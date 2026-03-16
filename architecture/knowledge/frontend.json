@@ -1,0 +1,94 @@
+{
+  "domain": "frontend",
+  "patterns": [
+    {
+      "key": "vite_react_tailwind_v4_stack",
+      "value": "Vite 6 + React 18 + @tailwindcss/vite (no tailwind.config.ts needed) + tw-animate-css builds cleanly; @import 'tailwindcss' source(none) with @source glob is the correct Tailwind v4 pattern",
+      "timestamp": 1773425249.6245
+    },
+    {
+      "key": "motion_import_path",
+      "value": "Use 'motion/react' not 'framer-motion' for Framer Motion v12+ with React; AnimatePresence also from 'motion/react'",
+      "timestamp": 1773425249.6245
+    },
+    {
+      "key": "supabase_path_depth",
+      "value": "When placing supabase/info.tsx inside src/utils/ vs project root utils/, update relative import paths in components accordingly (../../utils vs ../../../utils)",
+      "timestamp": 1773425249.624501
+    },
+    {
+      "key": "artisan_cafe_palette",
+      "value": "Warm cream-brown palette works best with CSS radial gradient blobs at 12-18% opacity; floating bean shapes use border-radius 50%/60%60%40%40% + ::after pseudo-element for the groove line",
+      "stack": "html",
+      "agent": "web-builder-alpha",
+      "timestamp": 1773648777.312054
+    },
+    {
+      "key": "menu_tab_pattern",
+      "value": "data-category tabs + JS renderMenu() with staggered transition-delay on cards is clean pattern for single-file HTML; observer re-attachment needed after innerHTML replacement",
+      "stack": "html+vanilla-js",
+      "agent": "web-builder-alpha",
+      "timestamp": 1773648777.312054
+    },
+    {
+      "key": "parallax_mousemove",
+      "value": "mousemove parallax on blobs: divide delta by window size, multiply by 20, apply to transform translate. Guard with window.innerWidth check for mobile.",
+      "stack": "html+vanilla-js",
+      "agent": "web-builder-alpha",
+      "timestamp": 1773648777.312054
+    },
+    {
+      "key": "fitness_dark_theme_palette",
+      "value": "Black #0a0a0a + neon lime #c8ff00 + dark grey #1a1a1a — high contrast, raw aesthetic. Avoid pastels or purple gradients for fitness/sport brands.",
+      "stack": "html",
+      "agent": "web-builder-alpha",
+      "timestamp": 1773648777.51123
+    },
+    {
+      "key": "diagonal_clip_path_sections",
+      "value": "clip-path polygon(0 40px, 100% 0, 100% calc(100% - 40px), 0 100%) creates diagonal cuts between sections — use margin: -2px to avoid gaps",
+      "stack": "html",
+      "agent": "web-builder-alpha",
+      "timestamp": 1773648777.51123
+    },
+    {
+      "key": "counter_animation_easeout",
+      "value": "IntersectionObserver + requestAnimationFrame with ease-out cubic (1 - (1-t)^3) for number counters — start on section enter with countersStarted flag",
+      "stack": "vanilla-js",
+      "agent": "web-builder-alpha",
+      "timestamp": 1773648777.51123
+    },
+    {
+      "key": "bug_cursor_none_accessibility",
+      "value": "cursor:none on body breaks touch devices and low-vision users — wrap in @media (pointer:fine) and mirror in JS with matchMedia check",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195981
+    },
+    {
+      "key": "bug_muted_color_contrast",
+      "value": "#52525C on dark backgrounds fails WCAG AA (2.6:1). Minimum accessible muted on #06060A is #7A7A88 (4.6:1). Always verify contrast before using muted palette tokens.",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195981
+    },
+    {
+      "key": "fix_mobile_nav_no_burger",
+      "value": "Hidden nav ul with display:none on mobile without a burger toggle JS is a critical mobile navigation failure — always pair with toggle button + aria-expanded + close-on-link-click + Escape key handler",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195981
+    },
+    {
+      "key": "fix_prefers_reduced_motion",
+      "value": "Horror/atmospheric sites use heavy animations (grain, fog, glitch, flicker). Always add @media(prefers-reduced-motion:reduce) block + JS check before registering IntersectionObserver and setInterval effects",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195981
+    },
+    {
+      "key": "fix_external_links",
+      "value": "Footer/CTA links that look like placeholders (href='#') should be given real URLs or clearly marked. All real external links need target='_blank' rel='noopener noreferrer'",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195982
+    }
+  ],
+  "updated": "2026-03-16 11:12",
+  "agents": []
+}

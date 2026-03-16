@@ -1,0 +1,32 @@
+{
+  "domain": "strategy",
+  "updated": "2026-03-04",
+  "agents": ["web-strategy-beta"],
+  "patterns": [
+    {
+      "key": "horror_social_proof_threshold",
+      "value": "Психологические хорроры с Overwhelmingly Positive (96%+) используют счётчик отзывов как главный социальный сигнал. Минимальный порог для доверия — 1000 отзывов. SIGNALIS: 19,550 отзывов / 96%. Fears to Fathom EP1: 10,069 отзывов / 88%.",
+      "timestamp": 1741046400
+    },
+    {
+      "key": "horror_tagline_formula",
+      "value": "Лучшие тэглайны хорроров строятся по формуле: [протагонист] + [действие выживания] + [необъяснимая угроза]. SIGNALIS: 'Searching for dreams inside of a nightmare'. Fears to Fathom: 'narrated by the ones who survived' — survivor POV усиливает доверие.",
+      "timestamp": 1741046400
+    },
+    {
+      "key": "free_episode_funnel",
+      "value": "Fears to Fathom использует Episode 1 FREE как точку входа в воронку. Конверсия в платные эпизоды опирается на эмоциональный крюк бесплатного опыта. Тактика применима для демо-версий инди хорроров.",
+      "timestamp": 1741046400
+    },
+    {
+      "key": "horror_steam_cta_pattern",
+      "value": "Steam CTA для хорроров: Add to Wishlist (до релиза) / Add to Cart (после). SIGNALIS добавил DLC и soundtrack как дополнительные конверсии. Wishlist-нотификация при скидке = лучший момент конверсии.",
+      "timestamp": 1741046400
+    },
+    {
+      "key": "ice_framework_ab",
+      "value": "ICE Score: Impact x Confidence x Ease (1-10 каждый). Приоритет: изменение H1/тэглайна всегда даёт Impact 8+. Минимум теста: 2 недели, 1000 посетителей, значимость >= 95%.",
+      "timestamp": 1741046400
+    }
+  ]
+}

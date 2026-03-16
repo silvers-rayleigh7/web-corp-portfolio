@@ -1,0 +1,56 @@
+{
+  "domain": "design",
+  "patterns": [
+    {
+      "key": "law_firm_premium_palette",
+      "value": "Deep navy + gold + warm white is the canonical trust palette for premium legal/financial. Gold used ONLY as accent (borders, dividers, stat numbers, eyebrows) — never as fill on large areas. Single-file HTML works well for this archetype.",
+      "agent": "web-builder-alpha",
+      "timestamp": 1773648806.164524
+    },
+    {
+      "key": "services_grid_with_gap_border",
+      "value": "1px gap + background on wrapper creates clean divider lines between cards without double-borders. Pair with bottom-line ::after reveal-on-hover for a premium feel that doesn't add visual noise at rest.",
+      "agent": "web-builder-alpha",
+      "timestamp": 1773648806.164524
+    },
+    {
+      "key": "no_photos_visual_strategy",
+      "value": "When photos are forbidden: law/finance sites benefit from geometric SVG emblems (shield+scales), structural line overlays on hero, and decorative framed compositions. More credible than stock photography for B2B audiences.",
+      "agent": "web-builder-alpha",
+      "timestamp": 1773648806.164524
+    }
+  ],
+  "updated": "2026-03-16 11:13",
+  "agents": [],
+  "layout_patterns": [
+    {
+      "site_type": "game",
+      "insight": "Horror Steam landing: hide all nav except single CTA (Wishlist Steam). Bento grid for mechanics with stat callouts. Sticky scroll for atmospheric about section. Developer quote before final CTA humanizes indie project.",
+      "agent": "figma-alpha",
+      "timestamp": 1772595576.6266072
+    }
+  ],
+  "component_patterns": [
+    {
+      "component": "button",
+      "insight": "Horror buttons use uppercase micro-font 0.06em tracking + blood/ethereal variants; box-shadow drives emotion not background-color alone; ::before gradient adds depth without color change",
+      "stitch_style": "horror-psychological",
+      "agent": "figma-beta",
+      "timestamp": 1772595911.789357
+    },
+    {
+      "component": "card",
+      "insight": "card-document with ::after corner fold + .is-redacted stamp creates strong narrative impact; card-terminal uses CRT scanlines inline via repeating-linear-gradient; translateY(-3px) hover feels corpse-like but deliberate",
+      "stitch_style": "horror-psychological",
+      "agent": "figma-beta",
+      "timestamp": 1772595911.7893581
+    },
+    {
+      "component": "badge",
+      "insight": "0.6875rem / letter-spacing 0.1em / uppercase works at small size in dark bg; 4 semantic variants map to the color palette directly (blood=danger, ethereal=special, rot=environmental)",
+      "stitch_style": "horror-psychological",
+      "agent": "figma-beta",
+      "timestamp": 1772595911.7893581
+    }
+  ]
+}

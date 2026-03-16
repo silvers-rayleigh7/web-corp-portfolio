@@ -1,0 +1,43 @@
+{
+  "domain": "seo",
+  "patterns": [
+    {
+      "key": "gaming_niche_tags",
+      "value": "Steam теги напрямую отражают поисковые запросы игроков — каждый тег = потенциальный ключ для SEO",
+      "timestamp": 1772598632.223747
+    },
+    {
+      "key": "psychological_horror_competitors",
+      "value": "Топ: MiSide (98%/136K отз), OMORI (97%/85K), Mouthwashing (96%/27K), Signalis, DDLC. Паттерн: surreal + atmospheric + story-rich конвертирует лучше",
+      "timestamp": 1772598632.223747
+    },
+    {
+      "key": "horror_game_seo_intent",
+      "value": "Transactional = 'buy psychological horror game steam', Commercial = 'best psychological horror games like OMORI'. Конкуренты в Commercial слабее — туда идём первыми",
+      "timestamp": 1772598632.223747
+    },
+    {
+      "key": "indie_game_landing_page",
+      "value": "Лучший паттерн: полноэкранный трейлер + атмосферный визуал + narrative hook в первых 100 словах. Пример: Slay the Princess, Citizen Sleeper",
+      "timestamp": 1772598632.2237482
+    }
+  ],
+    {
+      "key": "competitor_anchor_keywords",
+      "value": "'games like OMORI/MiSide Steam' — наивысший ROI ключ для психологического хоррора. Прямое упоминание конкурентов в Tagline легально и эффективно для 'similar to' поиска Steam",
+      "timestamp": 1741082400
+    },
+    {
+      "key": "emotional_low_competition_keys",
+      "value": "Эмоциональные ключи (dread, unsettling, haunting, fragmented memory, unreliable narrator) — низкая конкуренция + высокая конверсия в gaming horror нише. Использовать в body description",
+      "timestamp": 1741082400
+    },
+    {
+      "key": "steam_tagline_template",
+      "value": "Шаблон: '[Жанр] where [уникальный хук]. For fans of [Конкурент1], [Конкурент2], and [Конкурент3].' — попадание в 'similar games' поиски без paid продвижения",
+      "timestamp": 1741082400
+    }
+  ],
+  "updated": "2026-03-04 10:00",
+  "agents": []
+}

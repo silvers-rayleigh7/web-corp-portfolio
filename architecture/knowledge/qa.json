@@ -1,0 +1,177 @@
+{
+  "domain": "qa",
+  "patterns": [
+    {
+      "key": "prefers_reduced_motion_required",
+      "value": "Always add @media (prefers-reduced-motion: reduce) to disable .reveal animations + set opacity:1/transform:none. Also guard JS smooth scroll with window.matchMedia check.",
+      "timestamp": 1773679533.103267
+    },
+    {
+      "key": "focus_visible_pattern",
+      "value": ":focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; } + :focus:not(:focus-visible) { outline: none; } — place after all other CSS.",
+      "timestamp": 1773679533.1032681
+    },
+    {
+      "key": "hero_mobile_flex_direction",
+      "value": "When hero uses position:absolute stats strip that becomes position:static on mobile, add flex-direction:column to .hero at <=768px breakpoint + width:100% on the stats element.",
+      "timestamp": 1773679533.1032681
+    },
+    {
+      "key": "seo_meta_checklist",
+      "value": "Always include: og:image, og:url, og:type, twitter:card, canonical link, and JSON-LD Schema.org (LegalService/Organization etc). Missing from Alpha output.",
+      "timestamp": 1773679533.1032681
+    },
+    {
+      "key": "hamburger_touch_target",
+      "value": "Hamburger button needs min-width:44px; min-height:44px; padding:10px and type='button' + aria-controls attribute.",
+      "timestamp": 1773679533.1032681
+    },
+    {
+      "key": "hardcoded_colors_in_js",
+      "value": "Form success state used hardcoded hex #2d6a4f/#d8f3dc. Fix: use CSS variable references via btn.style.background='var(--gold-dim)'.",
+      "timestamp": 1773679533.1032681
+    },
+    {
+      "key": "bug_duplicate_checkmark_li_before",
+      "value": "li::before pseudo-element combined with a .checkmark span inside the same li creates a duplicate visual checkmark. Remove li::before/after if a span handles the icon.",
+      "timestamp": 1773679550.261878
+    },
+    {
+      "key": "fix_burger_div_to_button",
+      "value": "nav-burger as <div> is not keyboard accessible. Always use <button type='button'> with aria-expanded, aria-controls, and aria-label for hamburger menus.",
+      "timestamp": 1773679550.261878
+    },
+    {
+      "key": "fix_outline_none_accessibility",
+      "value": "outline:none on form inputs breaks keyboard navigation. Replace with outline:2px solid transparent + outline-color on :focus — keeps visual design while restoring a11y.",
+      "timestamp": 1773679550.261878
+    },
+    {
+      "key": "fix_prefers_reduced_motion_missing",
+      "value": "Animations without prefers-reduced-motion are a WCAG 2.3.3 failure. Add @media(prefers-reduced-motion:reduce) and check JS counters/observers too.",
+      "timestamp": 1773679550.261879
+    },
+    {
+      "key": "fix_mobile_menu_semantic",
+      "value": "Mobile menu overlay should be <nav> with aria-hidden toggled by JS (true when closed, false when open). Also handle Escape key to close.",
+      "timestamp": 1773679550.261879
+    },
+    {
+      "key": "roundRect_safari_fallback",
+      "value": "ctx.roundRect() not in Safari < 16 — always wrap in typeof check with ctx.rect() fallback",
+      "timestamp": 1773679574.5503821
+    },
+    {
+      "key": "prefers_reduced_motion_reveal",
+      "value": "Scroll-reveal animations must set opacity:1 and transform:none inside prefers-reduced-motion:reduce",
+      "timestamp": 1773679574.550383
+    },
+    {
+      "key": "qr_cdn_error_handling",
+      "value": "Dynamic CDN scripts need both onload and onerror handlers + crossOrigin attribute",
+      "timestamp": 1773679574.550383
+    },
+    {
+      "key": "webkit_backdrop_filter",
+      "value": "Always add -webkit-backdrop-filter before backdrop-filter for Safari support",
+      "timestamp": 1773679574.550383
+    },
+    {
+      "key": "og_tags_full_set",
+      "value": "OG tags minimum: og:type, og:url, og:title, og:description, og:image + twitter:card, twitter:title, twitter:description, twitter:image",
+      "timestamp": 1773679574.550383
+    },
+    {
+      "key": "bug_cursor_none_accessibility",
+      "value": "cursor:none on body breaks touch devices and low-vision users — wrap in @media (pointer:fine) and mirror in JS with matchMedia check",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195981
+    },
+    {
+      "key": "bug_muted_color_contrast",
+      "value": "#52525C on dark backgrounds fails WCAG AA (2.6:1). Minimum accessible muted on #06060A is #7A7A88 (4.6:1). Always verify contrast before using muted palette tokens.",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195981
+    },
+    {
+      "key": "fix_mobile_nav_no_burger",
+      "value": "Hidden nav ul with display:none on mobile without a burger toggle JS is a critical mobile navigation failure — always pair with toggle button + aria-expanded + close-on-link-click + Escape key handler",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195981
+    },
+    {
+      "key": "fix_prefers_reduced_motion",
+      "value": "Horror/atmospheric sites use heavy animations (grain, fog, glitch, flicker). Always add @media(prefers-reduced-motion:reduce) block + JS check before registering IntersectionObserver and setInterval effects",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195981
+    },
+    {
+      "key": "fix_external_links",
+      "value": "Footer/CTA links that look like placeholders (href='#') should be given real URLs or clearly marked. All real external links need target='_blank' rel='noopener noreferrer'",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679588.195982
+    },
+    {
+      "key": "prefers_reduced_motion_required",
+      "value": "Always add @media (prefers-reduced-motion: reduce) to disable all animations. Also set opacity:1 on elements that rely on animation to become visible, or they stay invisible for reduced-motion users.",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679623.643691
+    },
+    {
+      "key": "100svh_needs_fallback",
+      "value": "min-height: 100svh requires fallback: min-height: 100vh first for Safari < 15.4 and older browsers",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679623.643691
+    },
+    {
+      "key": "contrast_rgba_alpha_traps",
+      "value": "rgba color with low alpha (0.45-0.6) on dark or light backgrounds often fails WCAG 4.5:1 contrast. Bump to 0.75-0.85 minimum. Use WebAIM checker on blended hex value.",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679623.643692
+    },
+    {
+      "key": "aria_expanded_nav_toggle",
+      "value": "Mobile hamburger button must have aria-expanded='false' initially and toggle to 'true' on open. Also update aria-label to 'Закрыть меню' when open. Add Escape key handler to close.",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679623.643692
+    },
+    {
+      "key": "skip_link_pattern",
+      "value": "Skip-to-content link: position absolute, top -100%, show on :focus. Targets #main-content which wraps all sections inside <main>. Required for WCAG 2.4.1.",
+      "agent": "web-builder-beta",
+      "timestamp": 1773679623.643692
+    },
+    {
+      "key": "bug_missing_meta_description",
+      "value": "All pages lacked meta description and OG tags — always check head section first in QA",
+      "timestamp": 1773679807.299524
+    },
+    {
+      "key": "bug_no_mobile_responsive",
+      "value": "Nav with 60px padding + 3-4 col grids break at 390px — add breakpoints at 768px and 480px for all multi-column grids",
+      "timestamp": 1773679807.299524
+    },
+    {
+      "key": "bug_button_type_missing",
+      "value": "All interactive buttons lacked type='button' — causes accidental form submission; always add type to every <button>",
+      "timestamp": 1773679807.299525
+    },
+    {
+      "key": "bug_no_prefers_reduced_motion",
+      "value": "Pages with CSS animations had no prefers-reduced-motion fallback — add @media block to every animated page",
+      "timestamp": 1773679807.299525
+    },
+    {
+      "key": "bug_form_no_labels",
+      "value": "Consultation form inputs had <label> without for/id pairs — link all labels to inputs for WCAG AA compliance",
+      "timestamp": 1773679807.299525
+    },
+    {
+      "key": "fix_mobile_nav_pattern",
+      "value": "Pattern: hide nav-links at 768px, show nav-burger, fullscreen overlay nav-mobile with close button — works on all forte subpages",
+      "timestamp": 1773679807.299525
+    }
+  ],
+  "updated": "2026-03-16 19:50",
+  "agents": []
+}
