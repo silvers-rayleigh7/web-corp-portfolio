@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Lost File — Psychological Horror | AMAI Game Studio</title>
+<meta name="description" content="Заброшенная психиатрическая больница. Страх через тишину. Монстр, который учится. Steam — скоро.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --void:       #06060A;
+    --deep:       #0A0A10;
+    --surface:    #0F0F16;
+    --blood:      #5C0A14;
+    --blood-mid:  #8B1A24;
+    --blood-bright: #B01C2E;
+    --blood-dim:  #380610;
+    --paper:      #DDD8CC;
+    --paper-dim:  #A09890;
+    --muted:      #52525C;
+    --font-horror:   'IM Fell English', 'Cormorant Garamond', serif;
+    --font-display:  'Cormorant Garamond', serif;
+    --font-mono:     'Space Mono', monospace;
+    --ease: cubic-bezier(0.21, 0.47, 0.32, 0.98);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--void);
+    color: var(--paper);
+    font-family: var(--font-display);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── Custom Cursor ── */
+  #cursor {
+    position: fixed; z-index: 9999; pointer-events: none;
+    width: 10px; height: 10px;
+    background: var(--blood-bright);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+  }
+  #cursor-ring {
+    position: fixed; z-index: 9998; pointer-events: none;
+    width: 30px; height: 30px;
+    border: 1px solid rgba(176, 28, 46, 0.35);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+  }
+  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring { width: 44px; height: 44px; }
+
+  /* ── Grain ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 1000; pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    animation: grain 0.35s steps(1) infinite;
+  }
+  @keyframes grain {
+    0%   { background-position: 0 0; }
+    20%  { background-position: -45px -25px; }
+    40%  { background-position: 25px -65px; }
+    60%  { background-position: -65px 35px; }
+    80%  { background-position: 45px 55px; }
+    100% { background-position: -25px -45px; }
+  }
+
+  /* ── CRT scanlines ── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 999; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+  }
+
+  /* ── FOG LAYER ── */
+  .fog-layer {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+  }
+  .fog-cloud {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(160,152,144,0.045) 0%, transparent 70%);
+    filter: blur(50px);
+  }
+  .fog-1 { width: 600px; height: 400px; top: 10%; left: -10%; animation: fog-a 22s ease-in-out infinite alternate; }
+  .fog-2 { width: 500px; height: 350px; top: 40%; right: -8%; animation: fog-b 28s ease-in-out infinite alternate; }
+  .fog-3 { width: 700px; height: 300px; bottom: 15%; left: 20%; animation: fog-c 18s ease-in-out infinite alternate; }
+  @keyframes fog-a { from{transform:translate(0,0) scale(1)} to{transform:translate(60px,30px) scale(1.1)} }
+  @keyframes fog-b { from{transform:translate(0,0) scale(1)} to{transform:translate(-50px,-40px) scale(0.9)} }
+  @keyframes fog-c { from{transform:translate(0,0) scale(1)} to{transform:translate(40px,-20px) scale(1.05)} }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 48px;
+    background: linear-gradient(to bottom, rgba(6,6,10,0.92), transparent);
+  }
+  .logo { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.15em; color: var(--paper); text-decoration: none; opacity: 0.7; }
+  .logo span { color: var(--blood-bright); }
+  nav ul { list-style: none; display: flex; gap: 40px; }
+  nav a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color 0.3s; }
+  nav a:hover { color: var(--paper); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; padding: 100px 48px 60px; text-align: center; overflow: hidden;
+  }
+
+  /* Vignette — much heavier for horror */
+  .hero-vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 20%, rgba(6,6,10,0.7) 70%, rgba(6,6,10,0.95) 100%);
+    animation: flicker 10s ease-in-out infinite;
+  }
+  @keyframes flicker {
+    0%,100% { opacity: 1; }
+    42%  { opacity: 1; }
+    43%  { opacity: 0.82; }
+    44%  { opacity: 1; }
+    85%  { opacity: 1; }
+    86%  { opacity: 0.88; }
+    86.5%{ opacity: 1; }
+    87%  { opacity: 0.75; }
+    87.5%{ opacity: 1; }
+  }
+
+  /* Subtle horizontal scan artifact */
+  .hero-static {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, transparent 0px, transparent 4px, rgba(255,255,255,0.003) 4px, rgba(255,255,255,0.003) 5px);
+    animation: static-move 0.08s steps(1) infinite;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .hero:hover .hero-static { opacity: 1; }
+  @keyframes static-move { 0%{background-position:0 0} 50%{background-position:3px 0} 100%{background-position:-3px 0} }
+
+  /* Faint red corner stains */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 0% 0%, rgba(92,10,20,0.18) 0%, transparent 40%),
+      radial-gradient(ellipse at 100% 100%, rgba(92,10,20,0.12) 0%, transparent 35%);
+  }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.3em;
+    color: var(--blood-bright); text-transform: uppercase;
+    border: 1px solid rgba(176,28,46,0.25); padding: 6px 16px; margin-bottom: 44px;
+    animation: badge-pulse 4s ease-in-out infinite;
+  }
+  @keyframes badge-pulse {
+    0%,100% { border-color: rgba(176,28,46,0.25); }
+    50% { border-color: rgba(176,28,46,0.55); box-shadow: 0 0 10px rgba(176,28,46,0.12); }
+  }
+  .badge-dot { width: 5px; height: 5px; background: var(--blood-bright); border-radius: 50%; animation: dot-blink 2s step-end infinite; }
+  @keyframes dot-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── HERO TITLE — IM Fell English, smaller, haunting ── */
+  h1 {
+    font-family: var(--font-horror);
+    font-size: clamp(40px, 6vw, 70px);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    color: var(--paper);
+    margin-bottom: 10px;
+    text-shadow: 0 2px 40px rgba(92,10,20,0.4), 0 0 80px rgba(92,10,20,0.15);
+  }
+  h1 .glitch {
+    position: relative; display: inline-block; font-style: italic;
+  }
+  h1 .glitch::before, h1 .glitch::after {
+    content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; font-style: italic;
+  }
+  h1 .glitch::before {
+    color: var(--blood-bright);
+    animation: glitch-1 5s infinite steps(1);
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  }
+  h1 .glitch::after {
+    color: rgba(100,200,180,0.4);
+    animation: glitch-2 5s infinite steps(1);
+    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  }
+  @keyframes glitch-1 {
+    0%,83%,100% { transform:none; opacity:0; }
+    84% { transform:translate(-3px,1px); opacity:1; }
+    85% { transform:translate(3px,-1px); opacity:1; }
+    86% { transform:none; opacity:0; }
+    94% { transform:translate(2px,2px); opacity:1; }
+    95% { transform:none; opacity:0; }
+  }
+  @keyframes glitch-2 {
+    0%,85%,100% { transform:none; opacity:0; }
+    86% { transform:translate(3px,-2px); opacity:1; }
+    87% { transform:translate(-2px,1px); opacity:1; }
+    88% { transform:none; opacity:0; }
+  }
+
+  .hero-sub { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; color: var(--muted); text-transform: uppercase; margin-top: 22px; margin-bottom: 14px; }
+  .hero-desc { font-family: var(--font-horror); font-size: 18px; font-style: italic; color: rgba(221,216,204,0.45); max-width: 520px; margin: 0 auto 52px; line-height: 1.65; }
+
+  .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--void); background: var(--paper); padding: 16px 40px; text-decoration: none;
+    border: none; cursor: none; transition: background 0.3s, transform 0.2s; position: relative; overflow: hidden;
+  }
+  .btn-primary::after { content: ''; position: absolute; inset: 0; background: var(--blood-bright); transform: scaleX(0); transform-origin: left; transition: transform 0.4s var(--ease); }
+  .btn-primary:hover::after { transform: scaleX(1); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-primary:hover span { color: var(--paper); }
+  .btn-secondary {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); background: transparent; padding: 16px 40px; text-decoration: none;
+    border: 1px solid rgba(82,82,92,0.3); cursor: none; transition: color 0.3s, border-color 0.3s;
+  }
+  .btn-secondary:hover { color: var(--paper); border-color: rgba(221,216,204,0.35); }
+
+  .hero-scroll { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .scroll-line { width: 1px; height: 56px; background: linear-gradient(to bottom, var(--blood-bright), transparent); animation: scroll-drop 2.5s ease-in-out infinite; }
+  @keyframes scroll-drop { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+  .scroll-text { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; writing-mode: vertical-rl; }
+
+  /* ── BLOOD DRIP on dividers ── */
+  .divider {
+    display: flex; align-items: center; gap: 16px; padding: 0 48px; margin: 0 auto; max-width: 1200px;
+    position: relative;
+  }
+  .divider-line { flex: 1; height: 1px; background: rgba(221,216,204,0.06); position: relative; }
+  /* drip from line */
+  .divider-line::before {
+    content: '';
+    position: absolute; top: 0; left: 18%;
+    width: 2px; height: 0;
+    background: linear-gradient(to bottom, var(--blood-mid), transparent);
+    border-radius: 0 0 50% 50%;
+    opacity: 0;
+    animation: drip-fall 7s ease-in 2s infinite;
+  }
+  .divider-line:last-child::before { left: 65%; animation-delay: 4s; }
+  @keyframes drip-fall {
+    0%   { height: 0; opacity: 0; }
+    15%  { height: 14px; opacity: 0.55; }
+    75%  { height: 20px; opacity: 0.4; }
+    100% { height: 28px; opacity: 0; }
+  }
+  .divider-text { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; }
+
+  /* ── SECTIONS ── */
+  .section { padding: 120px 48px; max-width: 1200px; margin: 0 auto; }
+  .section-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.4em; color: var(--blood-bright); text-transform: uppercase; margin-bottom: 20px; opacity: 0.8; }
+
+  /* Section titles use horror font, medium size */
+  .section-title {
+    font-family: var(--font-horror);
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--paper);
+    margin-bottom: 60px;
+    max-width: 560px;
+    text-shadow: 0 1px 20px rgba(92,10,20,0.2);
+  }
+  .section-title em { font-style: italic; color: rgba(221,216,204,0.35); }
+
+  /* ── Mechanics ── */
+  .mechanics-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+  .mechanic-card {
+    background: var(--surface); padding: 48px 40px;
+    border-top: 1px solid rgba(221,216,204,0.05);
+    position: relative; overflow: hidden; transition: background 0.4s;
+  }
+  .mechanic-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--blood); transform: scaleX(0); transform-origin: left; transition: transform 0.5s var(--ease); }
+  .mechanic-card:hover { background: #13131A; }
+  .mechanic-card:hover::before { transform: scaleX(1); }
+  /* Blood stain corner on hover */
+  .mechanic-card::after { content: ''; position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(92,10,20,0.15) 0%, transparent 70%); opacity: 0; transition: opacity 0.4s; }
+  .mechanic-card:hover::after { opacity: 1; }
+
+  .card-num { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; color: var(--blood-dim); margin-bottom: 24px; }
+  .card-title { font-family: var(--font-horror); font-size: 24px; font-weight: 400; color: var(--paper); margin-bottom: 16px; line-height: 1.2; }
+  .card-desc { font-family: var(--font-display); font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.75; }
+
+  /* ── Story ── */
+  .story-section {
+    padding: 120px 48px; background: var(--deep); position: relative; overflow: hidden;
+  }
+  /* Fluorescent flicker effect — hospital feel */
+  .story-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(200,220,200,0.015) 0%, transparent 30%);
+    animation: fluorescent 12s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes fluorescent {
+    0%,100% { opacity:1; }
+    30%  { opacity:1; }
+    30.5%{ opacity:0.6; }
+    31%  { opacity:1; }
+    60%  { opacity:1; }
+    60.3%{ opacity:0.4; }
+    60.6%{ opacity:0.9; }
+    60.9%{ opacity:0.5; }
+    61.2%{ opacity:1; }
+  }
+  .story-section::after { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(ellipse, rgba(92,10,20,0.04) 0%, transparent 70%); pointer-events: none; }
+
+  .story-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+  .story-text p { font-family: var(--font-display); font-size: 17px; font-weight: 300; color: rgba(221,216,204,0.55); line-height: 1.95; margin-bottom: 20px; }
+  .story-text p strong { color: var(--paper); font-weight: 400; }
+
+  .story-visual {
+    aspect-ratio: 3/4; background: var(--surface); border: 1px solid rgba(221,216,204,0.05);
+    position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
+  }
+  /* Rust stain on case file */
+  .story-visual::before {
+    content: '';
+    position: absolute; bottom: 20px; right: 20px;
+    width: 60px; height: 80px;
+    background: radial-gradient(ellipse, rgba(92,10,20,0.25) 0%, rgba(139,26,36,0.1) 40%, transparent 70%);
+    border-radius: 30% 60% 50% 40%;
+    filter: blur(4px);
+  }
+  .story-visual-inner { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-align: center; line-height: 2.2; }
+  .story-visual::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(6,6,10,0.38) 3px, rgba(6,6,10,0.38) 4px); pointer-events: none; }
+
+  /* ── Release ── */
+  .release-section { padding: 120px 48px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .price-block { border-top: 1px solid rgba(221,216,204,0.07); padding-top: 32px; }
+  .price-region { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.3em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+  .price-amount { font-family: var(--font-horror); font-size: 52px; font-weight: 400; color: var(--paper); margin-bottom: 4px; }
+  .price-note { font-family: var(--font-display); font-size: 14px; color: var(--muted); font-style: italic; }
+  .price-separator { width: 40px; height: 1px; background: rgba(176,28,46,0.3); margin: 32px 0; }
+  .release-info h3 { font-family: var(--font-horror); font-size: 32px; font-weight: 400; color: var(--paper); margin-bottom: 16px; }
+  .release-info p { font-family: var(--font-display); font-size: 16px; font-weight: 300; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+
+  /* ── Team ── */
+  .team-section { padding: 120px 48px; background: var(--deep); }
+  .team-inner { max-width: 1200px; margin: 0 auto; }
+  .team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-top: 64px; }
+  .team-card { background: var(--surface); padding: 32px; transition: background 0.3s; }
+  .team-card:hover { background: #13131A; }
+  .team-role { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; color: var(--blood-dim); text-transform: uppercase; margin-bottom: 8px; }
+  .team-name { font-family: var(--font-horror); font-size: 20px; font-weight: 400; color: var(--paper); }
+
+  /* ── Footer ── */
+  footer { padding: 60px 48px; border-top: 1px solid rgba(221,216,204,0.05); display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; color: var(--muted); }
+  .footer-logo span { color: var(--blood-bright); }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--paper); }
+  .footer-copy { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: rgba(82,82,92,0.4); }
+
+  /* ── Scroll reveal ── */
+  .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+  .fade-up.visible { opacity: 1; transform: none; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    nav ul { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .section { padding: 80px 24px; }
+    .mechanics-grid { grid-template-columns: 1fr; }
+    .story-inner { grid-template-columns: 1fr; gap: 48px; }
+    .story-visual { aspect-ratio: 4/3; }
+    .release-section { grid-template-columns: 1fr; gap: 48px; padding: 80px 24px; }
+    .team-grid { grid-template-columns: repeat(2,1fr); }
+    footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 24px; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+    .fog-layer { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ── FOG LAYER ── -->
+<div class="fog-layer">
+  <div class="fog-cloud fog-1"></div>
+  <div class="fog-cloud fog-2"></div>
+  <div class="fog-cloud fog-3"></div>
+</div>
+
+<nav>
+  <a href="#" class="logo">AMAI<span>.</span>STUDIO</a>
+  <ul>
+    <li><a href="#mechanics">Механики</a></li>
+    <li><a href="#story">История</a></li>
+    <li><a href="#release">Релиз</a></li>
+    <li><a href="#team">Команда</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-vignette"></div>
+  <div class="hero-static"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      AMAI Game Studio &mdash; Psychological Horror
+    </div>
+
+    <h1>
+      The <span class="glitch" data-text="Lost">Lost</span><br>File
+    </h1>
+
+    <p class="hero-sub">// Заброшенная психиатрическая больница &mdash; 19██</p>
+
+    <p class="hero-desc">
+      Страх живёт не в том, что ты видишь.<br>
+      Страх живёт в тишине между шагами.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#" class="btn-primary"><span>Wishlist на Steam</span></a>
+      <a href="#story" class="btn-secondary">Узнать историю</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<div class="divider">
+  <div class="divider-line"></div>
+  <span class="divider-text">Механики игры</span>
+  <div class="divider-line"></div>
+</div>
+
+<!-- ── MECHANICS ── -->
+<section class="section" id="mechanics">
+  <div class="section-label">// 001 — Game Design</div>
+  <h2 class="section-title">
+    Механики, которые<br><em>делают тебя уязвимым</em>
+  </h2>
+
+  <div class="mechanics-grid">
+    <div class="mechanic-card fade-up">
+      <div class="card-num">// 01</div>
+      <div class="card-title">Моргание через камеру</div>
+      <div class="card-desc">Камера отслеживает твои глаза в реальном времени. Моргнул — мир меняется. Закрыл глаза слишком долго — не знаешь, что произошло рядом.</div>
+    </div>
+    <div class="mechanic-card fade-up" style="transition-delay:0.12s">
+      <div class="card-num">// 02</div>
+      <div class="card-title">ИИ-адаптация монстра</div>
+      <div class="card-desc">Существо обучается твоим паттернам. Повторяешь одну тактику — оно запоминает. Каждое прохождение уникально. Прятаться в том же месте не получится.</div>
+    </div>
+    <div class="mechanic-card fade-up" style="transition-delay:0.24s">
+      <div class="card-num">// 03</div>
+      <div class="card-title">Тишина как оружие</div>
+      <div class="card-desc">Нет джамп-скейров. Ужас строится через атмосферу, звук и то, чего ты не видишь. Самое страшное — ждать.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STORY ── -->
+<section class="story-section" id="story">
+  <div class="story-inner">
+    <div class="story-text fade-up">
+      <div class="section-label">// 002 — Narrative</div>
+      <h2 class="section-title" style="margin-bottom:36px">Что<br>случилось<br><em>здесь</em></h2>
+      <p>Психиатрическая больница закрыта <strong>тридцать лет назад</strong>. Официальная причина — реструктуризация. Неофициальная — исчезновение пациентов из изолированного крыла.</p>
+      <p>Ты журналист. Ты пришёл за <strong>одним файлом</strong> из архива. Файл существует. Он ждёт тебя. Но ты не один в этих коридорах.</p>
+      <p>Каждая комната — фрагмент. Каждая запись — ложь или правда. <strong>Ты сам решаешь, что было на самом деле.</strong></p>
+    </div>
+    <div class="story-visual fade-up" style="transition-delay:0.2s">
+      <div class="story-visual-inner">
+        <div style="color:var(--blood-bright);margin-bottom:16px;font-size:12px;">PATIENT FILE #1847</div>
+        <div>Admission: ██/██/19██</div>
+        <div>Diagnosis: [REDACTED]</div>
+        <div>Ward: East Wing — Isolated</div>
+        <div style="margin:14px 0;color:rgba(82,82,92,0.4);">— — — — —</div>
+        <div>Last entry:</div>
+        <div style="color:var(--blood-mid);margin-top:10px;font-style:italic;font-family:'IM Fell English',serif;font-size:14px;line-height:1.7;">"оно знает, что я<br>пишу это"</div>
+        <div style="margin-top:14px;color:rgba(82,82,92,0.3);font-size:9px;letter-spacing:0.15em;">FILE STATUS: MISSING</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RELEASE ── -->
+<section class="release-section" id="release">
+  <div class="fade-up">
+    <div class="section-label">// 003 — Release</div>
+    <h2 class="section-title">Скоро<br>в Steam</h2>
+    <p style="font-family:var(--font-display);font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:32px;">Wishlist сейчас — получи уведомление в день релиза. Поддержи независимую разработку.</p>
+    <a href="#" class="btn-primary"><span>Добавить в Wishlist</span></a>
+  </div>
+
+  <div class="fade-up" style="transition-delay:0.2s">
+    <div class="price-block">
+      <div class="price-region">США / Европа</div>
+      <div class="price-amount">$12</div>
+      <div class="price-note">Нет сезонных пропусков. Нет DLC.</div>
+    </div>
+    <div class="price-separator"></div>
+    <div class="price-block">
+      <div class="price-region">СНГ</div>
+      <div class="price-amount">449₽</div>
+      <div class="price-note">Полная игра навсегда.</div>
+    </div>
+    <div style="margin-top:32px;">
+      <div class="price-region" style="margin-bottom:12px;">Также планируется</div>
+      <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--muted);border:1px solid rgba(82,82,92,0.18);padding:6px 14px;">Xbox</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ── -->
+<section class="team-section" id="team">
+  <div class="team-inner">
+    <div class="section-label">// 004 — Studio</div>
+    <h2 class="section-title">AMAI Game Studio</h2>
+    <div class="team-grid">
+      <div class="team-card fade-up"><div class="team-role">Game Design & Lead</div><div class="team-name">Rayleigh</div></div>
+      <div class="team-card fade-up" style="transition-delay:0.08s"><div class="team-role">Lead Unity Dev</div><div class="team-name">darknesod</div></div>
+      <div class="team-card fade-up" style="transition-delay:0.12s"><div class="team-role">Unity Developer</div><div class="team-name">Formless</div></div>
+      <div class="team-card fade-up" style="transition-delay:0.16s"><div class="team-role">3D Artist</div><div class="team-name">Egorisnise</div></div>
+      <div class="team-card fade-up" style="transition-delay:0.2s"><div class="team-role">2D Artist</div><div class="team-name">darriyano</div></div>
+      <div class="team-card fade-up" style="transition-delay:0.24s"><div class="team-role">Composer</div><div class="team-name">Achoombers</div></div>
+      <div class="team-card fade-up" style="transition-delay:0.28s"><div class="team-role">Unity Developer</div><div class="team-name">Kosmogor</div></div>
+      <div class="team-card fade-up" style="background:transparent;border:1px solid rgba(221,216,204,0.03);display:flex;align-items:center;justify-content:center;transition-delay:0.32s">
+        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.2em;color:rgba(82,82,92,0.3);">Indie Team</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">AMAI<span>.</span>STUDIO © 2026</div>
+  <div class="footer-links">
+    <a href="#">Steam</a>
+    <a href="https://t.me/amai_game_studio">Telegram</a>
+    <a href="#">VK</a>
+    <a href="#">DTF</a>
+  </div>
+  <div class="footer-copy">The Lost File</div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx=0, my=0, rx=0, ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+  });
+  function animRing() { rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); }
+  animRing();
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, {threshold:0.12, rootMargin:'0px 0px -60px 0px'});
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  // Random subtle flicker on mechanic cards
+  document.querySelectorAll('.mechanic-card').forEach(card => {
+    setInterval(() => {
+      if (Math.random() < 0.03) {
+        card.style.opacity = '0.88';
+        setTimeout(() => card.style.opacity = '', 60);
+      }
+    }, 2000);
+  });
+</script>
+</body>
+</html>

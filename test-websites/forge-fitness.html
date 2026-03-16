@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="FORGE — Кузница тела. Силовые тренировки, кроссфит, бокс в Москве. Первая тренировка бесплатно.">
+<meta property="og:title" content="FORGE — Кузница тела">
+<meta property="og:description" content="Не жди понедельника. Начни сейчас. Первая тренировка — бесплатно.">
+<title>FORGE — Кузница тела</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ========================================
+   CSS CUSTOM PROPERTIES — FORGE DESIGN TOKENS
+   ======================================== */
+:root {
+  --black:       #0a0a0a;
+  --dark:        #1a1a1a;
+  --dark-2:      #222222;
+  --grey:        #888888;
+  --grey-light:  #aaaaaa;
+  --white:       #f5f5f5;
+  --lime:        #c8ff00;
+  --lime-dim:    #a8d900;
+  --lime-glow:   rgba(200, 255, 0, 0.15);
+  --lime-glow-s: rgba(200, 255, 0, 0.08);
+
+  --font-head: 'Barlow Condensed', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --ease-out: cubic-bezier(0.21, 0.47, 0.32, 0.98);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-sharp: cubic-bezier(0.86, 0, 0.07, 1);
+
+  --section-pad: clamp(64px, 8vw, 120px);
+  --container:   1280px;
+}
+
+/* ========================================
+   RESET & BASE
+   ======================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--lime); border-radius: 2px; }
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 60px);
+}
+
+/* ========================================
+   UTILITY: DIAGONAL CLIP
+   ======================================== */
+.clip-diagonal {
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+}
+.clip-diagonal-reverse {
+  clip-path: polygon(0 0, 100% 4%, 100% 100%, 0 100%);
+}
+
+/* ========================================
+   NAV
+   ======================================== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px clamp(20px, 5vw, 60px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s var(--ease-out), backdrop-filter 0.3s;
+}
+
+nav.scrolled {
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(200, 255, 0, 0.1);
+}
+
+.nav-logo {
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--lime);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.nav-logo span {
+  color: var(--white);
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--grey);
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--lime);
+  transition: width 0.3s var(--ease-out);
+}
+
+.nav-links a:hover {
+  color: var(--lime);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-cta {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--lime);
+  padding: 10px 24px;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.nav-cta:hover {
+  background: #d4ff20;
+  box-shadow: 0 0 20px var(--lime-glow);
+}
+
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-burger span {
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--white);
+  transition: all 0.3s;
+}
+
+/* ========================================
+   HERO
+   ======================================== */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--black);
+}
+
+/* Animated diagonal stripe pattern */
+.hero-stripes {
+  position: absolute;
+  inset: -20%;
+  width: 140%;
+  height: 140%;
+  background-image: repeating-linear-gradient(
+    -55deg,
+    transparent,
+    transparent 40px,
+    rgba(200, 255, 0, 0.025) 40px,
+    rgba(200, 255, 0, 0.025) 41px
+  );
+  animation: stripes-shift 20s linear infinite;
+}
+
+@keyframes stripes-shift {
+  from { transform: translateX(0) translateY(0); }
+  to   { transform: translateX(82px) translateY(82px); }
+}
+
+/* Hero ambient glow */
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 255, 0, 0.06) 0%, transparent 70%);
+  top: 50%; left: 60%;
+  transform: translate(-50%, -50%);
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.15); }
+}
+
+/* Hero noise overlay */
+.hero-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 120px clamp(20px, 5vw, 60px) 80px;
+  max-width: var(--container);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 24px;
+  animation: fade-up 0.8s var(--ease-out) both;
+}
+
+.hero-label::before {
+  content: '';
+  display: block;
+  width: 40px; height: 2px;
+  background: var(--lime);
+}
+
+.hero-title {
+  font-family: var(--font-head);
+  font-size: clamp(72px, 12vw, 160px);
+  font-weight: 900;
+  line-height: 0.88;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  color: var(--white);
+  animation: fade-up 0.8s var(--ease-out) 0.1s both;
+}
+
+.hero-title .accent {
+  color: var(--lime);
+  display: block;
+  text-shadow: 0 0 60px rgba(200, 255, 0, 0.3);
+}
+
+.hero-title .outline {
+  -webkit-text-stroke: 2px var(--white);
+  color: transparent;
+  display: block;
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 400;
+  color: var(--grey);
+  margin-top: 28px;
+  max-width: 460px;
+  line-height: 1.6;
+  animation: fade-up 0.8s var(--ease-out) 0.2s both;
+}
+
+.hero-sub strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 44px;
+  flex-wrap: wrap;
+  animation: fade-up 0.8s var(--ease-out) 0.3s both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--lime);
+  padding: 18px 40px;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.2s var(--ease-spring);
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  transform: translateX(-110%) skewX(-15deg);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.btn-primary:hover::before {
+  transform: translateX(110%) skewX(-15deg);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 40px rgba(200, 255, 0, 0.4), 0 0 80px rgba(200, 255, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--grey);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.btn-secondary:hover {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+.hero-stats {
+  position: absolute;
+  bottom: 48px; right: clamp(20px, 5vw, 60px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 2;
+  animation: fade-up 0.8s var(--ease-out) 0.5s both;
+}
+
+.hero-stat {
+  text-align: right;
+}
+
+.hero-stat-num {
+  font-family: var(--font-head);
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--lime);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 48px; left: clamp(20px, 5vw, 60px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+  animation: fade-up 0.8s var(--ease-out) 0.6s both;
+}
+
+.hero-scroll-line {
+  width: 40px; height: 1px;
+  background: var(--grey);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-scroll-line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: var(--lime);
+  animation: scroll-line 2s ease-in-out infinite;
+}
+
+@keyframes scroll-line {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
+
+.hero-scroll-text {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+
+/* ========================================
+   FEATURES / ПРЕИМУЩЕСТВА
+   ======================================== */
+#features {
+  padding: var(--section-pad) 0;
+  background: var(--dark);
+  clip-path: polygon(0 40px, 100% 0, 100% calc(100% - 40px), 0 100%);
+  margin: -2px 0;
+}
+
+.features-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.features-header {
+  padding: 60px clamp(20px, 5vw, 60px) 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section-tag {
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-head);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: -1px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+
+.feature-card {
+  padding: 40px 36px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+
+.feature-card:hover {
+  background: rgba(200, 255, 0, 0.03);
+}
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--lime);
+  transition: width 0.4s var(--ease-out);
+}
+
+.feature-card:hover::after {
+  width: 100%;
+}
+
+.feature-num {
+  font-family: var(--font-head);
+  font-size: clamp(52px, 5vw, 72px);
+  font-weight: 900;
+  color: var(--lime);
+  line-height: 1;
+  letter-spacing: -2px;
+  text-shadow: 0 0 30px rgba(200,255,0,0.2);
+}
+
+.feature-unit {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--lime-dim);
+}
+
+.feature-label {
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-top: 8px;
+}
+
+.feature-desc {
+  font-size: 13px;
+  color: var(--grey);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ========================================
+   PROGRAMS / ПРОГРАММЫ
+   ======================================== */
+#programs {
+  padding: var(--section-pad) 0;
+  background: var(--black);
+  overflow: hidden;
+}
+
+.programs-header {
+  margin-bottom: 56px;
+}
+
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+
+.program-card {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  cursor: pointer;
+  clip-path: polygon(0 0, 100% 0, 100% 92%, 96% 100%, 0 100%);
+  transition: clip-path 0.3s var(--ease-out);
+}
+
+.program-card:hover {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.program-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.program-card:hover .program-bg {
+  transform: scale(1.05);
+}
+
+.program-card:nth-child(1) .program-bg {
+  background: linear-gradient(160deg, #1a1a1a 0%, #0a0a0a 60%),
+    repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(200,255,0,0.04) 8px, rgba(200,255,0,0.04) 9px);
+}
+.program-card:nth-child(2) .program-bg {
+  background: linear-gradient(160deg, #141a0a 0%, #0a0a0a 60%),
+    repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(200,255,0,0.06) 8px, rgba(200,255,0,0.06) 9px);
+}
+.program-card:nth-child(3) .program-bg {
+  background: linear-gradient(160deg, #1a0f0a 0%, #0a0a0a 60%),
+    repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(200,255,0,0.04) 8px, rgba(200,255,0,0.04) 9px);
+}
+.program-card:nth-child(4) .program-bg {
+  background: linear-gradient(160deg, #0a0f1a 0%, #0a0a0a 60%),
+    repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(200,255,0,0.04) 8px, rgba(200,255,0,0.04) 9px);
+}
+
+/* Abstract shape inside each card */
+.program-shape {
+  position: absolute;
+  top: 20px; right: -20px;
+  width: 120px; height: 120px;
+  opacity: 0.08;
+  transition: opacity 0.3s, transform 0.5s var(--ease-out);
+}
+
+.program-card:hover .program-shape {
+  opacity: 0.14;
+  transform: rotate(10deg) scale(1.1);
+}
+
+.program-card:nth-child(1) .program-shape {
+  background: var(--lime);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.program-card:nth-child(2) .program-shape {
+  background: var(--lime);
+  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+}
+.program-card:nth-child(3) .program-shape {
+  background: var(--lime);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+.program-card:nth-child(4) .program-shape {
+  background: var(--lime);
+  border-radius: 50%;
+}
+
+.program-content {
+  position: absolute;
+  inset: 0;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+}
+
+.program-number {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--lime);
+  margin-bottom: 8px;
+}
+
+.program-name {
+  font-family: var(--font-head);
+  font-size: clamp(28px, 2.5vw, 36px);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.95;
+  color: var(--white);
+  letter-spacing: -1px;
+}
+
+.program-desc {
+  font-size: 13px;
+  color: var(--grey-light);
+  margin-top: 10px;
+  line-height: 1.5;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s var(--ease-out), opacity 0.4s;
+  opacity: 0;
+}
+
+.program-card:hover .program-desc {
+  max-height: 80px;
+  opacity: 1;
+}
+
+.program-tag {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--lime);
+  padding: 4px 10px;
+}
+
+/* ========================================
+   PRICING / ЦЕНЫ
+   ======================================== */
+#pricing {
+  padding: var(--section-pad) 0;
+  background: var(--dark);
+  clip-path: polygon(0 40px, 100% 0, 100% calc(100% - 40px), 0 100%);
+  margin: -2px 0;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.pricing-header .section-title {
+  margin: 8px auto 0;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  align-items: stretch;
+}
+
+.price-card {
+  position: relative;
+  padding: 44px 36px;
+  background: var(--dark-2);
+  border: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
+}
+
+.price-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  transition: background 0.3s;
+}
+
+.price-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.price-card.featured {
+  background: var(--black);
+  border-color: var(--lime);
+  transform: translateY(-12px);
+  box-shadow: 0 0 60px rgba(200,255,0,0.1), 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.price-card.featured::before {
+  background: var(--lime);
+}
+
+.price-card.featured:hover {
+  transform: translateY(-18px);
+  box-shadow: 0 0 80px rgba(200,255,0,0.2), 0 30px 80px rgba(0,0,0,0.5);
+}
+
+.price-badge {
+  position: absolute;
+  top: 20px; right: -28px;
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--lime);
+  padding: 4px 40px;
+  transform: rotate(45deg);
+}
+
+.price-tier {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-bottom: 20px;
+}
+
+.price-featured .price-tier {
+  color: var(--lime);
+}
+
+.price-amount {
+  font-family: var(--font-head);
+  font-size: clamp(52px, 4vw, 64px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.price-currency {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--grey);
+  vertical-align: super;
+}
+
+.price-period {
+  font-size: 14px;
+  color: var(--grey);
+  margin-left: 4px;
+}
+
+.price-divider {
+  width: 40px; height: 2px;
+  background: rgba(255,255,255,0.1);
+  margin: 24px 0;
+}
+
+.price-card.featured .price-divider {
+  background: var(--lime);
+}
+
+.price-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.price-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--grey-light);
+  line-height: 1.4;
+}
+
+.price-features li::before {
+  content: '';
+  display: block;
+  width: 16px; height: 16px;
+  min-width: 16px;
+  background: rgba(200,255,0,0.12);
+  border: 1px solid rgba(200,255,0,0.3);
+  position: relative;
+  margin-top: 1px;
+}
+
+.price-features li::after {
+  content: '';
+  position: absolute;
+}
+
+.price-features li span {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.checkmark {
+  display: inline-block;
+  width: 16px; height: 16px;
+  min-width: 16px;
+  background: rgba(200,255,0,0.12);
+  border: 1px solid rgba(200,255,0,0.3);
+  position: relative;
+  margin-top: 2px;
+}
+
+.checkmark::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 4px;
+  width: 6px; height: 4px;
+  border-left: 2px solid var(--lime);
+  border-bottom: 2px solid var(--lime);
+  transform: rotate(-45deg);
+}
+
+.price-features li .text {
+  color: var(--grey-light);
+}
+
+.price-card.featured .price-features li .text {
+  color: var(--white);
+}
+
+.price-cta {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid rgba(255,255,255,0.15);
+  color: var(--grey);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+
+.price-cta:hover {
+  border-color: var(--white);
+  color: var(--white);
+}
+
+.price-card.featured .price-cta {
+  background: var(--lime);
+  border-color: var(--lime);
+  color: var(--black);
+}
+
+.price-card.featured .price-cta:hover {
+  background: #d4ff20;
+  box-shadow: 0 0 30px rgba(200,255,0,0.3);
+}
+
+/* ========================================
+   MOTIVATION / МОТИВАЦИЯ
+   ======================================== */
+#motivation {
+  padding: var(--section-pad) 0;
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+.motivation-bg-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-head);
+  font-size: clamp(120px, 18vw, 240px);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.018);
+  letter-spacing: -4px;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.motivation-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.motivation-quote {
+  font-family: var(--font-head);
+  font-size: clamp(36px, 5vw, 72px);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -2px;
+  max-width: 900px;
+  margin: 0 auto 20px;
+}
+
+.motivation-quote em {
+  font-style: normal;
+  color: var(--lime);
+  text-shadow: 0 0 40px rgba(200,255,0,0.25);
+}
+
+.motivation-author {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-bottom: 64px;
+}
+
+.motivation-stats {
+  display: flex;
+  justify-content: center;
+  gap: clamp(40px, 6vw, 100px);
+  flex-wrap: wrap;
+  margin-top: 64px;
+}
+
+.m-stat {
+  text-align: center;
+}
+
+.m-stat-num {
+  font-family: var(--font-head);
+  font-size: clamp(48px, 5vw, 72px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1;
+  letter-spacing: -2px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.m-stat-num .counter {
+  color: var(--lime);
+}
+
+.m-stat-num .plus {
+  font-size: 40px;
+  color: var(--lime);
+}
+
+.m-stat-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-top: 8px;
+}
+
+.motivation-bar {
+  width: 60px; height: 3px;
+  background: var(--lime);
+  margin: 40px auto 0;
+}
+
+/* ========================================
+   CTA / ЗАПИСАТЬСЯ
+   ======================================== */
+#cta {
+  padding: var(--section-pad) 0;
+  background: var(--dark);
+  clip-path: polygon(0 40px, 100% 0, 100% 100%, 0 100%);
+  margin-top: -2px;
+}
+
+.cta-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.cta-text .section-title {
+  margin-bottom: 16px;
+}
+
+.cta-tagline {
+  font-size: 16px;
+  color: var(--grey);
+  line-height: 1.7;
+  max-width: 400px;
+}
+
+.cta-tagline strong {
+  color: var(--lime);
+  font-weight: 600;
+}
+
+.cta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.form-input::placeholder {
+  color: var(--grey);
+}
+
+.form-input:focus {
+  border-color: var(--lime);
+  background: rgba(200,255,0,0.04);
+}
+
+.form-select {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--grey);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.form-select:focus {
+  border-color: var(--lime);
+  background: rgba(200,255,0,0.04);
+  color: var(--white);
+}
+
+.form-select option {
+  background: #1a1a1a;
+  color: var(--white);
+}
+
+.form-submit {
+  padding: 20px 40px;
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--lime);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.2s var(--ease-spring);
+}
+
+.form-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  transform: translateX(-110%) skewX(-15deg);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.form-submit:hover::before {
+  transform: translateX(110%) skewX(-15deg);
+}
+
+.form-submit:hover {
+  box-shadow: 0 0 40px rgba(200,255,0,0.5);
+  transform: translateY(-2px);
+}
+
+.form-note {
+  font-size: 12px;
+  color: var(--grey);
+  line-height: 1.5;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+footer {
+  background: var(--black);
+  padding: 40px clamp(20px, 5vw, 60px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-logo {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--lime);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: var(--grey);
+  text-align: center;
+}
+
+.footer-address {
+  font-size: 13px;
+  color: var(--grey);
+  text-align: right;
+}
+
+.footer-address strong {
+  color: var(--white);
+  display: block;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll-triggered reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ========================================
+   FORM SUCCESS STATE
+   ======================================== */
+.form-success {
+  display: none;
+  padding: 32px;
+  border: 2px solid var(--lime);
+  text-align: center;
+}
+
+.form-success.show {
+  display: block;
+  animation: fade-up 0.5s var(--ease-out);
+}
+
+.form-success-title {
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 8px;
+}
+
+.form-success-text {
+  font-size: 15px;
+  color: var(--grey);
+}
+
+/* ========================================
+   MOBILE MENU
+   ======================================== */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  transform: translateX(100%);
+  transition: transform 0.4s var(--ease-sharp);
+}
+
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+.mobile-menu a {
+  font-family: var(--font-head);
+  font-size: 40px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--white);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.mobile-menu a:hover {
+  color: var(--lime);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1024px) {
+  .programs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cta-inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .features-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .features-header {
+    padding-bottom: 0;
+  }
+
+  .features-grid {
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --section-pad: 64px;
+  }
+
+  .nav-links, .nav-cta {
+    display: none;
+  }
+
+  .nav-burger {
+    display: flex;
+  }
+
+  .hero-stats {
+    display: none;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .price-card.featured {
+    transform: none;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .motivation-quote {
+    font-size: clamp(30px, 8vw, 52px);
+  }
+}
+
+@media (max-width: 480px) {
+  .programs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .program-card {
+    aspect-ratio: 16/9;
+  }
+
+  .hero-title {
+    font-size: clamp(56px, 15vw, 90px);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .motivation-stats {
+    gap: 32px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">FOR<span>GE</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">О нас</a></li>
+    <li><a href="#programs">Программы</a></li>
+    <li><a href="#pricing">Цены</a></li>
+    <li><a href="#cta">Контакты</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Начать</a>
+  <div class="nav-burger" id="burgerBtn" aria-label="Открыть меню">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" class="mobile-link">О нас</a>
+  <a href="#programs" class="mobile-link">Программы</a>
+  <a href="#pricing" class="mobile-link">Цены</a>
+  <a href="#cta" class="mobile-link">Записаться</a>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero">
+  <div class="hero-stripes" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-noise" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <p class="hero-label">Кузница тела — Москва</p>
+    <h1 class="hero-title">
+      <span>ВЫ</span>
+      <span class="accent">КУЙ</span>
+      <span class="outline">СЕБЯ</span>
+    </h1>
+    <p class="hero-sub">
+      Не просто зал.<br>
+      <strong>Место, где куются результаты.</strong><br>
+      Силовые, кроссфит, бокс — под одной крышей.
+    </p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">
+        Первая тренировка — бесплатно
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#programs" class="btn-secondary">
+        Посмотреть программы
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M6 1v10M1 6l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-stats" aria-label="Показатели зала">
+    <div class="hero-stat">
+      <div class="hero-stat-num">1500+</div>
+      <div class="hero-stat-label">Участников</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4.9</div>
+      <div class="hero-stat-label">Рейтинг</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-label">Лет работы</div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-text">Листай вниз</span>
+  </div>
+</section>
+
+<!-- ===================== FEATURES / ПРЕИМУЩЕСТВА ===================== -->
+<section id="features">
+  <div class="features-inner">
+    <div class="features-header">
+      <div class="container">
+        <p class="section-tag reveal">Почему FORGE</p>
+        <h2 class="section-title reveal reveal-delay-1">ЧЕТЫРЕ<br>ПРИЧИНЫ</h2>
+        <p style="color: var(--grey); font-size: 15px; margin-top: 16px; max-width: 300px; line-height: 1.7;" class="reveal reveal-delay-2">
+          Мы не про красивые фото. Мы про то, что происходит за закрытыми дверями.
+        </p>
+      </div>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-num">24<span class="feature-unit">/7</span></div>
+        <div class="feature-label">Доступ без выходных</div>
+        <div class="feature-desc">Тренируйся когда удобно — ранним утром или поздней ночью.</div>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-num">200<span class="feature-unit">+</span></div>
+        <div class="feature-label">Тренажёров</div>
+        <div class="feature-desc">Свободные веса, машины, функциональные зоны, ринг.</div>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-num">15</div>
+        <div class="feature-label">Тренеров</div>
+        <div class="feature-desc">Мастера спорта и действующие атлеты. Без диванных экспертов.</div>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-num">0</div>
+        <div class="feature-label">Отмазок</div>
+        <div class="feature-desc">Ни праздников, ни очередей, ни плохих оправданий. Только работа.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROGRAMS / ПРОГРАММЫ ===================== -->
+<section id="programs">
+  <div class="container">
+    <div class="programs-header">
+      <p class="section-tag reveal">Направления</p>
+      <h2 class="section-title reveal reveal-delay-1">ПРОГРАММЫ</h2>
+    </div>
+  </div>
+
+  <div style="max-width: var(--container); margin: 0 auto; padding: 0 clamp(20px, 5vw, 60px);">
+    <div class="programs-grid">
+      <div class="program-card reveal">
+        <div class="program-bg"></div>
+        <div class="program-shape" aria-hidden="true"></div>
+        <div class="program-content">
+          <div class="program-number">01</div>
+          <div class="program-name">Силовой<br>тренинг</div>
+          <div class="program-desc">Жим, присед, становая. Базовые движения — максимальный результат. Программы от новичка до мастера спорта.</div>
+          <div class="program-tag">С 6:00 до 23:00</div>
+        </div>
+      </div>
+      <div class="program-card reveal reveal-delay-1">
+        <div class="program-bg"></div>
+        <div class="program-shape" aria-hidden="true"></div>
+        <div class="program-content">
+          <div class="program-number">02</div>
+          <div class="program-name">Кросс<br>фит</div>
+          <div class="program-desc">Высокоинтенсивные тренировки. Сила + выносливость + скорость. Каждый день — новый WOD.</div>
+          <div class="program-tag">12 занятий в неделю</div>
+        </div>
+      </div>
+      <div class="program-card reveal reveal-delay-2">
+        <div class="program-bg"></div>
+        <div class="program-shape" aria-hidden="true"></div>
+        <div class="program-content">
+          <div class="program-number">03</div>
+          <div class="program-name">Бокс &amp;<br>единоборства</div>
+          <div class="program-desc">Профессиональный ринг, мешки, спарринги. Под руководством бывших бойцов.</div>
+          <div class="program-tag">Пн / Ср / Пт / Сб</div>
+        </div>
+      </div>
+      <div class="program-card reveal reveal-delay-3">
+        <div class="program-bg"></div>
+        <div class="program-shape" aria-hidden="true"></div>
+        <div class="program-content">
+          <div class="program-number">04</div>
+          <div class="program-name">Stretch<br>&amp; Recovery</div>
+          <div class="program-desc">Мобильность, фасция, восстановление после тяжёлых тренингов. Тело должно уметь отдыхать.</div>
+          <div class="program-tag">Вт / Чт / Вс</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PRICING / ЦЕНЫ ===================== -->
+<section id="pricing">
+  <div class="container">
+    <div class="pricing-header">
+      <p class="section-tag reveal">Инвестиция в себя</p>
+      <h2 class="section-title reveal reveal-delay-1">ТАРИФЫ</h2>
+      <p style="color: var(--grey); margin-top: 16px; font-size: 15px;" class="reveal reveal-delay-2">Без скрытых платежей. Без годовых контрактов-ловушек.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- СТАРТ -->
+      <div class="price-card reveal">
+        <div class="price-tier">Старт</div>
+        <div class="price-amount">
+          <span class="price-currency">₽</span>2900<span class="price-period">/мес</span>
+        </div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Доступ в зал 7:00–23:00</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Все тренажёры и свободные веса</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Раздевалка и душ</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Вводная консультация тренера</span></li>
+        </ul>
+        <a href="#cta" class="price-cta">Выбрать</a>
+      </div>
+
+      <!-- ПРО (FEATURED) -->
+      <div class="price-card featured reveal reveal-delay-1">
+        <div class="price-badge">Популярный</div>
+        <div class="price-tier" style="color: var(--lime);">Про</div>
+        <div class="price-amount">
+          <span class="price-currency">₽</span>4900<span class="price-period">/мес</span>
+        </div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Доступ 24/7 включая выходные</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Все тренажёры + групповые занятия</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Кроссфит и бокс без лимита</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">4 персональных тренировки / мес</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Анализ питания и восстановления</span></li>
+        </ul>
+        <a href="#cta" class="price-cta">Начать сейчас</a>
+      </div>
+
+      <!-- ЭЛИТ -->
+      <div class="price-card reveal reveal-delay-2">
+        <div class="price-tier">Элит</div>
+        <div class="price-amount">
+          <span class="price-currency">₽</span>7900<span class="price-period">/мес</span>
+        </div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Всё из тарифа Про</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Неограниченный личный тренер</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Индивидуальная программа</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Приоритетное бронирование</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Нутрициолог + спортивный врач</span></li>
+          <li><span class="checkmark" aria-hidden="true"></span><span class="text">Зона отдыха Elite-lounge</span></li>
+        </ul>
+        <a href="#cta" class="price-cta">Выбрать</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MOTIVATION / МОТИВАЦИЯ ===================== -->
+<section id="motivation">
+  <div class="motivation-bg-text" aria-hidden="true">FORGE</div>
+  <div class="container">
+    <div class="motivation-content">
+      <blockquote class="motivation-quote reveal">
+        Боль <em>временна.</em><br>
+        Результат — навсегда.
+      </blockquote>
+      <p class="motivation-author reveal reveal-delay-1">— Девиз FORGE</p>
+
+      <div class="motivation-bar reveal reveal-delay-2" aria-hidden="true"></div>
+
+      <div class="motivation-stats">
+        <div class="m-stat reveal">
+          <div class="m-stat-num">
+            <span class="counter" data-target="1500">0</span>
+            <span class="plus">+</span>
+          </div>
+          <div class="m-stat-label">Участников</div>
+        </div>
+        <div class="m-stat reveal reveal-delay-1">
+          <div class="m-stat-num">
+            <span class="counter" data-target="97">0</span>
+            <span>%</span>
+          </div>
+          <div class="m-stat-label">Вернулись снова</div>
+        </div>
+        <div class="m-stat reveal reveal-delay-2">
+          <div class="m-stat-num">
+            <span class="counter" data-target="12000">0</span>
+            <span class="plus">+</span>
+          </div>
+          <div class="m-stat-label">Часов тренировок</div>
+        </div>
+        <div class="m-stat reveal reveal-delay-3">
+          <div class="m-stat-num">
+            <span class="counter" data-target="5">0</span>
+          </div>
+          <div class="m-stat-label">Лет в деле</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA / ЗАПИСАТЬСЯ ===================== -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-text">
+        <p class="section-tag reveal">Не жди понедельника</p>
+        <h2 class="section-title reveal reveal-delay-1">НАЧНИ<br>СЕЙЧАС</h2>
+        <p class="cta-tagline reveal reveal-delay-2">
+          Первая тренировка <strong>бесплатно</strong>.<br>
+          Без обязательств. Без предоплаты.<br>
+          Просто приди и почувствуй разницу.
+        </p>
+        <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 12px;" class="reveal reveal-delay-3">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 8px; height: 8px; background: var(--lime); flex-shrink: 0;"></div>
+            <span style="font-size: 14px; color: var(--grey);">Москва, ул. Кузнецкий Мост, 12</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 8px; height: 8px; background: var(--lime); flex-shrink: 0;"></div>
+            <span style="font-size: 14px; color: var(--grey);">+7 (495) 000-00-00</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 8px; height: 8px; background: var(--lime); flex-shrink: 0;"></div>
+            <span style="font-size: 14px; color: var(--grey);">Открыто 24/7</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-2">
+        <form class="cta-form" id="ctaForm" novalidate>
+          <div class="form-row">
+            <input type="text" class="form-input" placeholder="Ваше имя" aria-label="Имя" required>
+            <input type="tel" class="form-input" placeholder="+7 (___) ___-__-__" aria-label="Телефон" required>
+          </div>
+          <select class="form-select" aria-label="Выберите программу">
+            <option value="" disabled selected>Выберите программу</option>
+            <option>Силовой тренинг</option>
+            <option>Кроссфит</option>
+            <option>Бокс и единоборства</option>
+            <option>Stretch &amp; Recovery</option>
+            <option>Не определился — помогите выбрать</option>
+          </select>
+          <button type="submit" class="form-submit">Начать сейчас</button>
+          <p class="form-note">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных. Без спама — только подтверждение записи.</p>
+        </form>
+
+        <div class="form-success" id="formSuccess">
+          <div class="form-success-title">Готово.</div>
+          <div class="form-success-text">Мы свяжемся с вами в течение 30 минут для подтверждения записи на бесплатную тренировку.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">FORGE</a>
+    <p class="footer-copy">© 2024 FORGE — Кузница тела.<br>Все права защищены.</p>
+    <div class="footer-address">
+      <strong>Москва, Кузнецкий Мост, 12</strong>
+      Открыто 24/7 без выходных
+    </div>
+  </div>
+</footer>
+
+<script>
+// ========================================
+// NAV SCROLL EFFECT
+// ========================================
+const navbar = document.getElementById('navbar');
+let lastScroll = 0;
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+
+  if (scrollY > 60) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+
+  lastScroll = scrollY;
+}, { passive: true });
+
+// ========================================
+// MOBILE MENU
+// ========================================
+const burgerBtn = document.getElementById('burgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileLinks = document.querySelectorAll('.mobile-link');
+
+burgerBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+
+  const spans = burgerBtn.querySelectorAll('span');
+  if (mobileMenu.classList.contains('open')) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+  } else {
+    spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  }
+});
+
+mobileLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+    const spans = burgerBtn.querySelectorAll('span');
+    spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  });
+});
+
+// ========================================
+// SCROLL REVEAL
+// ========================================
+const revealElements = document.querySelectorAll('.reveal');
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+});
+
+revealElements.forEach(el => revealObserver.observe(el));
+
+// ========================================
+// COUNTER ANIMATION
+// ========================================
+const counters = document.querySelectorAll('.counter');
+let countersStarted = false;
+
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target, 10);
+  const duration = 2000;
+  const startTime = performance.now();
+
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.floor(eased * target);
+
+    if (target >= 1000) {
+      el.textContent = current.toLocaleString('ru-RU');
+    } else {
+      el.textContent = current;
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      if (target >= 1000) {
+        el.textContent = target.toLocaleString('ru-RU');
+      } else {
+        el.textContent = target;
+      }
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+const motivationSection = document.getElementById('motivation');
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !countersStarted) {
+      countersStarted = true;
+      counters.forEach(counter => {
+        setTimeout(() => animateCounter(counter), Math.random() * 300);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+counterObserver.observe(motivationSection);
+
+// ========================================
+// FORM SUBMIT
+// ========================================
+const ctaForm = document.getElementById('ctaForm');
+const formSuccess = document.getElementById('formSuccess');
+
+ctaForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const btn = ctaForm.querySelector('.form-submit');
+  btn.textContent = 'Отправляем...';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+
+  setTimeout(() => {
+    ctaForm.style.display = 'none';
+    formSuccess.classList.add('show');
+  }, 900);
+});
+
+// ========================================
+// SMOOTH HOVER PARALLAX ON HERO
+// ========================================
+const heroSection = document.querySelector('#hero');
+const heroGlow = document.querySelector('.hero-glow');
+
+heroSection.addEventListener('mousemove', (e) => {
+  const rect = heroSection.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width;
+  const y = (e.clientY - rect.top) / rect.height;
+
+  const moveX = (x - 0.5) * 30;
+  const moveY = (y - 0.5) * 30;
+
+  heroGlow.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+}, { passive: true });
+
+// ========================================
+// PROGRAM CARDS — TOUCH SUPPORT
+// ========================================
+const programCards = document.querySelectorAll('.program-card');
+
+programCards.forEach(card => {
+  card.addEventListener('touchstart', () => {
+    card.classList.add('hovered');
+  }, { passive: true });
+
+  card.addEventListener('touchend', () => {
+    setTimeout(() => card.classList.remove('hovered'), 600);
+  }, { passive: true });
+});
+</script>
+</body>
+</html>

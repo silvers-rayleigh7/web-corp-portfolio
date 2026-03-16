@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Development Corp — Архитектура AI-корпорации</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════ RESET & BASE ═══════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #06080f;
+  --bg-surface: #0c1021;
+  --bg-card: #111631;
+  --bg-card-hover: #161d42;
+  --border: rgba(124, 58, 237, 0.15);
+  --border-hover: rgba(124, 58, 237, 0.4);
+  --text-primary: #e8eaf0;
+  --text-secondary: #8b90a8;
+  --text-muted: #5a5f78;
+  --accent-purple: #7c3aed;
+  --accent-blue: #3b82f6;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --glow-purple: rgba(124, 58, 237, 0.3);
+  --glow-blue: rgba(59, 130, 246, 0.3);
+  --gradient-hero: linear-gradient(135deg, #7c3aed 0%, #3b82f6 50%, #06b6d4 100%);
+  --font-display: 'Sora', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ═══════ GRID BACKGROUND ═══════ */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.grid-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(124,58,237,0.08), transparent),
+              radial-gradient(ellipse 60% 40% at 80% 100%, rgba(59,130,246,0.06), transparent);
+}
+
+/* ═══════ NAVIGATION ═══════ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px) saturate(1.5);
+  background: rgba(6,8,15,0.7);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+nav.scrolled { background: rgba(6,8,15,0.92); }
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links { display: flex; gap: 0.25rem; }
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+  background: rgba(124,58,237,0.1);
+}
+
+.nav-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 100px;
+  background: rgba(124,58,237,0.1);
+  border: 1px solid rgba(124,58,237,0.25);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--accent-purple);
+}
+
+.nav-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+}
+
+/* ═══════ SECTIONS COMMON ═══════ */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-purple);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-purple);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 640px;
+  margin-bottom: 3rem;
+}
+
+/* ═══════ REVEAL ANIMATION ═══════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+.reveal-delay-6 { transition-delay: 0.6s; }
+
+/* ═══════ HERO ═══════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 5rem;
+  position: relative;
+}
+
+.hero-orb {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  animation: orb-drift 20s ease-in-out infinite;
+}
+
+.hero-orb-1 { background: var(--accent-purple); top: 10%; left: 20%; }
+.hero-orb-2 { background: var(--accent-blue); bottom: 20%; right: 15%; animation-delay: -7s; }
+.hero-orb-3 { background: var(--accent-cyan); top: 50%; left: 60%; animation-delay: -14s; opacity: 0.06; }
+
+@keyframes orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+.hero-corp-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 100px;
+  background: rgba(124,58,237,0.08);
+  border: 1px solid rgba(124,58,237,0.2);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-purple);
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  max-width: 900px;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 .gradient-text {
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin-bottom: 3rem;
+  line-height: 1.8;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+.scroll-hint .arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 1.5px solid var(--text-muted);
+  border-bottom: 1.5px solid var(--text-muted);
+  transform: rotate(45deg);
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ═══════ OVERVIEW CARDS ═══════ */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.overview-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-hero);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.overview-card:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.overview-card:hover::before { opacity: 1; }
+
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-icon.purple { background: rgba(124,58,237,0.12); }
+.card-icon.blue { background: rgba(59,130,246,0.12); }
+.card-icon.cyan { background: rgba(6,180,212,0.12); }
+.card-icon.emerald { background: rgba(16,185,129,0.12); }
+.card-icon.amber { background: rgba(245,158,11,0.12); }
+.card-icon.rose { background: rgba(244,63,94,0.12); }
+
+.overview-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.01em;
+}
+
+.overview-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ═══════ HIERARCHY ═══════ */
+.hierarchy-container {
+  position: relative;
+}
+
+.hierarchy-level {
+  margin-bottom: 2rem;
+}
+
+.level-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.level-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.level-tag.ceo { background: rgba(124,58,237,0.15); color: var(--accent-purple); }
+.level-tag.csuite { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+.level-tag.specialist { background: rgba(6,180,212,0.15); color: var(--accent-cyan); }
+.level-tag.super { background: rgba(245,158,11,0.15); color: var(--accent-amber); }
+
+.level-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.level-count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Agent Cards */
+.agents-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.agent-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 0.82rem;
+  transition: all 0.2s;
+  cursor: default;
+}
+
+.agent-chip:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-card-hover);
+}
+
+.agent-chip .agent-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.agent-chip .agent-name {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.78rem;
+}
+
+.agent-chip .agent-role {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+}
+
+.dot-purple { background: var(--accent-purple); box-shadow: 0 0 8px var(--glow-purple); }
+.dot-blue { background: var(--accent-blue); box-shadow: 0 0 8px var(--glow-blue); }
+.dot-cyan { background: var(--accent-cyan); box-shadow: 0 0 8px rgba(6,180,212,0.3); }
+.dot-emerald { background: var(--accent-emerald); box-shadow: 0 0 8px rgba(16,185,129,0.3); }
+.dot-amber { background: var(--accent-amber); box-shadow: 0 0 8px rgba(245,158,11,0.3); }
+.dot-rose { background: var(--accent-rose); box-shadow: 0 0 8px rgba(244,63,94,0.3); }
+
+/* C-Suite expanded cards */
+.csuite-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.csuite-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.csuite-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.csuite-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.csuite-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.csuite-card-head h4 {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.csuite-card-head .csuite-title {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.csuite-card .csuite-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.csuite-card .manages-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.manages-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(124,58,237,0.08);
+  color: var(--text-muted);
+}
+
+/* ═══════ PIPELINE ═══════ */
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.pipeline::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent-purple), var(--accent-blue), var(--accent-cyan), var(--accent-emerald));
+  opacity: 0.3;
+}
+
+.pipeline-step {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  position: relative;
+}
+
+.pipeline-node {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.pipeline-content {
+  flex: 1;
+  padding-top: 0.5rem;
+}
+
+.pipeline-content h4 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.pipeline-content p {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.pipeline-agents {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+}
+
+.pipeline-agent-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+/* ═══════ TECH STACK ═══════ */
+.tech-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.tech-category {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.tech-category h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tech-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.tech-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.tech-item .tech-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tech-item strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ═══════ DESIGN SYSTEM ═══════ */
+.design-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .design-two-col { grid-template-columns: 1fr; }
+}
+
+.theme-questions {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.theme-questions h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.question-item {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.question-num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-purple);
+  padding: 0.15rem 0.5rem;
+  background: rgba(124,58,237,0.1);
+  border-radius: 4px;
+  height: fit-content;
+  flex-shrink: 0;
+}
+
+.genre-table {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  overflow-x: auto;
+}
+
+.genre-table h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.genre-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(124,58,237,0.06);
+}
+
+.genre-row:last-child { border-bottom: none; }
+
+.genre-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.genre-name {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  min-width: 90px;
+}
+
+.genre-font {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  flex: 1;
+}
+
+/* ═══════ IMAGE TRIO ═══════ */
+.trio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .trio-grid { grid-template-columns: 1fr; }
+}
+
+.trio-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.trio-card.primary {
+  border-color: rgba(124,58,237,0.3);
+  background: linear-gradient(135deg, rgba(124,58,237,0.05), var(--bg-card));
+}
+
+.trio-card:hover { transform: translateY(-3px); border-color: var(--border-hover); }
+
+.trio-badge {
+  position: absolute;
+  top: -8px;
+  right: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background: var(--accent-purple);
+  color: white;
+}
+
+.trio-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.trio-card h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.trio-card .trio-model {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.trio-card p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.trio-card .trio-price {
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-emerald);
+}
+
+/* ═══════ QA SECTION ═══════ */
+.qa-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.25rem;
+}
+
+.qa-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.75rem;
+}
+
+.qa-card h4 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qa-checklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.qa-checklist li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+
+.qa-check {
+  color: var(--accent-emerald);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+/* ═══════ PROJECTS ═══════ */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+  .projects-grid { grid-template-columns: 1fr; }
+}
+
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-hover);
+}
+
+.project-preview {
+  height: 160px;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-preview .project-gradient {
+  position: absolute;
+  inset: 0;
+}
+
+.project-preview .project-label {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  color: white;
+}
+
+.project-info {
+  padding: 1.5rem;
+}
+
+.project-info h4 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.project-info p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.project-tech-tags {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.project-tech-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(59,130,246,0.1);
+  color: var(--accent-blue);
+}
+
+/* ═══════ QR CODE ═══════ */
+.project-qr-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.project-qr-canvas {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.project-qr-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.project-qr-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.project-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  background: rgba(124,58,237,0.12);
+  border: 1px solid rgba(124,58,237,0.25);
+  color: var(--accent-purple);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  width: fit-content;
+}
+
+.project-link-btn:hover {
+  background: rgba(124,58,237,0.2);
+  border-color: rgba(124,58,237,0.5);
+  transform: translateX(3px);
+}
+
+.project-link-btn .arrow-icon {
+  transition: transform 0.2s;
+}
+
+.project-link-btn:hover .arrow-icon {
+  transform: translateX(3px);
+}
+
+.project-subpages {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.project-subpage-link {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(6,180,212,0.08);
+  color: var(--accent-cyan);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.project-subpage-link:hover {
+  background: rgba(6,180,212,0.18);
+}
+
+/* ═══════ SKILLS SECTION ═══════ */
+.skills-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 100px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.skill-chip:hover {
+  border-color: var(--accent-purple);
+  color: var(--text-primary);
+}
+
+.skill-chip .skill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+}
+
+/* ═══════ FOOTER ═══════ */
+.footer {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  border-top: 1px solid var(--border);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.footer .footer-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media (max-width: 768px) {
+  section { padding: 4rem 1.25rem; }
+  .hero-stats { gap: 2rem; }
+  .nav-links { display: none; }
+  .csuite-grid { grid-template-columns: 1fr; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .trio-grid { grid-template-columns: 1fr; }
+  .pipeline-step { gap: 1rem; }
+  .pipeline-node { width: 44px; height: 44px; font-size: 0.9rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- ═══════ NAVIGATION ═══════ -->
+<nav>
+  <div class="nav-brand">CORP-001</div>
+  <div class="nav-links">
+    <a href="#overview">Обзор</a>
+    <a href="#hierarchy">Иерархия</a>
+    <a href="#pipeline">Pipeline</a>
+    <a href="#tech">Стек</a>
+    <a href="#design">Дизайн</a>
+    <a href="#qa">QA</a>
+    <a href="#projects">Проекты</a>
+  </div>
+  <div class="nav-badge">
+    <span class="dot"></span>
+    36 агентов online
+  </div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+
+  <div class="hero-corp-tag reveal">
+    <span>CORP-001</span>
+    <span style="color: var(--text-muted)">|</span>
+    <span>Web Development Corp</span>
+  </div>
+
+  <h1 class="reveal reveal-delay-1">
+    Архитектура<br><span class="gradient-text">AI-корпорации</span>
+  </h1>
+
+  <p class="hero-description reveal reveal-delay-2">
+    36 автономных агентов. 7 директоров. 8 навыков. Полный цикл от брифа до деплоя - сайт любой сложности силами искусственного интеллекта.
+  </p>
+
+  <div class="hero-stats reveal reveal-delay-3">
+    <div class="hero-stat">
+      <div class="hero-stat-value">36</div>
+      <div class="hero-stat-label">Агентов</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">7</div>
+      <div class="hero-stat-label">C-Suite</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">8</div>
+      <div class="hero-stat-label">Skills</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">5</div>
+      <div class="hero-stat-label">Проектов</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- ═══════ OVERVIEW ═══════ -->
+<section id="overview">
+  <div class="section-label reveal">01 — Обзор</div>
+  <h2 class="section-title reveal reveal-delay-1">Что такое Web Corp?</h2>
+  <p class="section-subtitle reveal reveal-delay-2">
+    Корпоративная иерархия AI-агентов, где каждый специалист отвечает за свою область. Пользователь выступает как Совет Директоров.
+  </p>
+
+  <div class="overview-grid">
+    <div class="overview-card reveal reveal-delay-1">
+      <div class="card-icon purple">&#9672;</div>
+      <h3>Корпоративная иерархия</h3>
+      <p>CEO оркестрирует задачу, 6 C-Suite директоров управляют доменами, 24 специалиста выполняют работу в alpha/beta парах.</p>
+    </div>
+    <div class="overview-card reveal reveal-delay-2">
+      <div class="card-icon blue">&#9881;</div>
+      <h3>Параллельное исполнение</h3>
+      <p>Независимые задачи запускаются одновременно: дизайн + копирайтинг + SEO работают параллельно, сокращая время в 3 раза.</p>
+    </div>
+    <div class="overview-card reveal reveal-delay-3">
+      <div class="card-icon cyan">&#10697;</div>
+      <h3>Alpha/Beta обучение</h3>
+      <p>Каждая роль имеет 2 агента: Alpha экспериментирует с новыми подходами, Beta использует проверенные паттерны. Они учатся друг у друга.</p>
+    </div>
+    <div class="overview-card reveal reveal-delay-4">
+      <div class="card-icon emerald">&#9733;</div>
+      <h3>Quality Gate</h3>
+      <p>Ни один сайт не выходит без прохождения QA: Lighthouse >= 90, WCAG 2.1, cross-browser тестирование, SEO-аудит.</p>
+    </div>
+    <div class="overview-card reveal reveal-delay-5">
+      <div class="card-icon amber">&#9670;</div>
+      <h3>Theme-First дизайн</h3>
+      <p>10 вопросов о целевой аудитории до начала дизайна. Визуальный язык формируется из контекста, не из шаблонов.</p>
+    </div>
+    <div class="overview-card reveal reveal-delay-6">
+      <div class="card-icon rose">&#9830;</div>
+      <h3>Image Trio</h3>
+      <p>3 AI-модели генерируют изображения параллельно: Nano Banana (атмосфера), GPT Image (фотореализм), Grok (бюджет).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ HIERARCHY ═══════ -->
+<section id="hierarchy">
+  <div class="section-label reveal">02 — Иерархия</div>
+  <h2 class="section-title reveal reveal-delay-1">Структура корпорации</h2>
+  <p class="section-subtitle reveal reveal-delay-2">
+    От CEO до специалистов - каждый агент знает свою роль и зону ответственности.
+  </p>
+
+  <div class="hierarchy-container">
+    <!-- Super Agents -->
+    <div class="hierarchy-level reveal">
+      <div class="level-header">
+        <span class="level-tag super">Super Agents</span>
+        <div class="level-line"></div>
+        <span class="level-count">2 агента</span>
+      </div>
+      <div class="agents-row">
+        <div class="agent-chip">
+          <div class="agent-dot dot-amber"></div>
+          <span class="agent-name">stitch</span>
+          <span class="agent-role">Creative Genius (Awwwards level)</span>
+        </div>
+        <div class="agent-chip">
+          <div class="agent-dot dot-amber"></div>
+          <span class="agent-name">kimi-claw</span>
+          <span class="agent-role">Universal AI (1T params, 256K ctx)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CEO -->
+    <div class="hierarchy-level reveal reveal-delay-1">
+      <div class="level-header">
+        <span class="level-tag ceo">CEO</span>
+        <div class="level-line"></div>
+        <span class="level-count">1 агент</span>
+      </div>
+      <div class="agents-row">
+        <div class="agent-chip">
+          <div class="agent-dot dot-purple"></div>
+          <span class="agent-name">web-ceo</span>
+          <span class="agent-role">Claude Opus 4.6 - Главный оркестратор</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- C-Suite -->
+    <div class="hierarchy-level reveal reveal-delay-2">
+      <div class="level-header">
+        <span class="level-tag csuite">C-Suite Directors</span>
+        <div class="level-line"></div>
+        <span class="level-count">6 агентов</span>
+      </div>
+      <div class="csuite-grid">
+        <div class="csuite-card">
+          <div class="csuite-card-head">
+            <div class="csuite-avatar" style="background: rgba(124,58,237,0.15);">&#128736;</div>
+            <div>
+              <h4>web-cto</h4>
+              <div class="csuite-title">Chief Technology Officer</div>
+            </div>
+          </div>
+          <div class="csuite-desc">Архитектура, стек, код. Управляет Frontend, Backend, DevOps.</div>
+          <div class="manages-list">
+            <span class="manages-tag">frontend-alpha/beta</span>
+            <span class="manages-tag">backend-alpha/beta</span>
+            <span class="manages-tag">devops-alpha/beta</span>
+          </div>
+        </div>
+
+        <div class="csuite-card">
+          <div class="csuite-card-head">
+            <div class="csuite-avatar" style="background: rgba(59,130,246,0.15);">&#127912;</div>
+            <div>
+              <h4>web-cdo</h4>
+              <div class="csuite-title">Chief Design Officer</div>
+            </div>
+          </div>
+          <div class="csuite-desc">Визуальная система + Stitch AI. Kimi K2.5 для vision-анализа.</div>
+          <div class="manages-list">
+            <span class="manages-tag">figma-alpha/beta</span>
+            <span class="manages-tag">ux-alpha/beta</span>
+          </div>
+        </div>
+
+        <div class="csuite-card">
+          <div class="csuite-card-head">
+            <div class="csuite-avatar" style="background: rgba(6,180,212,0.15);">&#9998;</div>
+            <div>
+              <h4>web-cco</h4>
+              <div class="csuite-title">Chief Content Officer</div>
+            </div>
+          </div>
+          <div class="csuite-desc">Единый голос бренда. Тексты + SEO координация.</div>
+          <div class="manages-list">
+            <span class="manages-tag">copy-alpha/beta</span>
+            <span class="manages-tag">seo-alpha/beta</span>
+          </div>
+        </div>
+
+        <div class="csuite-card">
+          <div class="csuite-card-head">
+            <div class="csuite-avatar" style="background: rgba(16,185,129,0.15);">&#128200;</div>
+            <div>
+              <h4>web-cmo</h4>
+              <div class="csuite-title">Chief Marketing Officer</div>
+            </div>
+          </div>
+          <div class="csuite-desc">Конверсия, стратегия, ROI. GA4, A/B тесты, воронки.</div>
+          <div class="manages-list">
+            <span class="manages-tag">strategy-alpha/beta</span>
+            <span class="manages-tag">analytics-alpha/beta</span>
+          </div>
+        </div>
+
+        <div class="csuite-card">
+          <div class="csuite-card-head">
+            <div class="csuite-avatar" style="background: rgba(244,63,94,0.15);">&#127909;</div>
+            <div>
+              <h4>web-ccro</h4>
+              <div class="csuite-title">Chief Creative Officer</div>
+            </div>
+          </div>
+          <div class="csuite-desc">Медиа-директор: Image Trio, видео, GIF, анимации.</div>
+          <div class="manages-list">
+            <span class="manages-tag">image-nano/gpt/grok</span>
+            <span class="manages-tag">video-alpha/beta</span>
+            <span class="manages-tag">gif-alpha/beta</span>
+          </div>
+        </div>
+
+        <div class="csuite-card">
+          <div class="csuite-card-head">
+            <div class="csuite-avatar" style="background: rgba(245,158,11,0.15);">&#9989;</div>
+            <div>
+              <h4>web-coo</h4>
+              <div class="csuite-title">Chief Operating Officer</div>
+            </div>
+          </div>
+          <div class="csuite-desc">QA, Lighthouse, финальная сдача. Zero critical bugs.</div>
+          <div class="manages-list">
+            <span class="manages-tag">qa-alpha/beta</span>
+            <span class="manages-tag">perf-alpha/beta</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Specialists -->
+    <div class="hierarchy-level reveal reveal-delay-3">
+      <div class="level-header">
+        <span class="level-tag specialist">Specialists (Alpha/Beta)</span>
+        <div class="level-line"></div>
+        <span class="level-count">24+ агента</span>
+      </div>
+      <div class="agents-row">
+        <div class="agent-chip"><div class="agent-dot dot-cyan"></div><span class="agent-name">frontend-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-cyan"></div><span class="agent-name">frontend-beta</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-cyan"></div><span class="agent-name">backend-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-cyan"></div><span class="agent-name">backend-beta</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-cyan"></div><span class="agent-name">devops-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-cyan"></div><span class="agent-name">devops-beta</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-blue"></div><span class="agent-name">figma-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-blue"></div><span class="agent-name">figma-beta</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-blue"></div><span class="agent-name">ux-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-blue"></div><span class="agent-name">ux-beta</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-emerald"></div><span class="agent-name">copy-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-emerald"></div><span class="agent-name">copy-beta</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-emerald"></div><span class="agent-name">seo-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-emerald"></div><span class="agent-name">seo-beta</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-rose"></div><span class="agent-name">image-nano</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-rose"></div><span class="agent-name">image-gpt</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-rose"></div><span class="agent-name">image-grok</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-rose"></div><span class="agent-name">video-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-rose"></div><span class="agent-name">video-beta</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-amber"></div><span class="agent-name">qa-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-amber"></div><span class="agent-name">qa-beta</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-amber"></div><span class="agent-name">perf-alpha</span></div>
+        <div class="agent-chip"><div class="agent-dot dot-amber"></div><span class="agent-name">perf-beta</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PIPELINE ═══════ -->
+<section id="pipeline">
+  <div class="section-label reveal">03 — Pipeline</div>
+  <h2 class="section-title reveal reveal-delay-1">От брифа до деплоя</h2>
+  <p class="section-subtitle reveal reveal-delay-2">
+    Полный цикл создания сайта через координированную работу агентов.
+  </p>
+
+  <div class="pipeline">
+    <div class="pipeline-step reveal">
+      <div class="pipeline-node" style="background: rgba(124,58,237,0.15); color: var(--accent-purple);">1</div>
+      <div class="pipeline-content">
+        <h4>Бриф и исследование</h4>
+        <p>CEO получает задачу, декомпозирует на 8-12 подзадач. Researcher анализирует нишу, конкурентов, аудиторию.</p>
+        <div class="pipeline-agents">
+          <span class="pipeline-agent-tag">web-ceo</span>
+          <span class="pipeline-agent-tag">web-researcher</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-step reveal reveal-delay-1">
+      <div class="pipeline-node" style="background: rgba(59,130,246,0.15); color: var(--accent-blue);">2</div>
+      <div class="pipeline-content">
+        <h4>Контент + Дизайн (параллельно)</h4>
+        <p>Копирайтеры пишут тексты (hero, CTA, features), дизайнеры создают wireframes через Theme Analysis (10 вопросов). SEO готовит ключевые слова.</p>
+        <div class="pipeline-agents">
+          <span class="pipeline-agent-tag">web-copy-alpha</span>
+          <span class="pipeline-agent-tag">web-copy-beta</span>
+          <span class="pipeline-agent-tag">web-figma-alpha</span>
+          <span class="pipeline-agent-tag">web-seo-alpha</span>
+          <span class="pipeline-agent-tag">stitch</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-step reveal reveal-delay-2">
+      <div class="pipeline-node" style="background: rgba(6,180,212,0.15); color: var(--accent-cyan);">3</div>
+      <div class="pipeline-content">
+        <h4>Разработка + Медиа (параллельно)</h4>
+        <p>Frontend строит React/Next.js или HTML/CSS. Backend создает API (если нужен). Image Trio генерирует визуалы параллельно в 3 моделях.</p>
+        <div class="pipeline-agents">
+          <span class="pipeline-agent-tag">web-frontend-alpha</span>
+          <span class="pipeline-agent-tag">web-backend-alpha</span>
+          <span class="pipeline-agent-tag">web-image-nano</span>
+          <span class="pipeline-agent-tag">web-image-gpt</span>
+          <span class="pipeline-agent-tag">web-image-grok</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-step reveal reveal-delay-3">
+      <div class="pipeline-node" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald);">4</div>
+      <div class="pipeline-content">
+        <h4>Quality Gate</h4>
+        <p>Финальная проверка: Lighthouse >= 90, WCAG 2.1, cross-browser, SEO-аудит. Если FAIL - возврат на доработку. Максимум 2 раунда ревизий.</p>
+        <div class="pipeline-agents">
+          <span class="pipeline-agent-tag">web-qa-alpha</span>
+          <span class="pipeline-agent-tag">web-qa-beta</span>
+          <span class="pipeline-agent-tag">web-perf-alpha</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-step reveal reveal-delay-4">
+      <div class="pipeline-node" style="background: rgba(245,158,11,0.15); color: var(--accent-amber);">5</div>
+      <div class="pipeline-content">
+        <h4>Деплой</h4>
+        <p>Сайт деплоится на Vercel/Netlify/Railway. Настройка домена, SSL, CI/CD. Сдача готового продукта.</p>
+        <div class="pipeline-agents">
+          <span class="pipeline-agent-tag">web-devops-alpha</span>
+          <span class="pipeline-agent-tag">web-devops-beta</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TECH STACK ═══════ -->
+<section id="tech">
+  <div class="section-label reveal">04 — Технологии</div>
+  <h2 class="section-title reveal reveal-delay-1">Технологический стек</h2>
+  <p class="section-subtitle reveal reveal-delay-2">
+    Современные инструменты для каждого слоя разработки.
+  </p>
+
+  <div class="tech-columns">
+    <div class="tech-category reveal reveal-delay-1">
+      <h3><span style="color: var(--accent-purple);">&#9632;</span> Frontend</h3>
+      <ul class="tech-list">
+        <li class="tech-item"><span class="tech-dot dot-purple"></span><strong>Next.js 14+</strong> / React 18</li>
+        <li class="tech-item"><span class="tech-dot dot-purple"></span><strong>Tailwind CSS v4</strong> (@tailwindcss/vite)</li>
+        <li class="tech-item"><span class="tech-dot dot-purple"></span><strong>Framer Motion v12+</strong> ('motion/react')</li>
+        <li class="tech-item"><span class="tech-dot dot-purple"></span>HTML5 + CSS3 (статичные сайты)</li>
+        <li class="tech-item"><span class="tech-dot dot-purple"></span>Mobile-first: 390px > 768px > 1280px</li>
+      </ul>
+    </div>
+
+    <div class="tech-category reveal reveal-delay-2">
+      <h3><span style="color: var(--accent-blue);">&#9632;</span> Backend</h3>
+      <ul class="tech-list">
+        <li class="tech-item"><span class="tech-dot dot-blue"></span><strong>Node.js</strong> + Express</li>
+        <li class="tech-item"><span class="tech-dot dot-blue"></span><strong>Prisma</strong> ORM</li>
+        <li class="tech-item"><span class="tech-dot dot-blue"></span><strong>PostgreSQL</strong> / Supabase</li>
+        <li class="tech-item"><span class="tech-dot dot-blue"></span>JWT Auth / Supabase Auth</li>
+        <li class="tech-item"><span class="tech-dot dot-blue"></span>Stripe, Resend, REST/GraphQL</li>
+      </ul>
+    </div>
+
+    <div class="tech-category reveal reveal-delay-3">
+      <h3><span style="color: var(--accent-cyan);">&#9632;</span> AI-модели (Polza.ai)</h3>
+      <ul class="tech-list">
+        <li class="tech-item"><span class="tech-dot dot-cyan"></span><strong>Gemini 3.1 Flash</strong> (Nano Banana - изображения)</li>
+        <li class="tech-item"><span class="tech-dot dot-cyan"></span><strong>GPT Image 1.5</strong> (фотореализм, текст)</li>
+        <li class="tech-item"><span class="tech-dot dot-cyan"></span><strong>Grok Imagine</strong> (бюджетная генерация)</li>
+        <li class="tech-item"><span class="tech-dot dot-cyan"></span><strong>Kimi K2.5</strong> (vision-анализ)</li>
+        <li class="tech-item"><span class="tech-dot dot-cyan"></span><strong>DeepSeek V3.2</strong> (keyword research)</li>
+      </ul>
+    </div>
+
+    <div class="tech-category reveal reveal-delay-4">
+      <h3><span style="color: var(--accent-emerald);">&#9632;</span> Хостинг и DevOps</h3>
+      <ul class="tech-list">
+        <li class="tech-item"><span class="tech-dot dot-emerald"></span><strong>Vercel</strong> (Next.js приоритет)</li>
+        <li class="tech-item"><span class="tech-dot dot-emerald"></span><strong>Netlify</strong> (статичные сайты)</li>
+        <li class="tech-item"><span class="tech-dot dot-emerald"></span><strong>Railway</strong> (backend + DB)</li>
+        <li class="tech-item"><span class="tech-dot dot-emerald"></span>GitHub Actions CI/CD</li>
+        <li class="tech-item"><span class="tech-dot dot-emerald"></span>Cloudflare DNS + SSL</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ DESIGN SYSTEM ═══════ -->
+<section id="design">
+  <div class="section-label reveal">05 — Дизайн-система</div>
+  <h2 class="section-title reveal reveal-delay-1">Theme-First подход</h2>
+  <p class="section-subtitle reveal reveal-delay-2">
+    Дизайн рождается из контекста аудитории, а не из шаблонов. 10 вопросов перед каждым проектом.
+  </p>
+
+  <div class="design-two-col">
+    <div class="theme-questions reveal reveal-delay-1">
+      <h3>10 вопросов Theme Analysis</h3>
+      <div class="question-item">
+        <span class="question-num">01</span>
+        <span>Кто эти люди? Какая их главная идентичность?</span>
+      </div>
+      <div class="question-item">
+        <span class="question-num">02</span>
+        <span>Зачем они собираются вместе? Что их объединяет?</span>
+      </div>
+      <div class="question-item">
+        <span class="question-num">03</span>
+        <span>Что они любят вне контекста этого сайта?</span>
+      </div>
+      <div class="question-item">
+        <span class="question-num">04</span>
+        <span>Что их вдохновляет? Кто их герои?</span>
+      </div>
+      <div class="question-item">
+        <span class="question-num">05</span>
+        <span>Как они отличают "своих" от "чужих"?</span>
+      </div>
+      <div class="question-item">
+        <span class="question-num">06</span>
+        <span>Каким языком и сленгом они говорят?</span>
+      </div>
+      <div class="question-item">
+        <span class="question-num">07</span>
+        <span>Где они тусуются онлайн и оффлайн?</span>
+      </div>
+      <div class="question-item">
+        <span class="question-num">08</span>
+        <span>Какой визуальный мир они знают и любят?</span>
+      </div>
+      <div class="question-item">
+        <span class="question-num">09</span>
+        <span>Что для них "круто"? Что вызывает восторг?</span>
+      </div>
+      <div class="question-item">
+        <span class="question-num">10</span>
+        <span>Что их оттолкнет? Что неприемлемо?</span>
+      </div>
+    </div>
+
+    <div class="genre-table reveal reveal-delay-2">
+      <h3>Жанровые паттерны</h3>
+      <div class="genre-row">
+        <div class="genre-swatch" style="background: #5C0A14;"></div>
+        <span class="genre-name">Horror</span>
+        <span class="genre-font">IM Fell English, 40-70px, fog + glitch</span>
+      </div>
+      <div class="genre-row">
+        <div class="genre-swatch" style="background: linear-gradient(135deg, #7c3aed, #3b82f6);"></div>
+        <span class="genre-name">Tech/SaaS</span>
+        <span class="genre-font">Inter, 56-80px, aurora + bento grid</span>
+      </div>
+      <div class="genre-row">
+        <div class="genre-swatch" style="background: linear-gradient(135deg, #B8952A, #8B6914);"></div>
+        <span class="genre-name">Luxury</span>
+        <span class="genre-font">Playfair Display, 48-72px, slow reveal</span>
+      </div>
+      <div class="genre-row">
+        <div class="genre-swatch" style="background: #C8C0B4;"></div>
+        <span class="genre-name">Кавказ</span>
+        <span class="genre-font">Custom serif, серебро + чернь + гранат</span>
+      </div>
+      <div class="genre-row">
+        <div class="genre-swatch" style="background: #5865F2;"></div>
+        <span class="genre-name">GameDev</span>
+        <span class="genre-font">Discord purple + #39D353 neon green</span>
+      </div>
+      <div class="genre-row">
+        <div class="genre-swatch" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></div>
+        <span class="genre-name">Startup</span>
+        <span class="genre-font">Sora, 56-90px, liquid morph, playful</span>
+      </div>
+      <div class="genre-row">
+        <div class="genre-swatch" style="background: #10b981;"></div>
+        <span class="genre-name">Медицина</span>
+        <span class="genre-font">Nunito, белый + голубой, мягкие anim</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Trio -->
+  <div class="trio-grid">
+    <div class="trio-card primary reveal reveal-delay-3">
+      <div class="trio-badge">PRIMARY</div>
+      <div class="trio-icon">&#9733;</div>
+      <h4>Nano Banana</h4>
+      <div class="trio-model">Gemini 3.1 Flash Image</div>
+      <p>Атмосферные иллюстрации, hero-картинки, 3D-визуализации. Лучший баланс качества и скорости.</p>
+      <div class="trio-price">4.8 - 10.8 руб</div>
+    </div>
+    <div class="trio-card reveal reveal-delay-4">
+      <div class="trio-icon">&#128248;</div>
+      <h4>GPT Image 1.5</h4>
+      <div class="trio-model">OpenAI via Polza.ai</div>
+      <p>Фотореализм, текст в изображении, мокапы устройств, логотипы. Лучший для текстового контента.</p>
+      <div class="trio-price">3 - 16.5 руб</div>
+    </div>
+    <div class="trio-card reveal reveal-delay-5">
+      <div class="trio-icon">&#9889;</div>
+      <h4>Grok Imagine</h4>
+      <div class="trio-model">xAI via Polza.ai</div>
+      <p>Иконки, простые баннеры, bulk-генерация. Самый бюджетный вариант для массовых задач.</p>
+      <div class="trio-price">2.50 руб</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ QA ═══════ -->
+<section id="qa">
+  <div class="section-label reveal">06 — Quality Assurance</div>
+  <h2 class="section-title reveal reveal-delay-1">Гейткипер качества</h2>
+  <p class="section-subtitle reveal reveal-delay-2">
+    Ни один сайт не деплоится без прохождения всех проверок. Lighthouse >= 90 - обязательное условие.
+  </p>
+
+  <div class="qa-grid">
+    <div class="qa-card reveal reveal-delay-1">
+      <h4><span style="color: var(--accent-purple);">&#9632;</span> Адаптивность</h4>
+      <ul class="qa-checklist">
+        <li><span class="qa-check">&#10003;</span> Mobile 390px - нет горизонтального скролла</li>
+        <li><span class="qa-check">&#10003;</span> Tablet 768px - корректный layout</li>
+        <li><span class="qa-check">&#10003;</span> Desktop 1280px+ - полная версия</li>
+        <li><span class="qa-check">&#10003;</span> Touch-friendly элементы (44px min)</li>
+      </ul>
+    </div>
+    <div class="qa-card reveal reveal-delay-2">
+      <h4><span style="color: var(--accent-emerald);">&#9632;</span> Performance</h4>
+      <ul class="qa-checklist">
+        <li><span class="qa-check">&#10003;</span> Lighthouse >= 90</li>
+        <li><span class="qa-check">&#10003;</span> LCP < 2.5s</li>
+        <li><span class="qa-check">&#10003;</span> CLS < 0.1</li>
+        <li><span class="qa-check">&#10003;</span> INP < 200ms</li>
+        <li><span class="qa-check">&#10003;</span> WebP images + lazy loading</li>
+      </ul>
+    </div>
+    <div class="qa-card reveal reveal-delay-3">
+      <h4><span style="color: var(--accent-blue);">&#9632;</span> Accessibility</h4>
+      <ul class="qa-checklist">
+        <li><span class="qa-check">&#10003;</span> WCAG 2.1 compliance</li>
+        <li><span class="qa-check">&#10003;</span> Alt-text на всех изображениях</li>
+        <li><span class="qa-check">&#10003;</span> Контрастность >= 4.5:1</li>
+        <li><span class="qa-check">&#10003;</span> Keyboard navigation</li>
+        <li><span class="qa-check">&#10003;</span> Focus states видимы</li>
+      </ul>
+    </div>
+    <div class="qa-card reveal reveal-delay-4">
+      <h4><span style="color: var(--accent-amber);">&#9632;</span> SEO</h4>
+      <ul class="qa-checklist">
+        <li><span class="qa-check">&#10003;</span> Единственный H1 на странице</li>
+        <li><span class="qa-check">&#10003;</span> Meta title + description</li>
+        <li><span class="qa-check">&#10003;</span> Schema.org разметка</li>
+        <li><span class="qa-check">&#10003;</span> Canonical URL</li>
+        <li><span class="qa-check">&#10003;</span> sitemap.xml + robots.txt</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PROJECTS ═══════ -->
+<section id="projects">
+  <div class="section-label reveal">07 — Примеры</div>
+  <h2 class="section-title reveal reveal-delay-1">5 выполненных проектов</h2>
+  <p class="section-subtitle reveal reveal-delay-2">
+    Реальные сайты разных жанров, созданные Web Corp с применением Theme-First подхода. Сканируй QR для просмотра.
+  </p>
+
+  <div class="projects-grid">
+    <div class="project-card reveal reveal-delay-1">
+      <div class="project-preview">
+        <div class="project-gradient" style="background: linear-gradient(135deg, #1a0a0a, #5C0A14, #2a0505);"></div>
+        <div class="project-label">Horror / Atmosphere</div>
+      </div>
+      <div class="project-info">
+        <h4>The Lost File</h4>
+        <p>Атмосферный хоррор-сайт: туман, капли крови на разделителях, IM Fell English, scanline эффект, тяжёлая виньетка.</p>
+        <div class="project-tech-tags">
+          <span class="project-tech-tag">HTML5</span>
+          <span class="project-tech-tag">CSS keyframes</span>
+          <span class="project-tech-tag">Vanilla JS</span>
+          <span class="project-tech-tag">Fog layers</span>
+        </div>
+        <div class="project-qr-section">
+          <canvas class="project-qr-canvas" data-url="test-websites/the-lost-file.html" width="80" height="80"></canvas>
+          <div class="project-qr-info">
+            <span class="project-qr-label">Сканируй QR или нажми</span>
+            <a href="test-websites/the-lost-file.html" target="_blank" class="project-link-btn">
+              Открыть проект <span class="arrow-icon">&#8594;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-delay-2">
+      <div class="project-preview">
+        <div class="project-gradient" style="background: linear-gradient(135deg, #0a0a1a, #3b82f6, #7c3aed);"></div>
+        <div class="project-label">E-commerce / Music</div>
+      </div>
+      <div class="project-info">
+        <h4>Forte Music Store</h4>
+        <p>Музыкальный магазин с Web Audio синтезатором, табовой каруселью, корзиной на localStorage, 5 подстраниц.</p>
+        <div class="project-tech-tags">
+          <span class="project-tech-tag">HTML5</span>
+          <span class="project-tech-tag">CSS3</span>
+          <span class="project-tech-tag">Web Audio API</span>
+          <span class="project-tech-tag">localStorage</span>
+        </div>
+        <div class="project-qr-section">
+          <canvas class="project-qr-canvas" data-url="test-websites/forte-music.html" width="80" height="80"></canvas>
+          <div class="project-qr-info">
+            <span class="project-qr-label">Сканируй QR или нажми</span>
+            <a href="test-websites/forte-music.html" target="_blank" class="project-link-btn">
+              Открыть проект <span class="arrow-icon">&#8594;</span>
+            </a>
+            <div class="project-subpages">
+              <a href="test-websites/forte-guitars.html" target="_blank" class="project-subpage-link">Гитары</a>
+              <a href="test-websites/forte-keys.html" target="_blank" class="project-subpage-link">Клавишные</a>
+              <a href="test-websites/forte-drums.html" target="_blank" class="project-subpage-link">Ударные</a>
+              <a href="test-websites/forte-winds.html" target="_blank" class="project-subpage-link">Духовые</a>
+              <a href="test-websites/forte-accessories.html" target="_blank" class="project-subpage-link">Аксессуары</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-delay-3">
+      <div class="project-preview">
+        <div class="project-gradient" style="background: linear-gradient(135deg, #0a1628, #1a2744, #c9a84c33);"></div>
+        <div class="project-label">Legal / Corporate</div>
+      </div>
+      <div class="project-info">
+        <h4>Щит и Право</h4>
+        <p>Юридическое бюро: navy + золото, IBM Plex Serif, SVG-эмблемы (щит, весы), декоративные рамки, строгая авторитетность.</p>
+        <div class="project-tech-tags">
+          <span class="project-tech-tag">HTML5</span>
+          <span class="project-tech-tag">IBM Plex Serif</span>
+          <span class="project-tech-tag">CSS Grid</span>
+          <span class="project-tech-tag">SVG inline</span>
+        </div>
+        <div class="project-qr-section">
+          <canvas class="project-qr-canvas" data-url="test-websites/shield-law.html" width="80" height="80"></canvas>
+          <div class="project-qr-info">
+            <span class="project-qr-label">Сканируй QR или нажми</span>
+            <a href="test-websites/shield-law.html" target="_blank" class="project-link-btn">
+              Открыть проект <span class="arrow-icon">&#8594;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-delay-4">
+      <div class="project-preview">
+        <div class="project-gradient" style="background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #c8ff0033);"></div>
+        <div class="project-label">Fitness / Industrial</div>
+      </div>
+      <div class="project-info">
+        <h4>FORGE Fitness</h4>
+        <p>Фитнес-клуб: чёрный + неоновый лайм, Barlow Condensed UPPERCASE, диагональные срезы, animated counters, raw industrial.</p>
+        <div class="project-tech-tags">
+          <span class="project-tech-tag">HTML5</span>
+          <span class="project-tech-tag">clip-path</span>
+          <span class="project-tech-tag">CSS animations</span>
+          <span class="project-tech-tag">Neon glow</span>
+        </div>
+        <div class="project-qr-section">
+          <canvas class="project-qr-canvas" data-url="test-websites/forge-fitness.html" width="80" height="80"></canvas>
+          <div class="project-qr-info">
+            <span class="project-qr-label">Сканируй QR или нажми</span>
+            <a href="test-websites/forge-fitness.html" target="_blank" class="project-link-btn">
+              Открыть проект <span class="arrow-icon">&#8594;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-delay-5">
+      <div class="project-preview">
+        <div class="project-gradient" style="background: linear-gradient(135deg, #faf6f0, #c17f59, #3d2c1e);"></div>
+        <div class="project-label">Cafe / Artisan</div>
+      </div>
+      <div class="project-info">
+        <h4>Зерно</h4>
+        <p>Кофейня: кремовый + терракота, Playfair Display, CSS кофейные зёрна, табовое меню, тёплая органика, steam-анимации.</p>
+        <div class="project-tech-tags">
+          <span class="project-tech-tag">HTML5</span>
+          <span class="project-tech-tag">Playfair Display</span>
+          <span class="project-tech-tag">CSS shapes</span>
+          <span class="project-tech-tag">Tab navigation</span>
+        </div>
+        <div class="project-qr-section">
+          <canvas class="project-qr-canvas" data-url="test-websites/zerno-coffee.html" width="80" height="80"></canvas>
+          <div class="project-qr-info">
+            <span class="project-qr-label">Сканируй QR или нажми</span>
+            <a href="test-websites/zerno-coffee.html" target="_blank" class="project-link-btn">
+              Открыть проект <span class="arrow-icon">&#8594;</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════ SKILLS ═══════ -->
+<section>
+  <div class="section-label reveal">08 — Навыки</div>
+  <h2 class="section-title reveal reveal-delay-1">8 автоматических Skills</h2>
+  <p class="section-subtitle reveal reveal-delay-2">
+    Каждый skill вызывается агентами автоматически, без ручного запуска.
+  </p>
+
+  <div class="skills-row reveal reveal-delay-3">
+    <div class="skill-chip"><span class="skill-dot"></span>web-cross-learning</div>
+    <div class="skill-chip"><span class="skill-dot"></span>web-figma</div>
+    <div class="skill-chip"><span class="skill-dot"></span>web-seo</div>
+    <div class="skill-chip"><span class="skill-dot"></span>web-copywriting</div>
+    <div class="skill-chip"><span class="skill-dot"></span>web-performance</div>
+    <div class="skill-chip"><span class="skill-dot"></span>web-image-ensemble</div>
+    <div class="skill-chip"><span class="skill-dot"></span>theme-analysis</div>
+    <div class="skill-chip"><span class="skill-dot"></span>kimi-universal</div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer class="footer">
+  <div class="footer-brand">Web Development Corp</div>
+  <p>CORP-001 | AMAI Game Studio | 36 агентов | 2026</p>
+</footer>
+
+<!-- ═══════ JAVASCRIPT ═══════ -->
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Nav scroll effect
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Smooth scroll for nav links
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Agent chip hover glow
+document.querySelectorAll('.agent-chip').forEach(chip => {
+  chip.addEventListener('mouseenter', () => {
+    const dot = chip.querySelector('.agent-dot');
+    if (dot) dot.style.transform = 'scale(1.4)';
+  });
+  chip.addEventListener('mouseleave', () => {
+    const dot = chip.querySelector('.agent-dot');
+    if (dot) dot.style.transform = 'scale(1)';
+  });
+});
+
+// ═══════ QR CODE GENERATOR (zero dependencies) ═══════
+// Minimal QR Code generator - supports alphanumeric mode, version 2-4
+(function() {
+  // Use a CDN for proper QR generation - lightweight qrcode-generator
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+  script.onload = function() {
+    document.querySelectorAll('.project-qr-canvas').forEach(canvas => {
+      const url = canvas.dataset.url;
+      // Build full URL from current page location
+      const fullUrl = new URL(url, window.location.href).href;
+
+      const qr = qrcode(0, 'M');
+      qr.addData(fullUrl);
+      qr.make();
+
+      const ctx = canvas.getContext('2d');
+      const size = canvas.width;
+      const moduleCount = qr.getModuleCount();
+      const cellSize = size / (moduleCount + 2); // +2 for quiet zone
+      const offset = cellSize; // quiet zone
+
+      // White background with rounded corners
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, 6);
+      ctx.fill();
+
+      // Draw QR modules
+      for (let row = 0; row < moduleCount; row++) {
+        for (let col = 0; col < moduleCount; col++) {
+          if (qr.isDark(row, col)) {
+            const x = offset + col * cellSize;
+            const y = offset + row * cellSize;
+            // Gradient effect: purple to blue
+            const progress = (row + col) / (moduleCount * 2);
+            const r = Math.round(124 - progress * 65);
+            const g = Math.round(58 + progress * 72);
+            const b = Math.round(237 - progress * 91);
+            ctx.fillStyle = `rgb(${r},${g},${b})`;
+            ctx.fillRect(x, y, cellSize + 0.5, cellSize + 0.5);
+          }
+        }
+      }
+    });
+  };
+  document.head.appendChild(script);
+})();
+</script>
+</body>
+</html>

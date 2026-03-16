@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Духовые — Forte Music Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0A0908; --surface: #1A1714; --surface2: #231F1C;
+    --amber: #C4873A; --amber-light: #E0A855;
+    --ivory: #F5F0E8; --ivory-dim: #BDB6A8; --ivory-mute: #7A7268;
+    --border: rgba(196,135,58,0.15);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ivory); font-family: 'Inter', sans-serif; min-height: 100vh; }
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(10,9,8,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 70px; }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--amber-light); text-decoration: none; letter-spacing: 0.02em; }
+  .nav-logo span { color: var(--ivory-mute); font-size: 0.7em; margin-left: 6px; font-family: 'Inter', sans-serif; font-weight: 300; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { color: var(--ivory-dim); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--amber-light); }
+  .nav-actions { display: flex; align-items: center; gap: 12px; }
+  .btn-call { background: transparent; border: 1px solid var(--amber); color: var(--amber); padding: 8px 20px; border-radius: 4px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+  .btn-call:hover { background: var(--amber); color: var(--bg); }
+  .btn-cart { position: relative; background: var(--amber); border: none; color: var(--bg); padding: 8px 20px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; font-family: 'Inter', sans-serif; }
+  .btn-cart:hover { background: var(--amber-light); }
+  .cart-badge { background: var(--bg); color: var(--amber-light); border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .cart-badge.bump { animation: badge-bump 0.3s ease; }
+  @keyframes badge-bump { 0%,100%{transform:scale(1)} 50%{transform:scale(1.4)} }
+  .category-hero { padding: 60px 40px 40px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(196,135,58,0.05) 0%, transparent 100%); }
+  .breadcrumb { font-size: 0.8rem; color: var(--ivory-mute); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .breadcrumb a { color: var(--ivory-mute); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--amber); }
+  .breadcrumb span { color: var(--amber); }
+  .category-hero h1 { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; margin-bottom: 16px; line-height: 1.1; }
+  .category-hero h1 em { font-style: normal; color: var(--amber-light); }
+  .category-hero p { color: var(--ivory-dim); font-size: 1.05rem; max-width: 600px; line-height: 1.7; }
+  .hero-stats { display: flex; gap: 40px; margin-top: 32px; }
+  .hero-stat strong { display: block; font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--amber-light); }
+  .hero-stat span { font-size: 0.8rem; color: var(--ivory-mute); }
+  .filters { padding: 24px 40px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .filter-group { display: flex; align-items: center; gap: 8px; }
+  .filter-label { font-size: 0.78rem; color: var(--ivory-mute); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+  .filter-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--ivory-dim); padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; white-space: nowrap; }
+  .filter-btn:hover { border-color: var(--amber); color: var(--amber); }
+  .filter-btn.active { background: var(--amber); border-color: var(--amber); color: var(--bg); font-weight: 600; }
+  .filter-divider { width: 1px; height: 24px; background: var(--border); }
+  .products-section { padding: 40px; }
+  .section-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .section-meta p { color: var(--ivory-mute); font-size: 0.85rem; }
+  .sort-select { background: var(--surface); border: 1px solid var(--border); color: var(--ivory-dim); padding: 8px 14px; border-radius: 4px; font-size: 0.85rem; font-family: 'Inter', sans-serif; cursor: pointer; }
+  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s; position: relative; }
+  .product-card:hover { transform: translateY(-4px); border-color: rgba(196,135,58,0.4); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+  .product-img { background: var(--surface2); height: 180px; display: flex; align-items: center; justify-content: center; font-size: 5rem; position: relative; }
+  .product-badge { position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: 3px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  .badge-hit { background: var(--amber); color: var(--bg); }
+  .badge-new { background: #4CAF7D; color: #fff; }
+  .badge-sale { background: #E05555; color: #fff; }
+  .wishlist-btn { position: absolute; top: 12px; right: 12px; background: rgba(10,9,8,0.6); border: 1px solid var(--border); color: var(--ivory-mute); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .wishlist-btn:hover, .wishlist-btn.active { color: #E05555; border-color: #E05555; }
+  .product-info { padding: 18px; }
+  .product-brand { font-size: 0.75rem; color: var(--amber); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .product-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--ivory); margin-bottom: 8px; line-height: 1.3; }
+  .product-stars { color: var(--amber); font-size: 0.8rem; margin-bottom: 4px; }
+  .product-stars span { color: var(--ivory-mute); font-size: 0.75rem; margin-left: 4px; font-family: 'Inter', sans-serif; }
+  .product-desc { font-size: 0.82rem; color: var(--ivory-mute); line-height: 1.5; margin-bottom: 14px; }
+  .product-price { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+  .price-current { font-size: 1.2rem; font-weight: 700; color: var(--ivory); }
+  .price-old { font-size: 0.85rem; color: var(--ivory-mute); text-decoration: line-through; }
+  .price-discount { font-size: 0.78rem; color: #E05555; font-weight: 600; }
+  .btn-add { width: 100%; background: var(--amber); border: none; color: var(--bg); padding: 10px; border-radius: 4px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: 'Inter', sans-serif; }
+  .btn-add:hover { background: var(--amber-light); }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .overlay.open { opacity: 1; pointer-events: all; }
+  .cart-drawer { position: fixed; top: 0; right: 0; width: 400px; max-width: 100vw; height: 100vh; background: var(--surface); z-index: 201; transform: translateX(100%); transition: transform 0.35s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; border-left: 1px solid var(--border); }
+  .cart-drawer.open { transform: translateX(0); }
+  .drawer-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .drawer-header h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--ivory); }
+  .drawer-close { background: none; border: none; color: var(--ivory-mute); font-size: 1.4rem; cursor: pointer; line-height: 1; transition: color 0.2s; }
+  .drawer-close:hover { color: var(--ivory); }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 20px; }
+  .cart-empty { text-align: center; padding: 60px 20px; color: var(--ivory-mute); }
+  .cart-empty p { font-size: 2.5rem; margin-bottom: 12px; }
+  .cart-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .cart-item-icon { font-size: 2rem; width: 52px; height: 52px; background: var(--surface2); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 0.88rem; color: var(--ivory); margin-bottom: 4px; }
+  .cart-item-price { font-size: 0.85rem; color: var(--amber); font-weight: 600; }
+  .cart-item-remove { background: none; border: none; color: var(--ivory-mute); cursor: pointer; font-size: 1rem; padding: 4px; transition: color 0.2s; align-self: flex-start; }
+  .cart-item-remove:hover { color: #E05555; }
+  .drawer-footer { padding: 20px; border-top: 1px solid var(--border); }
+  .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .cart-total span { color: var(--ivory-dim); }
+  .cart-total strong { font-size: 1.2rem; color: var(--ivory); }
+  .btn-checkout { width: 100%; background: var(--amber); border: none; color: var(--bg); padding: 14px; border-radius: 4px; font-size: 0.95rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; }
+  .btn-checkout:hover { background: var(--amber-light); }
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 48px 40px 24px; margin-top: 60px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+  .footer-brand p { color: var(--ivory-mute); font-size: 0.85rem; line-height: 1.6; max-width: 280px; margin-top: 12px; }
+  .footer-col h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--ivory); margin-bottom: 14px; }
+  .footer-col a { display: block; color: var(--ivory-mute); text-decoration: none; font-size: 0.85rem; margin-bottom: 8px; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--amber); }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-bottom p { color: var(--ivory-mute); font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="forte-music.html" class="nav-logo">Forte <span>Music Store</span></a>
+  <div class="nav-links">
+    <a href="forte-music.html#catalog" class="active">Каталог</a>
+    <a href="forte-music.html#about">О нас</a>
+    <a href="forte-music.html#tips">Советы</a>
+    <a href="forte-music.html#consultation">Консультация</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-call">📞 Позвонить</button>
+    <button class="btn-cart" onclick="toggleCart()">🛒 Корзина <span class="cart-badge" id="cartBadge">0</span></button>
+  </div>
+</nav>
+
+<section class="category-hero">
+  <div class="breadcrumb">
+    <a href="forte-music.html">Главная</a><span>›</span><span>Духовые</span>
+  </div>
+  <h1>🎷 <em>Духовые</em></h1>
+  <p>Саксофоны, трубы, кларнеты, флейты и тромбоны от Yamaha, Selmer, Buffet, Bach. Инструменты для начинающих музыкантов и профессионалов мирового уровня.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>120+</strong><span>инструментов в наличии</span></div>
+    <div class="hero-stat"><strong>12</strong><span>ведущих брендов</span></div>
+    <div class="hero-stat"><strong>Бесплатно</strong><span>первичная настройка</span></div>
+  </div>
+</section>
+
+<div class="filters">
+  <div class="filter-group">
+    <span class="filter-label">Бренд</span>
+    <button class="filter-btn active" onclick="toggleFilter(this)">Все</button>
+    <button class="filter-btn" onclick="toggleFilter(this)">Yamaha</button>
+    <button class="filter-btn" onclick="toggleFilter(this)">Selmer</button>
+    <button class="filter-btn" onclick="toggleFilter(this)">Buffet</button>
+    <button class="filter-btn" onclick="toggleFilter(this)">Bach</button>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="filter-group">
+    <span class="filter-label">Цена</span>
+    <button class="filter-btn" onclick="toggleFilter(this)">до 20 000₽</button>
+    <button class="filter-btn" onclick="toggleFilter(this)">20–50 тыс.</button>
+    <button class="filter-btn" onclick="toggleFilter(this)">50–100 тыс.</button>
+    <button class="filter-btn" onclick="toggleFilter(this)">100 000₽+</button>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="filter-group">
+    <span class="filter-label">Уровень</span>
+    <button class="filter-btn" onclick="toggleFilter(this)">Новичок</button>
+    <button class="filter-btn" onclick="toggleFilter(this)">Любитель</button>
+    <button class="filter-btn" onclick="toggleFilter(this)">Профи</button>
+  </div>
+</div>
+
+<section class="products-section">
+  <div class="section-meta">
+    <p>Показано 10 из 120+ товаров</p>
+    <select class="sort-select"><option>По популярности</option><option>Сначала дешевле</option><option>Сначала дороже</option><option>Новинки</option></select>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="forte-music.html" class="nav-logo">Forte <span>Music Store</span></a>
+      <p>Музыкальные инструменты премиального качества с 2010 года. Консультации, настройка, сервис — всё в одном месте.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Каталог</h4>
+      <a href="forte-guitars.html">Гитары</a>
+      <a href="forte-keys.html">Клавишные</a>
+      <a href="forte-drums.html">Ударные</a>
+      <a href="forte-winds.html">Духовые</a>
+      <a href="forte-accessories.html">Аксессуары</a>
+    </div>
+    <div class="footer-col">
+      <h4>Информация</h4>
+      <a href="#">О магазине</a>
+      <a href="#">Доставка и оплата</a>
+      <a href="#">Гарантия</a>
+      <a href="#">Контакты</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Forte Music Store. Все права защищены.</p>
+    <p>Москва, ул. Тверская, 12 · +7 (495) 123-45-67</p>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="drawer-header">
+    <h3>Корзина</h3>
+    <button class="drawer-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-footer" id="cartFooter" style="display:none;">
+    <div class="cart-total"><span>Итого:</span><strong id="cartTotal">0₽</strong></div>
+    <button class="btn-checkout">Оформить заказ</button>
+  </div>
+</div>
+
+<script>
+const PRODUCTS = [
+  { id: 'w1', emoji: '🎷', brand: 'Yamaha', name: 'YAS-280 Alto Sax', rating: 5, reviews: 112, desc: 'Студенческий альт-саксофон с лёгким управлением клапанами и чистым звуком', price: 58900, oldPrice: null, badge: 'hit' },
+  { id: 'w2', emoji: '🎺', brand: 'Bach', name: 'TR300H2 Trumpet', rating: 4, reviews: 29, desc: 'Труба из жёлтой латуни с лакированным покрытием для студентов и любителей', price: 39500, oldPrice: null, badge: 'new' },
+  { id: 'w3', emoji: '🎷', brand: 'Buffet', name: 'E13 Clarinet Bb', rating: 5, reviews: 31, desc: 'Профессиональный кларнет из гренадиллы — тёплый, глубокий тон', price: 72000, oldPrice: 88000, badge: 'sale' },
+  { id: 'w4', emoji: '🎷', brand: 'Buffet Crampon', name: 'Prodige Clarinet', rating: 4, reviews: 18, desc: 'Кларнет для начинающих с улучшенной механикой и стабильным строем', price: 48000, oldPrice: null, badge: 'new' },
+  { id: 'w5', emoji: '🎺', brand: 'Yamaha', name: 'YTR-2330 Trumpet', rating: 4, reviews: 67, desc: 'Труба для студентов и любителей с ярким блестящим звуком', price: 44900, oldPrice: null, badge: 'hit' },
+  { id: 'w6', emoji: '🎷', brand: 'Selmer Paris', name: 'Alto Sax Reference 54', rating: 5, reviews: 14, desc: 'Профессиональный альт-саксофон мирового класса — чистота звука без компромиссов', price: 285000, oldPrice: null, badge: 'hit' },
+  { id: 'w7', emoji: '🎷', brand: 'Jupiter', name: 'JAS700 Alto Sax', rating: 4, reviews: 45, desc: 'Студенческий альт-саксофон с улучшенной эргономикой и мощным звуком', price: 68900, oldPrice: 82000, badge: 'sale' },
+  { id: 'w8', emoji: '🎵', brand: 'Conn-Selmer', name: 'Prelude Flute', rating: 4, reviews: 34, desc: 'Флейта для начинающих из никелевого серебра с закрытыми клапанами', price: 28900, oldPrice: null, badge: 'new' },
+  { id: 'w9', emoji: '🎺', brand: 'Yamaha', name: 'YSL-354 Trombone', rating: 5, reviews: 28, desc: 'Тромбон для студентов с лёгким ходом кулисы и ярким звуком', price: 52000, oldPrice: null, badge: 'hit' },
+  { id: 'w10', emoji: '🎵', brand: 'Hohner', name: 'Special 20 Harmonica', rating: 5, reviews: 298, desc: 'Легендарная блюзовая гармоника с металлическими тростями — выбор профи', price: 4900, oldPrice: 6500, badge: 'sale' },
+];
+
+function stars(n) { return '★'.repeat(n) + '☆'.repeat(5-n); }
+function fmt(n) { return n.toLocaleString('ru-RU') + '₽'; }
+function discount(p, o) { return Math.round((1 - p/o)*100) + '%'; }
+
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = PRODUCTS.map(p => {
+    const badgeTxt = p.badge === 'hit' ? 'Хит' : p.badge === 'new' ? 'Новинка' : (p.oldPrice ? '−' + discount(p.price, p.oldPrice) : '');
+    return `
+    <div class="product-card">
+      <div class="product-img">
+        ${p.emoji}
+        <span class="product-badge badge-${p.badge}">${badgeTxt}</span>
+        <button class="wishlist-btn" onclick="toggleWishlist(this)">♡</button>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-stars">${stars(p.rating)}<span>${p.reviews} отзывов</span></div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-price">
+          <span class="price-current">${fmt(p.price)}</span>
+          ${p.oldPrice ? `<span class="price-old">${fmt(p.oldPrice)}</span><span class="price-discount">−${discount(p.price, p.oldPrice)}</span>` : ''}
+        </div>
+        <button class="btn-add" onclick="addToCart('${p.id}', '${p.emoji}', '${p.brand} ${p.name}', ${p.price})">В корзину</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let cart = JSON.parse(localStorage.getItem('forte_cart') || '[]');
+function saveCart() { localStorage.setItem('forte_cart', JSON.stringify(cart)); }
+function updateBadge() {
+  const total = cart.reduce((s,i)=>s+i.qty,0);
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = total;
+  badge.classList.remove('bump'); void badge.offsetWidth; badge.classList.add('bump');
+}
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  const footer = document.getElementById('cartFooter');
+  if (!cart.length) { body.innerHTML = '<div class="cart-empty"><p>🎷</p><div>Корзина пуста</div></div>'; footer.style.display = 'none'; return; }
+  footer.style.display = 'block';
+  body.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-icon">${item.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${fmt(item.price)} × ${item.qty}</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">✕</button>
+    </div>`).join('');
+  document.getElementById('cartTotal').textContent = fmt(cart.reduce((s,i)=>s+i.price*i.qty, 0));
+}
+function addToCart(id, emoji, name, price) {
+  const ex = cart.find(i=>i.id===id);
+  if (ex) ex.qty++; else cart.push({id, emoji, name, price, qty: 1});
+  saveCart(); updateBadge(); renderCart();
+}
+function removeFromCart(id) { cart = cart.filter(i=>i.id!==id); saveCart(); updateBadge(); renderCart(); }
+function toggleCart() {
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+  renderCart();
+}
+function toggleFilter(btn) {
+  btn.closest('.filter-group').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleWishlist(btn) { btn.classList.toggle('active'); btn.textContent = btn.classList.contains('active') ? '♥' : '♡'; }
+
+renderProducts(); updateBadge();
+</script>
+</body>
+</html>

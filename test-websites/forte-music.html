@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forte — Музыкальные инструменты</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:#0A0908;--deep:#111009;--surface:#1A1714;--surface2:#231F1C;
+  --amber:#C4873A;--amber-light:#E0A855;--amber-dim:#7A5220;
+  --ivory:#F5F0E8;--ivory-dim:#BDB6A8;--ivory-mute:#7A7268;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --ease:cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--ivory);font-family:var(--font-body);font-size:16px;line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--void)}::-webkit-scrollbar-thumb{background:var(--amber-dim);border-radius:2px}
+#waveCanvas{position:absolute;inset:0;width:100%;height:100%;opacity:.18;pointer-events:none}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:20px 60px;transition:background .4s,padding .4s}
+nav.scrolled{background:rgba(10,9,8,.93);backdrop-filter:blur(12px);padding:14px 60px;border-bottom:1px solid rgba(196,135,58,.12)}
+.nav-logo{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--ivory);letter-spacing:.02em;text-decoration:none}
+.nav-logo span{color:var(--amber)}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{color:var(--ivory-dim);text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;transition:color .25s}
+.nav-links a:hover{color:var(--amber-light)}
+.nav-actions{display:flex;gap:12px;align-items:center}
+.btn-call{display:flex;align-items:center;gap:8px;padding:9px 20px;background:var(--amber);color:var(--void);font-size:13px;font-weight:600;letter-spacing:.04em;text-decoration:none;border-radius:2px;transition:background .25s,transform .2s}
+.btn-call:hover{background:var(--amber-light);transform:translateY(-1px)}
+.btn-call svg{width:14px;height:14px}
+.btn-cart{width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:var(--ivory-dim);transition:color .25s;position:relative;cursor:pointer;background:none;border:none}
+.btn-cart:hover{color:var(--amber)}
+.cart-badge{position:absolute;top:4px;right:4px;width:18px;height:18px;background:var(--amber);color:var(--void);font-size:10px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .3s}
+.cart-badge.bump{transform:scale(1.4)}
+
+/* CART DRAWER */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;opacity:0;pointer-events:none;transition:opacity .35s;backdrop-filter:blur(4px)}
+.cart-overlay.open{opacity:1;pointer-events:all}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:420px;background:var(--surface);z-index:301;transform:translateX(100%);transition:transform .4s var(--ease);display:flex;flex-direction:column;border-left:1px solid rgba(196,135,58,.15)}
+.cart-drawer.open{transform:translateX(0)}
+.cart-head{display:flex;align-items:center;justify-content:space-between;padding:24px 28px;border-bottom:1px solid rgba(245,240,232,.08)}
+.cart-head h3{font-family:var(--font-display);font-size:22px;color:var(--ivory)}
+.cart-close{width:36px;height:36px;background:var(--surface2);border:none;border-radius:2px;color:var(--ivory-mute);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .2s}
+.cart-close:hover{color:var(--ivory)}
+.cart-items-wrap{flex:1;overflow-y:auto;padding:20px 28px;display:flex;flex-direction:column;gap:16px}
+.cart-empty{text-align:center;padding:60px 20px;color:var(--ivory-mute)}
+.cart-empty .empty-icon{font-size:48px;display:block;margin-bottom:12px;opacity:.4}
+.cart-item{display:flex;gap:16px;align-items:center;background:var(--surface2);border-radius:4px;padding:14px;position:relative}
+.cart-item-emoji{font-size:36px;width:56px;height:56px;background:var(--surface);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-brand{font-size:11px;color:var(--amber);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.cart-item-name{font-size:14px;color:var(--ivory);margin-bottom:8px;line-height:1.3}
+.cart-item-controls{display:flex;align-items:center;gap:10px}
+.qty-btn{width:28px;height:28px;background:var(--surface);border:1px solid rgba(245,240,232,.12);border-radius:2px;color:var(--ivory);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s}
+.qty-btn:hover{border-color:var(--amber);color:var(--amber)}
+.qty-val{font-size:14px;font-weight:600;color:var(--ivory);min-width:20px;text-align:center}
+.cart-item-price{font-family:var(--font-display);font-size:16px;color:var(--amber);font-weight:700;white-space:nowrap}
+.cart-item-remove{position:absolute;top:8px;right:8px;width:20px;height:20px;background:none;border:none;color:var(--ivory-mute);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .2s}
+.cart-item-remove:hover{color:#C4443A}
+.cart-footer{padding:20px 28px;border-top:1px solid rgba(245,240,232,.08)}
+.cart-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.cart-subtotal span{font-size:14px;color:var(--ivory-mute)}
+.cart-subtotal strong{font-family:var(--font-display);font-size:24px;color:var(--ivory)}
+.btn-checkout{width:100%;padding:16px;background:var(--amber);color:var(--void);border:none;border-radius:2px;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:background .25s,transform .2s}
+.btn-checkout:hover{background:var(--amber-light);transform:translateY(-1px)}
+.btn-clear-cart{width:100%;padding:10px;background:none;color:var(--ivory-mute);border:1px solid rgba(245,240,232,.1);border-radius:2px;font-size:13px;cursor:pointer;margin-top:10px;transition:border-color .2s,color .2s}
+.btn-clear-cart:hover{border-color:#C4443A;color:#C4443A}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(196,135,58,.08) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(196,135,58,.05) 0%,transparent 50%)}
+.hero-grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.4;pointer-events:none}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:860px;padding:0 40px}
+.hero-label{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:28px;opacity:0;transform:translateY(20px);animation:fadeUp .8s var(--ease) .2s forwards}
+.hero-title{font-family:var(--font-display);font-size:clamp(48px,7vw,90px);font-weight:400;line-height:1.1;color:var(--ivory);margin-bottom:8px;opacity:0;transform:translateY(30px);animation:fadeUp .9s var(--ease) .4s forwards}
+.hero-title em{font-style:italic;color:var(--amber-light)}
+.hero-subtitle{font-family:var(--font-display);font-size:clamp(24px,3.5vw,44px);font-weight:400;font-style:italic;color:var(--ivory-dim);margin-bottom:28px;opacity:0;transform:translateY(30px);animation:fadeUp .9s var(--ease) .55s forwards}
+.hero-desc{font-size:17px;color:var(--ivory-mute);max-width:520px;margin:0 auto 48px;opacity:0;transform:translateY(20px);animation:fadeUp .8s var(--ease) .7s forwards}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:0;transform:translateY(20px);animation:fadeUp .8s var(--ease) .85s forwards}
+.btn-primary{padding:16px 40px;background:var(--amber);color:var(--void);font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:background .25s,transform .2s,box-shadow .25s}
+.btn-primary:hover{background:var(--amber-light);transform:translateY(-2px);box-shadow:0 12px 40px rgba(196,135,58,.3)}
+.btn-ghost{padding:16px 40px;background:transparent;color:var(--ivory);font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(245,240,232,.25);border-radius:2px;transition:border-color .25s,color .25s,transform .2s}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber);transform:translateY(-2px)}
+.hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeUp .8s var(--ease) 1.2s forwards}
+.hero-scroll span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ivory-mute)}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--amber),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* STATS */
+.stats-bar{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);border-bottom:1px solid rgba(196,135,58,.12);padding:32px 60px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.stat-item{text-align:center;padding:0 20px;border-right:1px solid rgba(245,240,232,.06)}
+.stat-item:last-child{border-right:none}
+.stat-number{font-family:var(--font-display);font-size:40px;font-weight:700;color:var(--amber);line-height:1;margin-bottom:6px}
+.stat-label{font-size:13px;color:var(--ivory-mute);letter-spacing:.04em}
+
+/* SECTIONS */
+section{padding:100px 60px}
+.section-label{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:16px}
+.section-title{font-family:var(--font-display);font-size:clamp(32px,4vw,52px);font-weight:400;color:var(--ivory);line-height:1.2;margin-bottom:16px}
+.section-title em{font-style:italic;color:var(--amber-light)}
+.section-desc{font-size:16px;color:var(--ivory-mute);max-width:480px;line-height:1.7}
+
+/* CATEGORIES */
+.categories{background:var(--void)}
+.categories-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px}
+.categories-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:auto auto;gap:12px}
+.cat-card{position:relative;overflow:hidden;border-radius:4px;background:var(--surface);cursor:pointer;transition:transform .4s var(--ease);text-decoration:none;display:block}
+.cat-card:hover{transform:scale(1.01)}
+.cat-card:nth-child(1){grid-row:1/3;min-height:420px}
+.cat-card:not(:nth-child(1)){min-height:200px}
+.cat-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:120px;opacity:.06;transition:opacity .4s,transform .5s var(--ease)}
+.cat-card:hover .cat-bg{opacity:.1;transform:scale(1.05)}
+.cat-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,9,8,.85) 0%,rgba(10,9,8,.1) 60%)}
+.cat-amber-line{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.cat-card:hover .cat-amber-line{transform:scaleX(1)}
+.cat-content{position:relative;z-index:2;padding:28px;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+.cat-name{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--ivory);margin-bottom:4px}
+.cat-count{font-size:13px;color:var(--amber);letter-spacing:.04em}
+.cat-arrow{margin-top:12px;width:32px;height:32px;border:1px solid rgba(196,135,58,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--amber);transition:background .25s,border-color .25s}
+.cat-card:hover .cat-arrow{background:var(--amber);color:var(--void);border-color:var(--amber)}
+
+/* PRODUCTS + CAROUSEL */
+.products{background:var(--deep)}
+.products-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px}
+.tabs{display:flex;gap:4px;background:var(--surface);padding:4px;border-radius:4px}
+.tab{padding:8px 20px;font-size:13px;font-weight:500;color:var(--ivory-mute);border-radius:2px;cursor:pointer;transition:all .25s;border:none;background:transparent}
+.tab.active{background:var(--amber);color:var(--void)}
+.carousel-wrapper{position:relative}
+.carousel-track{display:flex;gap:16px;overflow:hidden}
+.carousel-slide{display:flex;gap:16px;min-width:100%;transition:transform .4s var(--ease)}
+.carousel-nav{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}
+.carousel-btn{width:44px;height:44px;border:1px solid rgba(245,240,232,.15);background:var(--surface);color:var(--ivory);border-radius:2px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .25s,background .25s}
+.carousel-btn:hover{border-color:var(--amber);background:rgba(196,135,58,.1);color:var(--amber)}
+.carousel-btn:disabled{opacity:.3;cursor:default}
+.carousel-dots{display:flex;gap:6px;align-items:center;margin-top:20px;justify-content:center}
+.carousel-dot{width:6px;height:6px;border-radius:50%;background:var(--surface2);cursor:pointer;transition:background .25s,transform .25s}
+.carousel-dot.active{background:var(--amber);transform:scale(1.3)}
+
+/* PRODUCT CARD */
+.product-card{background:var(--surface);border-radius:4px;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s;cursor:pointer;flex:0 0 calc(25% - 12px);min-width:calc(25% - 12px)}
+.product-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.product-img{height:220px;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.product-emoji{font-size:80px;transition:transform .4s var(--ease);filter:drop-shadow(0 8px 24px rgba(196,135,58,.2))}
+.product-card:hover .product-emoji{transform:scale(1.08) rotate(-3deg)}
+.product-badge{position:absolute;top:12px;left:12px;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:2px}
+.badge-new,.badge-hit{background:var(--amber);color:var(--void)}
+.badge-hit{background:#C4443A;color:#fff}
+.badge-sale{background:#3A8B4A;color:#fff}
+.product-wishlist{position:absolute;top:12px;right:12px;width:32px;height:32px;background:rgba(26,23,20,.7);backdrop-filter:blur(4px);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ivory-mute);font-size:16px;transition:color .25s,background .25s;cursor:pointer;border:none}
+.product-wishlist:hover{color:#C4443A}
+.product-wishlist.active{color:#C4443A}
+.product-info{padding:20px}
+.product-brand{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.product-name{font-family:var(--font-display);font-size:17px;font-weight:400;color:var(--ivory);margin-bottom:6px;line-height:1.3}
+.product-desc-short{font-size:13px;color:var(--ivory-mute);margin-bottom:12px;line-height:1.5}
+.product-rating{display:flex;gap:2px;margin-bottom:12px;align-items:center}
+.star{color:var(--amber);font-size:13px}.star.empty{color:var(--surface2)}
+.rating-count{font-size:12px;color:var(--ivory-mute);margin-left:6px}
+.product-footer{display:flex;align-items:center;justify-content:space-between}
+.product-price{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--ivory)}
+.product-price-old{font-size:14px;color:var(--ivory-mute);text-decoration:line-through;margin-left:6px}
+.btn-add{width:38px;height:38px;background:var(--amber);border:none;border-radius:2px;display:flex;align-items:center;justify-content:center;color:var(--void);font-size:20px;cursor:pointer;transition:background .25s,transform .2s}
+.btn-add:hover{background:var(--amber-light);transform:scale(1.05)}
+.btn-add.added{background:#3A8B4A}
+
+/* SOUND RIPPLE */
+.track-card{background:var(--surface);border-radius:4px;padding:20px;display:flex;gap:16px;align-items:center;cursor:pointer;transition:background .25s,transform .3s var(--ease);border:1px solid transparent;position:relative;overflow:hidden}
+.track-card:hover{background:var(--surface2);border-color:rgba(196,135,58,.2);transform:translateY(-2px)}
+.track-card.playing{border-color:var(--amber);background:var(--surface2)}
+.track-ripple{position:absolute;border-radius:50%;background:rgba(196,135,58,.25);width:10px;height:10px;transform:scale(0);animation:rippleOut .8s ease-out forwards;pointer-events:none}
+@keyframes rippleOut{to{transform:scale(30);opacity:0}}
+.track-cover{width:56px;height:56px;border-radius:4px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;position:relative}
+.play-icon{position:absolute;inset:0;background:rgba(196,135,58,.85);border-radius:4px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s;font-size:18px}
+.track-card:hover .play-icon,.track-card.playing .play-icon{opacity:1}
+.track-card.playing .play-icon{background:rgba(196,135,58,1)}
+.track-info{flex:1;min-width:0}
+.track-song{font-weight:600;font-size:14px;color:var(--ivory);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-artist{font-size:13px;color:var(--ivory-mute)}
+.track-instrument{font-size:11px;color:var(--amber);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+.heard-in{background:var(--void);border-top:1px solid rgba(196,135,58,.1)}
+.heard-in-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.sound-indicator{display:flex;align-items:center;gap:3px;margin-top:6px}
+.sound-bar{width:3px;background:var(--amber);border-radius:1px;opacity:0;transition:height .1s}
+.track-card.playing .sound-bar{opacity:1;animation:soundBars .5s ease-in-out infinite alternate}
+.track-card.playing .sound-bar:nth-child(2){animation-delay:.1s}
+.track-card.playing .sound-bar:nth-child(3){animation-delay:.2s}
+.track-card.playing .sound-bar:nth-child(4){animation-delay:.15s}
+.track-card.playing .sound-bar:nth-child(5){animation-delay:.05s}
+@keyframes soundBars{from{height:4px}to{height:16px}}
+
+/* ABOUT */
+.about{background:var(--surface)}
+.about-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.about-visual{position:relative;height:480px}
+.about-card-main{position:absolute;top:0;left:0;right:60px;bottom:60px;background:var(--surface2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:120px;border:1px solid rgba(196,135,58,.1);overflow:hidden}
+.about-card-main::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 70%,rgba(196,135,58,.12) 0%,transparent 60%)}
+.about-card-accent{position:absolute;bottom:0;right:0;width:200px;height:200px;background:var(--amber);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.about-card-accent .big-num{font-family:var(--font-display);font-size:52px;font-weight:700;color:var(--void);line-height:1}
+.about-card-accent .big-label{font-size:13px;color:rgba(10,9,8,.7);font-weight:600;text-align:center}
+.about-features{display:flex;flex-direction:column;gap:24px;margin-top:40px}
+.about-feature{display:flex;gap:20px;align-items:flex-start}
+.feature-icon{width:44px;height:44px;background:rgba(196,135,58,.12);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1px solid rgba(196,135,58,.2)}
+.feature-title{font-weight:600;color:var(--ivory);margin-bottom:4px;font-size:15px}
+.feature-text{font-size:14px;color:var(--ivory-mute);line-height:1.6}
+
+/* CONSULTATION */
+.consultation{background:var(--void);border-top:1px solid rgba(196,135,58,.1)}
+.consultation-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.consult-form{background:var(--surface);border-radius:4px;padding:40px;border:1px solid rgba(196,135,58,.1)}
+.form-title{font-family:var(--font-display);font-size:24px;color:var(--ivory);margin-bottom:8px}
+.form-subtitle{font-size:14px;color:var(--ivory-mute);margin-bottom:28px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ivory-mute);margin-bottom:8px}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface2);border:1px solid rgba(245,240,232,.1);border-radius:2px;padding:12px 16px;font-size:15px;color:var(--ivory);font-family:var(--font-body);transition:border-color .25s;outline:none;resize:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--amber)}
+.form-group select option{background:var(--surface2)}
+.btn-submit{width:100%;padding:16px;background:var(--amber);color:var(--void);border:none;border-radius:2px;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;margin-top:8px;transition:background .25s,transform .2s}
+.btn-submit:hover{background:var(--amber-light);transform:translateY(-1px)}
+
+/* BLOG */
+.blog{background:var(--deep)}
+.blog-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;margin-top:48px}
+.blog-card{background:var(--surface);border-radius:4px;overflow:hidden;cursor:pointer;transition:transform .3s var(--ease)}
+.blog-card:hover{transform:translateY(-3px)}
+.blog-img{height:200px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;overflow:hidden}
+.blog-card:first-child .blog-img{height:260px;font-size:80px}
+.blog-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,23,20,.7),transparent)}
+.blog-body{padding:24px}
+.blog-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.blog-title{font-family:var(--font-display);font-size:18px;font-weight:400;color:var(--ivory);line-height:1.3;margin-bottom:10px}
+.blog-card:first-child .blog-title{font-size:22px}
+.blog-excerpt{font-size:14px;color:var(--ivory-mute);line-height:1.6}
+.blog-meta{display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid rgba(245,240,232,.06)}
+.blog-date{font-size:12px;color:var(--ivory-mute)}
+
+/* FOOTER */
+footer{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);padding:60px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-desc{font-size:14px;color:var(--ivory-mute);line-height:1.7;margin-bottom:24px;margin-top:16px}
+.social-links{display:flex;gap:12px}
+.social-link{width:36px;height:36px;background:var(--surface2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none;color:var(--ivory-mute);transition:background .25s,color .25s;font-weight:700}
+.social-link:hover{background:var(--amber);color:var(--void)}
+.footer-col h4{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ivory);margin-bottom:20px}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-links a{font-size:14px;color:var(--ivory-mute);text-decoration:none;transition:color .25s}
+.footer-links a:hover{color:var(--amber)}
+.footer-bottom{padding-top:32px;border-top:1px solid rgba(245,240,232,.06);display:flex;justify-content:space-between;align-items:center}
+.footer-copyright{font-size:13px;color:var(--ivory-mute)}
+.footer-payment{display:flex;gap:8px}
+.pay-badge{background:var(--surface2);padding:4px 10px;border-radius:2px;font-size:11px;color:var(--ivory-mute);font-weight:600}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
+</style>
+</head>
+<body>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>Корзина</h3>
+    <button class="cart-close" onclick="closeCart()">×</button>
+  </div>
+  <div class="cart-items-wrap" id="cartItemsWrap">
+    <div class="cart-empty"><span class="empty-icon">🎸</span><p>Корзина пуста</p><p style="font-size:13px;margin-top:6px">Добавьте инструмент, который поёт именно для вас</p></div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Итого:</span>
+      <strong id="cartTotal">0 ₽</strong>
+    </div>
+    <button class="btn-checkout" onclick="checkout()">Оформить заказ →</button>
+    <button class="btn-clear-cart" onclick="clearCart()">Очистить корзину</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="forte-music.html" class="nav-logo">Fort<span>e</span></a>
+  <ul class="nav-links">
+    <li><a href="#categories">Каталог</a></li>
+    <li><a href="#heard">Звук в музыке</a></li>
+    <li><a href="#about">О нас</a></li>
+    <li><a href="#blog">Советы</a></li>
+    <li><a href="#consult">Консультация</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="tel:+74951234567" class="btn-call">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+      Позвонить
+    </a>
+    <button class="btn-cart" onclick="toggleCart()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <div class="cart-badge" id="cartBadge">0</div>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="waveCanvas"></canvas>
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <div class="hero-label">Forte — Музыкальный магазин · Москва · 8 лет</div>
+    <h1 class="hero-title">Инструмент,<br>который <em>поёт</em></h1>
+    <p class="hero-subtitle">именно для тебя</p>
+    <p class="hero-desc">Больше 3 000 инструментов от мировых брендов. Бесплатная консультация специалиста. Доставка по всей России.</p>
+    <div class="hero-actions">
+      <a href="#categories" class="btn-primary">Смотреть каталог</a>
+      <a href="#consult" class="btn-ghost">Получить совет</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>Прокрути</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stat-item"><div class="stat-number" data-count="3200">0</div><div class="stat-label">инструментов в наличии</div></div>
+  <div class="stat-item"><div class="stat-number" data-count="8">0</div><div class="stat-label">лет на рынке</div></div>
+  <div class="stat-item"><div class="stat-number" data-count="47">0</div><div class="stat-label">брендов-партнёров</div></div>
+  <div class="stat-item"><div class="stat-number" data-count="12400">0</div><div class="stat-label">довольных музыкантов</div></div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categories">
+  <div class="categories-header reveal">
+    <div><div class="section-label">Каталог</div><h2 class="section-title">Найди свой<br><em>инструмент</em></h2></div>
+    <a href="#" class="btn-ghost" style="white-space:nowrap">Весь каталог →</a>
+  </div>
+  <div class="categories-grid reveal">
+    <a href="forte-guitars.html" class="cat-card">
+      <div class="cat-bg">🎸</div><div class="cat-overlay"></div><div class="cat-amber-line"></div>
+      <div class="cat-content"><div class="cat-name">Гитары</div><div class="cat-count">842 модели</div><div class="cat-arrow">→</div></div>
+    </a>
+    <a href="forte-keys.html" class="cat-card">
+      <div class="cat-bg">🎹</div><div class="cat-overlay"></div><div class="cat-amber-line"></div>
+      <div class="cat-content"><div class="cat-name">Клавишные</div><div class="cat-count">394 модели</div><div class="cat-arrow">→</div></div>
+    </a>
+    <a href="forte-drums.html" class="cat-card">
+      <div class="cat-bg">🥁</div><div class="cat-overlay"></div><div class="cat-amber-line"></div>
+      <div class="cat-content"><div class="cat-name">Ударные</div><div class="cat-count">267 моделей</div><div class="cat-arrow">→</div></div>
+    </a>
+    <a href="forte-winds.html" class="cat-card">
+      <div class="cat-bg">🎺</div><div class="cat-overlay"></div><div class="cat-amber-line"></div>
+      <div class="cat-content"><div class="cat-name">Духовые</div><div class="cat-count">178 моделей</div><div class="cat-arrow">→</div></div>
+    </a>
+    <a href="forte-accessories.html" class="cat-card">
+      <div class="cat-bg">🎵</div><div class="cat-overlay"></div><div class="cat-amber-line"></div>
+      <div class="cat-content"><div class="cat-name">Аксессуары</div><div class="cat-count">1 200+ позиций</div><div class="cat-arrow">→</div></div>
+    </a>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="products-header reveal">
+    <div><div class="section-label">Товары</div><h2 class="section-title">Хиты и <em>новинки</em></h2></div>
+    <div class="tabs">
+      <button class="tab active" data-tab="hits">Хиты продаж</button>
+      <button class="tab" data-tab="new">Новинки</button>
+      <button class="tab" data-tab="sale">Скидки</button>
+    </div>
+  </div>
+  <div class="carousel-wrapper reveal">
+    <div class="carousel-track" id="carouselTrack"></div>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <div class="carousel-nav">
+      <button class="carousel-btn" id="carouselPrev">‹</button>
+      <button class="carousel-btn" id="carouselNext">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- HEARD IN -->
+<section class="heard-in" id="heard">
+  <div class="reveal">
+    <div class="section-label">Звук в музыке</div>
+    <h2 class="section-title">Слышали <em>в этих треках?</em></h2>
+    <p class="section-desc">Узнайте какой инструмент создал любимое звучание — нажмите чтобы услышать.</p>
+  </div>
+  <div class="heard-in-grid reveal">
+    <div class="track-card" data-sound="guitar" onclick="playTrackSound(this)">
+      <div class="track-cover">🎸<div class="play-icon">▶</div></div>
+      <div class="track-info"><div class="track-song">Comfortably Numb</div><div class="track-artist">Pink Floyd</div><div class="track-instrument">Fender Stratocaster</div>
+        <div class="sound-indicator"><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div></div></div>
+    </div>
+    <div class="track-card" data-sound="piano" onclick="playTrackSound(this)">
+      <div class="track-cover">🎹<div class="play-icon">▶</div></div>
+      <div class="track-info"><div class="track-song">Clocks</div><div class="track-artist">Coldplay</div><div class="track-instrument">Yamaha Grand Piano</div>
+        <div class="sound-indicator"><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div></div></div>
+    </div>
+    <div class="track-card" data-sound="guitar" onclick="playTrackSound(this)">
+      <div class="track-cover">🎸<div class="play-icon">▶</div></div>
+      <div class="track-info"><div class="track-song">Back In Black</div><div class="track-artist">AC/DC</div><div class="track-instrument">Gibson SG</div>
+        <div class="sound-indicator"><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div></div></div>
+    </div>
+    <div class="track-card" data-sound="wind" onclick="playTrackSound(this)">
+      <div class="track-cover">🎺<div class="play-icon">▶</div></div>
+      <div class="track-info"><div class="track-song">So What</div><div class="track-artist">Miles Davis</div><div class="track-instrument">Martin Committee Trumpet</div>
+        <div class="sound-indicator"><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div></div></div>
+    </div>
+    <div class="track-card" data-sound="drums" onclick="playTrackSound(this)">
+      <div class="track-cover">🥁<div class="play-icon">▶</div></div>
+      <div class="track-info"><div class="track-song">In The Air Tonight</div><div class="track-artist">Phil Collins</div><div class="track-instrument">Simmons SDS-V</div>
+        <div class="sound-indicator"><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div></div></div>
+    </div>
+    <div class="track-card" data-sound="guitar" onclick="playTrackSound(this)">
+      <div class="track-cover">🎸<div class="play-icon">▶</div></div>
+      <div class="track-info"><div class="track-song">Sultans of Swing</div><div class="track-artist">Dire Straits</div><div class="track-instrument">Fender Stratocaster '61</div>
+        <div class="sound-indicator"><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-visual reveal">
+      <div class="about-card-main">🎸</div>
+      <div class="about-card-accent"><div class="big-num">8</div><div class="big-label">лет<br>с музыкой</div></div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="section-label">О нас</div>
+      <h2 class="section-title">Мы здесь,<br>потому что <em>любим</em></h2>
+      <p class="section-desc">Forte — не просто магазин. Мы сами музыканты. Каждый инструмент в каталоге прошёл через наши руки. Мы не продаём коробки — мы помогаем найти звук.</p>
+      <div class="about-features">
+        <div class="about-feature"><div class="feature-icon">🎓</div><div><div class="feature-title">Экспертный подбор</div><div class="feature-text">Бесплатная консультация с живым специалистом — музыкантом с опытом 10+ лет.</div></div></div>
+        <div class="about-feature"><div class="feature-icon">🔒</div><div><div class="feature-title">Официальные поставки</div><div class="feature-text">Сертифицированные партнёры Fender, Gibson, Yamaha, Roland, Pearl.</div></div></div>
+        <div class="about-feature"><div class="feature-icon">🚚</div><div><div class="feature-title">Доставка по всей России</div><div class="feature-text">Бережная упаковка, страховка, отслеживание. До двери за 2–5 дней.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONSULTATION -->
+<section class="consultation" id="consult">
+  <div class="consultation-inner">
+    <div class="reveal">
+      <div class="section-label">Консультация</div>
+      <h2 class="section-title">Не знаешь<br>с чего <em>начать?</em></h2>
+      <p class="section-desc">Расскажи нам о себе — жанр, уровень, бюджет. Мы подберём идеальный инструмент лично для тебя. Бесплатно и без давления.</p>
+    </div>
+    <div class="consult-form reveal reveal-delay-2">
+      <div class="form-title">Записаться на консультацию</div>
+      <div class="form-subtitle">Бесплатно · Без давления · Онлайн или в магазине</div>
+      <div class="form-group"><label>Ваше имя</label><input type="text" placeholder="Как вас зовут?"></div>
+      <div class="form-group"><label>Телефон</label><input type="tel" placeholder="+7 (___) ___-__-__"></div>
+      <div class="form-group"><label>Что вас интересует?</label>
+        <select><option value="">Выберите категорию</option><option>Первый инструмент (новичок)</option><option>Апгрейд текущего инструмента</option><option>Профессиональный подбор</option><option>Подарок музыканту</option><option>Инструмент для ребёнка</option></select>
+      </div>
+      <div class="form-group"><label>Расскажите подробнее</label><textarea rows="3" placeholder="Жанр, бюджет, опыт — любые детали помогут подобрать лучшее"></textarea></div>
+      <button class="btn-submit" onclick="submitForm(this)">Записаться бесплатно</button>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="blog" id="blog">
+  <div class="reveal"><div class="section-label">Советы</div><h2 class="section-title">От <em>музыкантов</em><br>для музыкантов</h2></div>
+  <div class="blog-grid reveal">
+    <div class="blog-card"><div class="blog-img">🎸</div><div class="blog-body"><div class="blog-tag">Гитара · Гайд</div><div class="blog-title">Как выбрать первую электрогитару: всё что нужно знать в 2025</div><div class="blog-excerpt">Stratocaster или Les Paul? Какой усилитель брать? Разбираем честно и без маркетинга.</div><div class="blog-meta"><span class="blog-date">12 февраля 2025</span><span style="color:var(--amber);font-size:12px">→ Читать</span></div></div></div>
+    <div class="blog-card"><div class="blog-img">🎹</div><div class="blog-body"><div class="blog-tag">Клавишные</div><div class="blog-title">Синтезатор vs цифровое пианино: в чём разница</div><div class="blog-excerpt">Не все клавишные одинаковы — объясняем разницу простым языком.</div><div class="blog-meta"><span class="blog-date">5 февраля 2025</span><span style="color:var(--amber);font-size:12px">→ Читать</span></div></div></div>
+    <div class="blog-card"><div class="blog-img">🎵</div><div class="blog-body"><div class="blog-tag">Уход</div><div class="blog-title">Как правильно хранить гитару зимой</div><div class="blog-excerpt">Сухой воздух убивает деки. Простые правила чтобы инструмент жил долго.</div><div class="blog-meta"><span class="blog-date">28 января 2025</span><span style="color:var(--amber);font-size:12px">→ Читать</span></div></div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div><a href="forte-music.html" class="nav-logo">Fort<span>e</span></a><p class="footer-desc">Музыкальные инструменты от людей, которые понимают музыку. Москва, работаем с 2017 года.</p><div class="social-links"><a href="#" class="social-link">VK</a><a href="#" class="social-link">TG</a><a href="#" class="social-link">YT</a></div></div>
+    <div class="footer-col"><h4>Каталог</h4><ul class="footer-links"><li><a href="forte-guitars.html">Гитары</a></li><li><a href="forte-keys.html">Клавишные</a></li><li><a href="forte-drums.html">Ударные</a></li><li><a href="forte-winds.html">Духовые</a></li><li><a href="forte-accessories.html">Аксессуары</a></li></ul></div>
+    <div class="footer-col"><h4>Магазин</h4><ul class="footer-links"><li><a href="#about">О нас</a></li><li><a href="#">Доставка и оплата</a></li><li><a href="#">Возврат и гарантия</a></li><li><a href="#blog">Статьи</a></li></ul></div>
+    <div class="footer-col"><h4>Контакты</h4><ul class="footer-links"><li><a href="tel:+74951234567">+7 (495) 123-45-67</a></li><li><a href="mailto:hello@forte-music.ru">hello@forte-music.ru</a></li><li><a href="#">Москва, ул. Тверская, 12</a></li><li><a href="#">Пн–Сб: 10:00 – 20:00</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><div class="footer-copyright">© 2025 Forte Music. Все права защищены.</div><div class="footer-payment"><div class="pay-badge">Visa</div><div class="pay-badge">MC</div><div class="pay-badge">МИР</div><div class="pay-badge">SBP</div></div></div>
+</footer>
+
+<script>
+// ── PRODUCTS DATA ──
+const PRODUCTS = [
+  // HITS
+  {id:1,tab:'hits',brand:'Fender',name:'Player Stratocaster HSS',price:68900,badge:'hit',emoji:'🎸',rating:5,reviews:184,desc:'Электрогитара HSS, идеальна для рока и блюза',sound:'guitar'},
+  {id:2,tab:'hits',brand:'Gibson',name:"Les Paul Standard '60s",price:145000,badge:'hit',emoji:'🎸',rating:5,reviews:97,desc:'Легендарная электрогитара с тёплым звуком хамбакеров',sound:'guitar'},
+  {id:3,tab:'hits',brand:'Yamaha',name:'P-125 Digital Piano',price:42900,badge:'hit',emoji:'🎹',rating:5,reviews:231,desc:'Компактное цифровое пианино с 88 взвешенными клавишами',sound:'piano'},
+  {id:4,tab:'hits',brand:'Nord',name:'Piano 5 73',price:235000,badge:'hit',emoji:'🎹',rating:5,reviews:44,desc:'Профессиональное сценическое пианино для концертных выступлений',sound:'piano'},
+  {id:5,tab:'hits',brand:'Yamaha',name:'Stage Custom Birch',price:89000,badge:'hit',emoji:'🥁',rating:4,reviews:78,desc:'Берёзовая барабанная установка для студии и сцены',sound:'drums'},
+  {id:6,tab:'hits',brand:'Yamaha',name:'YAS-280 Alto Sax',price:58900,badge:'hit',emoji:'🎷',rating:5,reviews:112,desc:'Альт-саксофон для начинающих и продвинутых музыкантов',sound:'wind'},
+  {id:7,tab:'hits',brand:'BOSS',name:'DS-1 Distortion',price:7900,badge:'hit',emoji:'🎛️',rating:5,reviews:502,desc:'Классическая педаль дисторшн, используется 40+ лет',sound:'guitar'},
+  {id:8,tab:'hits',brand:'PRS',name:'SE Custom 24',price:54900,badge:'hit',emoji:'🎸',rating:4,reviews:63,desc:'Универсальная гитара с двойным вырезом',sound:'guitar'},
+  {id:9,tab:'hits',brand:"D'Addario",name:'EXL110 Strings 10-46',price:890,badge:'hit',emoji:'🎵',rating:5,reviews:1240,desc:'Самые популярные никелевые струны для электрогитары',sound:'guitar'},
+  {id:10,tab:'hits',brand:'Korg',name:'Minilogue XD',price:64900,badge:'hit',emoji:'🎹',rating:5,reviews:156,desc:'Аналоговый синтезатор с цифровым процессором эффектов',sound:'piano'},
+  // NEW
+  {id:11,tab:'new',brand:'Roland',name:'FP-90X Digital Piano',price:142000,badge:'new',emoji:'🎹',rating:4,reviews:62,desc:'88 взвешенных клавиш с технологией SuperNATURAL',sound:'piano'},
+  {id:12,tab:'new',brand:'Pearl',name:'Export EXX725S/C',price:54500,badge:'new',emoji:'🥁',rating:4,reviews:48,desc:'Ударная установка для репетиционных баз',sound:'drums'},
+  {id:13,tab:'new',brand:'Epiphone',name:"Les Paul Standard '60s",price:28900,badge:'new',emoji:'🎸',rating:4,reviews:87,desc:'Доступная копия Gibson с качественными хамбакерами',sound:'guitar'},
+  {id:14,tab:'new',brand:'BOSS',name:'TU-3 Tuner',price:8900,badge:'new',emoji:'🎛️',rating:5,reviews:334,desc:'Хроматический тюнер-педаль с ярким дисплеем',sound:'guitar'},
+  {id:15,tab:'new',brand:'Bach',name:'TR300H2 Trumpet',price:39500,badge:'new',emoji:'🎺',rating:4,reviews:29,desc:'Труба для начинающих с корпусом из жёлтой латуни',sound:'wind'},
+  {id:16,tab:'new',brand:'Casio',name:'CT-X700 Keyboard',price:12900,badge:'new',emoji:'🎹',rating:4,reviews:143,desc:'Клавиатура для начинающих с 61 клавишей и 600 тембрами',sound:'piano'},
+  {id:17,tab:'new',brand:'Taylor',name:'114ce Acoustic',price:94000,badge:'new',emoji:'🎸',rating:5,reviews:21,desc:'Акустическая гитара с электроникой ES2, тёплый тон',sound:'guitar'},
+  {id:18,tab:'new',brand:'Roland',name:'TD-17KVX2 E-Drums',price:139000,badge:'new',emoji:'🥁',rating:5,reviews:37,desc:'Электронная барабанная установка со стойкой MDS-COMPACT',sound:'drums'},
+  {id:19,tab:'new',brand:'Buffet Crampon',name:'Prodige Clarinet',price:48000,badge:'new',emoji:'🎷',rating:4,reviews:18,desc:'Студенческий кларнет от легендарного французского производителя',sound:'wind'},
+  {id:20,tab:'new',brand:'Fender',name:'Champion 20 Amplifier',price:18400,badge:'new',emoji:'📻',rating:4,reviews:88,desc:'Транзисторный комбо для начинающих с встроенными эффектами',sound:'guitar'},
+  // SALE
+  {id:21,tab:'sale',brand:'Yamaha',name:'FG800 Acoustic',price:18700,oldPrice:23400,badge:'sale',emoji:'🎸',rating:5,reviews:311,desc:'Лучшая акустика для начинающих — сбалансированный звук',sound:'guitar'},
+  {id:22,tab:'sale',brand:'Korg',name:'B2 Digital Piano',price:32400,oldPrice:40000,badge:'sale',emoji:'🎹',rating:4,reviews:94,desc:'Доступное пианино с натуральным ощущением клавиш',sound:'piano'},
+  {id:23,tab:'sale',brand:'Roland',name:'TD-27KV Electronic Kit',price:185000,oldPrice:220000,badge:'sale',emoji:'🥁',rating:5,reviews:22,desc:'Профессиональная электронная ударная с модулем TD-27',sound:'drums'},
+  {id:24,tab:'sale',brand:'Buffet',name:'E13 Clarinet Bb',price:72000,oldPrice:88000,badge:'sale',emoji:'🎷',rating:5,reviews:31,desc:'Профессиональный кларнет для оркестра и джаза',sound:'wind'},
+  {id:25,tab:'sale',brand:'Fender',name:'Frontman 10G Amp',price:12400,oldPrice:16000,badge:'sale',emoji:'📻',rating:4,reviews:67,desc:'Маленький усилитель для домашних репетиций',sound:'guitar'},
+  {id:26,tab:'sale',brand:'Squier',name:"Classic Vibe '60s Strat",price:34900,oldPrice:44000,badge:'sale',emoji:'🎸',rating:4,reviews:188,desc:'Доступная Stratocaster с vintage-вдохновлёнными пикапами',sound:'guitar'},
+  {id:27,tab:'sale',brand:'Roland',name:'GO:PIANO 61',price:21900,oldPrice:27500,badge:'sale',emoji:'🎹',rating:4,reviews:76,desc:'Портативные клавиши с настоящим звуком рояля Roland',sound:'piano'},
+  {id:28,tab:'sale',brand:'Mapex',name:'Armory 5-Piece Kit',price:67900,oldPrice:82000,badge:'sale',emoji:'🥁',rating:4,reviews:43,desc:'Берёзово-тополевая установка с хорошим резонансом',sound:'drums'},
+  {id:29,tab:'sale',brand:'Ibanez',name:'RG450DX',price:29900,oldPrice:38000,badge:'sale',emoji:'🎸',rating:4,reviews:92,desc:'Металлическая гитара с тонким грифом',sound:'guitar'},
+  {id:30,tab:'sale',brand:'Ernie Ball',name:'Slinky Pack 10-46',price:1490,oldPrice:1990,badge:'sale',emoji:'🎵',rating:5,reviews:892,desc:'Набор 3 пачки фирменных никелевых струн Ernie Ball',sound:'guitar'},
+];
+
+// ── CART STATE ──
+let cart = JSON.parse(localStorage.getItem('forte_cart') || '[]');
+
+function saveCart(){ localStorage.setItem('forte_cart', JSON.stringify(cart)); }
+
+function addToCart(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  const existing = cart.find(x=>x.id===id);
+  if(existing){ existing.qty++; }
+  else { cart.push({...p, qty:1}); }
+  saveCart();
+  updateCartUI();
+  const badge = document.getElementById('cartBadge');
+  badge.classList.remove('bump');
+  requestAnimationFrame(()=>badge.classList.add('bump'));
+  setTimeout(()=>badge.classList.remove('bump'),400);
+}
+
+function removeFromCart(id){
+  cart = cart.filter(x=>x.id!==id);
+  saveCart(); updateCartUI();
+}
+
+function updateQty(id, delta){
+  const item = cart.find(x=>x.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0) { removeFromCart(id); return; }
+  saveCart(); updateCartUI();
+}
+
+function clearCart(){
+  cart = [];
+  saveCart(); updateCartUI();
+}
+
+function updateCartUI(){
+  const badge = document.getElementById('cartBadge');
+  const total = cart.reduce((s,i)=>s+i.qty,0);
+  badge.textContent = total;
+  const wrap = document.getElementById('cartItemsWrap');
+  const totalEl = document.getElementById('cartTotal');
+  if(cart.length===0){
+    wrap.innerHTML = '<div class="cart-empty"><span class="empty-icon">🎸</span><p>Корзина пуста</p><p style="font-size:13px;margin-top:6px">Добавьте инструмент, который поёт именно для вас</p></div>';
+    totalEl.textContent = '0 ₽';
+    return;
+  }
+  const totalPrice = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  totalEl.textContent = totalPrice.toLocaleString('ru')+'₽';
+  wrap.innerHTML = cart.map(item=>`
+    <div class="cart-item">
+      <div class="cart-item-emoji">${item.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-brand">${item.brand}</div>
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-controls">
+          <button class="qty-btn" onclick="updateQty(${item.id},-1)">−</button>
+          <span class="qty-val">${item.qty}</span>
+          <button class="qty-btn" onclick="updateQty(${item.id},1)">+</button>
+          <span class="cart-item-price">${(item.price*item.qty).toLocaleString('ru')} ₽</span>
+        </div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${item.id})">×</button>
+    </div>`).join('');
+}
+
+function toggleCart(){
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('cartDrawer').classList.contains('open') ? 'hidden' : '';
+}
+function closeCart(){
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function checkout(){
+  alert('Переход к оформлению заказа!\n\nТоваров: '+cart.reduce((s,i)=>s+i.qty,0)+'\nСумма: '+cart.reduce((s,i)=>s+i.price*i.qty,0).toLocaleString('ru')+' ₽');
+}
+
+// ── STARS ──
+function stars(rating){
+  return [1,2,3,4,5].map(i=>`<span class="star${i<=rating?'':' empty'}">★</span>`).join('');
+}
+
+// ── CAROUSEL ──
+let currentTab = 'hits', currentPage = 0;
+const perPage = 4;
+
+function renderCarousel(){
+  const items = PRODUCTS.filter(p=>p.tab===currentTab);
+  const pages = Math.ceil(items.length/perPage);
+  const track = document.getElementById('carouselTrack');
+  const dotsEl = document.getElementById('carouselDots');
+
+  track.innerHTML = Array.from({length:pages},(_,pi)=>{
+    const pageItems = items.slice(pi*perPage,(pi+1)*perPage);
+    return `<div class="carousel-slide" style="gap:16px">${pageItems.map(p=>`
+      <div class="product-card" style="flex:0 0 calc(25% - 12px);min-width:calc(25% - 12px)">
+        <div class="product-img">
+          <div class="product-emoji">${p.emoji}</div>
+          <div class="product-badge badge-${p.badge}">${p.badge==='hit'?'Хит':p.badge==='new'?'Новинка':'−'+(Math.round((1-p.price/p.oldPrice)*100))+'%'}</div>
+          <button class="product-wishlist" onclick="toggleWish(this)">♡</button>
+        </div>
+        <div class="product-info">
+          <div class="product-brand">${p.brand}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-rating">${stars(p.rating)}<span class="rating-count">(${p.reviews})</span></div>
+          <div class="product-desc-short">${p.desc}</div>
+          <div class="product-footer">
+            <div><span class="product-price">${p.price.toLocaleString('ru')} ₽</span>${p.oldPrice?`<span class="product-price-old">${p.oldPrice.toLocaleString('ru')} ₽</span>`:''}</div>
+            <button class="btn-add" onclick="handleAdd(this,${p.id})">+</button>
+          </div>
+        </div>
+      </div>`).join('')}</div>`;
+  }).join('');
+
+  dotsEl.innerHTML = Array.from({length:pages},(_,i)=>`<div class="carousel-dot${i===currentPage?' active':''}" onclick="goToPage(${i})"></div>`).join('');
+  goToPage(currentPage,false);
+}
+
+function goToPage(page, animate=true){
+  const items = PRODUCTS.filter(p=>p.tab===currentTab);
+  const pages = Math.ceil(items.length/perPage);
+  currentPage = Math.max(0,Math.min(page,pages-1));
+  const slides = document.querySelectorAll('.carousel-slide');
+  slides.forEach((s,i)=>{
+    s.style.transition = animate?'transform .4s cubic-bezier(0.4,0,0.2,1)':'none';
+    s.style.transform = `translateX(${(i-currentPage)*100}%)`;
+  });
+  document.querySelectorAll('.carousel-dot').forEach((d,i)=>d.classList.toggle('active',i===currentPage));
+  document.getElementById('carouselPrev').disabled = currentPage===0;
+  document.getElementById('carouselNext').disabled = currentPage===pages-1;
+}
+
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    currentTab = btn.dataset.tab;
+    currentPage = 0;
+    renderCarousel();
+  });
+});
+document.getElementById('carouselPrev').addEventListener('click',()=>goToPage(currentPage-1));
+document.getElementById('carouselNext').addEventListener('click',()=>goToPage(currentPage+1));
+
+function handleAdd(btn, id){
+  addToCart(id);
+  btn.classList.add('added');
+  btn.textContent = '✓';
+  setTimeout(()=>{ btn.classList.remove('added'); btn.textContent = '+'; },1400);
+}
+
+function toggleWish(btn){
+  btn.textContent = btn.textContent==='♡'?'♥':'♡';
+  btn.classList.toggle('active', btn.textContent==='♥');
+}
+
+renderCarousel();
+updateCartUI();
+
+// ── WEB AUDIO ──
+let audioCtx = null;
+function getCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playGuitar(ctx){
+  // Guitar chord: Am (A2, E3, A3, C4, E4)
+  [[110,2.8],[164.81,2.4],[220,2.2],[261.63,2.0],[329.63,1.8]].forEach(([freq,dur],ni)=>{
+    setTimeout(()=>{
+      [1,2,3,4,5,6].forEach((h,hi)=>{
+        const gains=[0.5,0.35,0.2,0.1,0.05,0.02];
+        const osc=ctx.createOscillator(), g=ctx.createGain(), f=ctx.createBiquadFilter();
+        osc.type='sawtooth'; osc.frequency.value=freq*h;
+        f.type='lowpass'; f.frequency.value=Math.max(400,2400/h); f.Q.value=2;
+        g.gain.setValueAtTime(gains[hi]*0.22,ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+dur);
+        osc.connect(f); f.connect(g); g.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime+dur+.1);
+      });
+    },ni*55);
+  });
+}
+
+function playPiano(ctx){
+  // C major chord: C4, E4, G4
+  [[261.63,3],[329.63,3],[392,3]].forEach(([freq,dur])=>{
+    [1,2,3,4,6,8].forEach((h,hi)=>{
+      const gains=[0.45,0.28,0.14,0.07,0.035,0.015];
+      const osc=ctx.createOscillator(), g=ctx.createGain();
+      osc.type='sine'; osc.frequency.value=freq*h;
+      g.gain.setValueAtTime(gains[hi]*0.3,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+dur);
+      osc.connect(g); g.connect(ctx.destination);
+      osc.start(); osc.stop(ctx.currentTime+dur+.1);
+    });
+  });
+}
+
+function playDrums(ctx){
+  const t=ctx.currentTime;
+  // KICK
+  const ko=ctx.createOscillator(), kg=ctx.createGain();
+  ko.frequency.setValueAtTime(160,t); ko.frequency.exponentialRampToValueAtTime(40,t+.25);
+  kg.gain.setValueAtTime(0.9,t); kg.gain.exponentialRampToValueAtTime(0.001,t+.4);
+  ko.connect(kg); kg.connect(ctx.destination); ko.start(t); ko.stop(t+.45);
+  // SNARE
+  const nbuf=ctx.createBuffer(1,Math.round(ctx.sampleRate*.18),ctx.sampleRate);
+  const nd=nbuf.getChannelData(0); for(let i=0;i<nd.length;i++) nd[i]=Math.random()*2-1;
+  const ns=ctx.createBufferSource(), nf=ctx.createBiquadFilter(), ng=ctx.createGain();
+  ns.buffer=nbuf; nf.type='bandpass'; nf.frequency.value=3000; nf.Q.value=.7;
+  ng.gain.setValueAtTime(0.4,t+.12); ng.gain.exponentialRampToValueAtTime(0.001,t+.35);
+  ns.connect(nf); nf.connect(ng); ng.connect(ctx.destination); ns.start(t+.12);
+  // HI-HAT x3
+  [0,.25,.5].forEach(delay=>{
+    const hb=ctx.createBuffer(1,Math.round(ctx.sampleRate*.04),ctx.sampleRate);
+    const hd=hb.getChannelData(0); for(let i=0;i<hd.length;i++) hd[i]=Math.random()*2-1;
+    const hs=ctx.createBufferSource(), hf=ctx.createBiquadFilter(), hg=ctx.createGain();
+    hs.buffer=hb; hf.type='highpass'; hf.frequency.value=9000;
+    hg.gain.setValueAtTime(0.15,t+delay); hg.gain.exponentialRampToValueAtTime(0.001,t+delay+.06);
+    hs.connect(hf); hf.connect(hg); hg.connect(ctx.destination); hs.start(t+delay);
+  });
+}
+
+function playWind(ctx){
+  const t=ctx.currentTime;
+  // Bb trumpet note with vibrato
+  [466.16,587.33,698.46].forEach((freq,ni)=>{
+    setTimeout(()=>{
+      const osc=ctx.createOscillator(), vib=ctx.createOscillator(), vg=ctx.createGain(), g=ctx.createGain(), d=ctx.createWaveShaper();
+      const curve=new Float32Array(256); for(let i=0;i<256;i++){const x=i*2/256-1;curve[i]=(Math.PI+100)*x/(Math.PI+100*Math.abs(x));} d.curve=curve;
+      osc.type='sawtooth'; osc.frequency.value=freq;
+      vib.frequency.value=5.5; vg.gain.value=4;
+      vib.connect(vg); vg.connect(osc.frequency);
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.12,t+.07);
+      g.gain.setValueAtTime(0.10,t+1.0); g.gain.exponentialRampToValueAtTime(0.001,t+1.6);
+      osc.connect(d); d.connect(g); g.connect(ctx.destination);
+      osc.start(t); vib.start(t); osc.stop(t+1.7); vib.stop(t+1.7);
+    },ni*120);
+  });
+}
+
+const soundFns = {guitar:playGuitar,piano:playPiano,drums:playDrums,wind:playWind};
+
+let activeTrack = null;
+function playTrackSound(card){
+  const ctx = getCtx();
+  // Stop previous visual
+  if(activeTrack && activeTrack!==card) activeTrack.classList.remove('playing');
+  card.classList.toggle('playing');
+  activeTrack = card.classList.contains('playing') ? card : null;
+  if(!activeTrack) return;
+  // Ripple effect
+  const ripple=document.createElement('div'); ripple.className='track-ripple';
+  ripple.style.cssText='left:28px;top:28px'; card.appendChild(ripple);
+  setTimeout(()=>ripple.remove(),900);
+  // Play sound
+  const type = card.dataset.sound;
+  soundFns[type]&&soundFns[type](ctx);
+  // Auto-stop visual after sound duration
+  const dur = type==='drums'?800:type==='wind'?2000:3000;
+  setTimeout(()=>{ if(activeTrack===card){ card.classList.remove('playing'); activeTrack=null; } },dur);
+}
+
+// ── NAV ──
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60));
+
+// ── WAVEFORM ──
+const canvas=document.getElementById('waveCanvas'), ctx2=canvas.getContext('2d');
+let W,H,wt=0;
+const waves=[{f:.018,a:28,s:.012,c:'rgba(196,135,58,.5)'},{f:.025,a:18,s:.018,c:'rgba(224,168,85,.35)'},{f:.012,a:40,s:.008,c:'rgba(196,135,58,.25)'}];
+function resizeC(){ W=canvas.width=canvas.parentElement.offsetWidth; H=canvas.height=canvas.parentElement.offsetHeight; }
+function drawW(w,t){ ctx2.beginPath(); ctx2.strokeStyle=w.c; ctx2.lineWidth=1.5; for(let x=0;x<=W;x+=3){const y=H/2+Math.sin(x*w.f+t)*w.a+Math.sin(x*w.f*1.7+t*.7)*w.a*.4; x===0?ctx2.moveTo(x,y):ctx2.lineTo(x,y);} ctx2.stroke(); }
+function animW(){ ctx2.clearRect(0,0,W,H); wt+=.3; waves.forEach(w=>drawW(w,wt*w.s*40)); requestAnimationFrame(animW); }
+resizeC(); window.addEventListener('resize',resizeC); animW();
+
+// ── SCROLL REVEAL ──
+const ro=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ── COUNTERS ──
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const el=e.target,t=parseInt(el.dataset.count);const s=performance.now();const u=n=>{const p=Math.min((n-s)/1800,1),v=1-Math.pow(1-p,3);el.textContent=Math.round(v*t).toLocaleString('ru');p<1?requestAnimationFrame(u):(el.textContent=t.toLocaleString('ru')+(t>100?'+':''));};requestAnimationFrame(u);co.unobserve(el);}}),{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+
+// ── CURSOR TILT ON CARDS ──
+document.querySelectorAll('.cat-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(600px) rotateY(${x*6}deg) rotateX(${-y*4}deg) translateY(-3px) scale(1.01)`;});
+  card.addEventListener('mouseleave',()=>{card.style.transform='';});
+});
+
+// ── FORM ──
+function submitForm(btn){btn.textContent='Отправляем...';btn.disabled=true;setTimeout(()=>{btn.textContent='✓ Заявка принята! Позвоним в течение часа';btn.style.background='#3A8B4A';},1200);}
+</script>
+</body>
+</html>

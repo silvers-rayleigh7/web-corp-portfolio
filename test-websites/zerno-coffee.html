@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Зерно — Specialty Coffee</title>
+  <meta name="description" content="Зерно — авторская кофейня в сердце города. Свежая обжарка, прямые закупки, мастерство в каждой чашке.">
+  <meta property="og:title" content="Зерно — Specialty Coffee">
+  <meta property="og:description" content="Каждое зерно — история. Specialty coffee, авторские напитки, место для работы и отдыха.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       CSS CUSTOM PROPERTIES — DESIGN TOKENS
+    ============================================ */
+    :root {
+      --cream:       #faf6f0;
+      --cream-light: #fdf9f5;
+      --cream-dark:  #f2ead8;
+      --brown:       #3d2c1e;
+      --coffee:      #6b4226;
+      --terracotta:  #c17f59;
+      --sage:        #8a9a7b;
+      --charcoal:    #2a2520;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Nunito', system-ui, sans-serif;
+
+      --ease-out: cubic-bezier(0.21, 0.47, 0.32, 0.98);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --radius-xl: 48px;
+
+      --shadow-soft: 0 4px 24px rgba(61, 44, 30, 0.08);
+      --shadow-card: 0 8px 40px rgba(61, 44, 30, 0.12);
+      --shadow-hover: 0 16px 56px rgba(61, 44, 30, 0.18);
+    }
+
+    /* ============================================
+       RESET & BASE
+    ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--cream);
+      color: var(--brown);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================
+       TYPOGRAPHY
+    ============================================ */
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1.1;
+      font-weight: 600;
+    }
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.5vw, 48px);
+      line-height: 1.2;
+      font-weight: 500;
+    }
+    h3 {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 500;
+      line-height: 1.35;
+    }
+    p {
+      font-size: 1rem;
+      line-height: 1.75;
+      font-weight: 400;
+    }
+
+    /* ============================================
+       NAVIGATION
+    ============================================ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+    }
+
+    .nav.scrolled {
+      background: rgba(250, 246, 240, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(61, 44, 30, 0.08);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--brown);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo span {
+      color: var(--terracotta);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--coffee);
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links a:hover {
+      color: var(--terracotta);
+    }
+
+    .nav-cta {
+      background: var(--brown);
+      color: var(--cream) !important;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.2s var(--ease-spring) !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--coffee) !important;
+      transform: scale(1.04) !important;
+      color: var(--cream) !important;
+    }
+
+    /* ============================================
+       HERO SECTION
+    ============================================ */
+    .hero {
+      min-height: 100vh;
+      background: var(--cream-light);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 0 40px;
+    }
+
+    /* Coffee bean CSS shapes */
+    .bean {
+      position: absolute;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      opacity: 0.12;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+
+    .bean::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      width: 2px;
+      height: 70%;
+      background: rgba(61, 44, 30, 0.5);
+      border-radius: 2px;
+    }
+
+    .bean-1 {
+      width: 80px; height: 52px;
+      background: var(--coffee);
+      top: 12%; left: 8%;
+      transform: rotate(35deg);
+      animation: float1 9s infinite;
+    }
+    .bean-2 {
+      width: 55px; height: 36px;
+      background: var(--terracotta);
+      top: 65%; left: 5%;
+      transform: rotate(-20deg);
+      animation: float2 12s infinite;
+      opacity: 0.1;
+    }
+    .bean-3 {
+      width: 100px; height: 65px;
+      background: var(--brown);
+      top: 20%; right: 12%;
+      transform: rotate(55deg);
+      animation: float1 14s infinite 2s;
+    }
+    .bean-4 {
+      width: 40px; height: 26px;
+      background: var(--coffee);
+      top: 75%; right: 20%;
+      transform: rotate(-40deg);
+      animation: float2 8s infinite 1s;
+      opacity: 0.09;
+    }
+    .bean-5 {
+      width: 65px; height: 42px;
+      background: var(--terracotta);
+      top: 45%; right: 5%;
+      transform: rotate(15deg);
+      animation: float1 11s infinite 3s;
+      opacity: 0.08;
+    }
+    .bean-6 {
+      width: 48px; height: 31px;
+      background: var(--brown);
+      top: 8%; right: 35%;
+      transform: rotate(-60deg);
+      animation: float2 10s infinite 0.5s;
+      opacity: 0.07;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translateY(0) rotate(35deg); }
+      33% { transform: translateY(-18px) rotate(40deg); }
+      66% { transform: translateY(8px) rotate(30deg); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0) rotate(-20deg); }
+      50% { transform: translateY(-22px) rotate(-15deg); }
+    }
+
+    /* Warm gradient blobs */
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .hero-blob-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(193, 127, 89, 0.18) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      animation: blobMove1 15s ease-in-out infinite;
+    }
+    .hero-blob-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(138, 154, 123, 0.14) 0%, transparent 70%);
+      bottom: 0; left: -80px;
+      animation: blobMove2 20s ease-in-out infinite;
+    }
+
+    @keyframes blobMove1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-30px, 40px) scale(1.05); }
+      66% { transform: translate(20px, -20px) scale(0.95); }
+    }
+    @keyframes blobMove2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, -30px) scale(1.1); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+      padding-top: 80px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) 0.2s forwards;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--terracotta);
+    }
+
+    .hero h1 {
+      color: var(--brown);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.9s var(--ease-out) 0.4s forwards;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--coffee);
+    }
+
+    .hero-desc {
+      font-size: 1.125rem;
+      color: var(--coffee);
+      max-width: 500px;
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: fadeUp 0.9s var(--ease-out) 0.6s forwards;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s var(--ease-out) 0.8s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--brown);
+      color: var(--cream);
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.25s, transform 0.25s var(--ease-spring), box-shadow 0.25s;
+      box-shadow: 0 4px 20px rgba(61, 44, 30, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--coffee);
+      transform: scale(1.04) translateY(-1px);
+      box-shadow: 0 8px 32px rgba(61, 44, 30, 0.28);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--brown);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      padding: 16px 0;
+      border-bottom: 1.5px solid var(--terracotta);
+      transition: color 0.2s, gap 0.2s;
+    }
+
+    .btn-secondary:hover {
+      color: var(--coffee);
+      gap: 12px;
+    }
+
+    /* Steam animation */
+    .hero-visual {
+      position: absolute;
+      right: 8%;
+      bottom: 0;
+      width: 320px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 1.2s var(--ease-out) 1s forwards;
+    }
+
+    .cup-wrapper {
+      position: relative;
+      width: 180px;
+    }
+
+    .cup {
+      width: 160px;
+      height: 120px;
+      background: linear-gradient(145deg, #fff8f0, #f2e4d0);
+      border-radius: 12px 12px 40px 40px;
+      margin: 0 auto;
+      position: relative;
+      box-shadow: 0 12px 40px rgba(61, 44, 30, 0.15), inset 0 2px 4px rgba(255,255,255,0.8);
+    }
+
+    .cup::before {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 50px;
+      background: radial-gradient(ellipse, rgba(107, 66, 38, 0.85) 0%, rgba(107, 66, 38, 0.6) 60%, transparent 100%);
+      border-radius: 50%;
+    }
+
+    .cup-handle {
+      position: absolute;
+      right: -30px;
+      top: 20px;
+      width: 36px;
+      height: 48px;
+      border: 10px solid #f2e4d0;
+      border-left: none;
+      border-radius: 0 20px 20px 0;
+      box-shadow: 4px 2px 8px rgba(61, 44, 30, 0.1);
+    }
+
+    .cup-saucer {
+      width: 200px;
+      height: 20px;
+      background: linear-gradient(145deg, #f2e4d0, #e8d5bc);
+      border-radius: 50%;
+      margin: 0 auto -10px;
+      box-shadow: 0 8px 24px rgba(61, 44, 30, 0.12);
+    }
+
+    .steam-container {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 8px;
+    }
+
+    .steam-line {
+      width: 3px;
+      height: 40px;
+      background: linear-gradient(to top, var(--terracotta), transparent);
+      border-radius: 4px;
+      animation: steam 2.5s ease-in-out infinite;
+      opacity: 0.5;
+    }
+    .steam-line:nth-child(1) { animation-delay: 0s; }
+    .steam-line:nth-child(2) { animation-delay: 0.6s; height: 56px; }
+    .steam-line:nth-child(3) { animation-delay: 1.2s; }
+
+    @keyframes steam {
+      0% { transform: translateY(10px) scaleX(1); opacity: 0; }
+      30% { opacity: 0.5; }
+      70% { opacity: 0.3; }
+      100% { transform: translateY(-30px) scaleX(1.5); opacity: 0; }
+    }
+
+    /* ============================================
+       SHARED SECTION STYLES
+    ============================================ */
+    section {
+      padding: 100px 40px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 20px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--terracotta);
+    }
+
+    /* ============================================
+       FADE-IN ANIMATIONS
+    ============================================ */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-up-delay-1 { transition-delay: 0.1s; }
+    .fade-up-delay-2 { transition-delay: 0.2s; }
+    .fade-up-delay-3 { transition-delay: 0.3s; }
+    .fade-up-delay-4 { transition-delay: 0.4s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       PHILOSOPHY SECTION
+    ============================================ */
+    .philosophy {
+      background: var(--brown);
+      color: var(--cream);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .philosophy::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(193, 127, 89, 0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .philosophy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .philosophy-left .section-label {
+      color: var(--terracotta);
+    }
+
+    .philosophy-left h2 {
+      color: var(--cream);
+      margin-bottom: 20px;
+    }
+
+    .philosophy-left p {
+      color: rgba(250, 246, 240, 0.72);
+      font-size: 1.0625rem;
+    }
+
+    .philosophy-values {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .value-card {
+      background: rgba(250, 246, 240, 0.06);
+      border: 1px solid rgba(250, 246, 240, 0.1);
+      border-radius: var(--radius-md);
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      transition: background 0.25s, transform 0.25s var(--ease-spring);
+    }
+
+    .value-card:hover {
+      background: rgba(250, 246, 240, 0.1);
+      transform: scale(1.02);
+    }
+
+    .value-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--terracotta);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.25rem;
+    }
+
+    .value-text h3 {
+      color: var(--cream);
+      font-size: 1.0625rem;
+      margin-bottom: 6px;
+    }
+
+    .value-text p {
+      color: rgba(250, 246, 240, 0.6);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    /* ============================================
+       MENU SECTION
+    ============================================ */
+    .menu {
+      background: var(--cream-light);
+    }
+
+    .menu-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .menu-header h2 {
+      color: var(--brown);
+      margin-bottom: 16px;
+    }
+
+    .menu-header p {
+      color: var(--coffee);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .menu-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 52px;
+      flex-wrap: wrap;
+    }
+
+    .menu-tab {
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1.5px solid rgba(61, 44, 30, 0.15);
+      background: transparent;
+      color: var(--coffee);
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s var(--ease-spring);
+    }
+
+    .menu-tab:hover,
+    .menu-tab.active {
+      background: var(--brown);
+      color: var(--cream);
+      border-color: var(--brown);
+      transform: scale(1.04);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.25s var(--ease-spring), box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--terracotta), var(--coffee));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .menu-card:hover::before {
+      opacity: 1;
+    }
+
+    .menu-card-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--cream-dark);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.375rem;
+      margin-bottom: 16px;
+    }
+
+    .menu-card h3 {
+      font-size: 1rem;
+      color: var(--brown);
+      margin-bottom: 6px;
+    }
+
+    .menu-card-desc {
+      font-size: 0.8375rem;
+      color: rgba(61, 44, 30, 0.55);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .menu-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .menu-price {
+      font-weight: 700;
+      font-size: 1.0625rem;
+      color: var(--coffee);
+      font-family: var(--font-display);
+    }
+
+    .menu-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 50px;
+      background: var(--cream-dark);
+      color: var(--terracotta);
+    }
+
+    /* ============================================
+       PROCESS / JOURNEY SECTION
+    ============================================ */
+    .process {
+      background: var(--cream);
+    }
+
+    .process-header {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+
+    .process-header h2 {
+      color: var(--brown);
+    }
+
+    .process-timeline {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .process-timeline::before {
+      content: '';
+      position: absolute;
+      top: 56px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--terracotta) 0%, var(--sage) 100%);
+      z-index: 0;
+    }
+
+    .process-step {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .process-icon {
+      width: 112px;
+      height: 112px;
+      margin: 0 auto 24px;
+      background: var(--cream-light);
+      border-radius: 50%;
+      border: 2px solid var(--cream-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      transition: transform 0.3s var(--ease-spring), box-shadow 0.3s, border-color 0.3s;
+      position: relative;
+    }
+
+    .process-step:hover .process-icon {
+      transform: scale(1.12) translateY(-4px);
+      box-shadow: 0 12px 32px rgba(193, 127, 89, 0.22);
+      border-color: var(--terracotta);
+    }
+
+    .process-num {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 28px;
+      height: 28px;
+      background: var(--terracotta);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: white;
+      border: 2px solid var(--cream-light);
+    }
+
+    .process-step h3 {
+      color: var(--brown);
+      font-size: 1.125rem;
+      margin-bottom: 10px;
+    }
+
+    .process-step p {
+      font-size: 0.875rem;
+      color: var(--coffee);
+      opacity: 0.75;
+      line-height: 1.65;
+    }
+
+    /* ============================================
+       QUOTE / ATMOSPHERE SECTION
+    ============================================ */
+    .atmosphere {
+      background: linear-gradient(135deg, #f5ede1 0%, #ede3d4 50%, #f0e8d8 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .atmosphere::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 20% 50%, rgba(193, 127, 89, 0.14) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 80% 30%, rgba(138, 154, 123, 0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .atmosphere-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .quote-mark {
+      font-family: var(--font-display);
+      font-size: 8rem;
+      line-height: 0.6;
+      color: var(--terracotta);
+      opacity: 0.25;
+      display: block;
+      margin-bottom: 24px;
+    }
+
+    .atmosphere blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3.5vw, 40px);
+      font-style: italic;
+      color: var(--brown);
+      line-height: 1.35;
+      font-weight: 500;
+      margin-bottom: 36px;
+    }
+
+    .atmosphere-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .meta-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--terracotta);
+    }
+
+    .atmosphere-meta span {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--coffee);
+      letter-spacing: 0.06em;
+    }
+
+    /* Small bean decorations */
+    .deco-bean {
+      position: absolute;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      opacity: 0.08;
+    }
+
+    .deco-bean-1 {
+      width: 60px; height: 40px;
+      background: var(--coffee);
+      top: 15%; left: 5%;
+      transform: rotate(30deg);
+    }
+    .deco-bean-2 {
+      width: 90px; height: 58px;
+      background: var(--terracotta);
+      bottom: 10%; right: 8%;
+      transform: rotate(-50deg);
+    }
+
+    /* ============================================
+       CONTACTS SECTION
+    ============================================ */
+    .contacts {
+      background: var(--cream-light);
+    }
+
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contacts-left h2 {
+      color: var(--brown);
+      margin-bottom: 16px;
+    }
+
+    .contacts-left > p {
+      color: var(--coffee);
+      margin-bottom: 44px;
+      font-size: 1.0625rem;
+    }
+
+    .contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 44px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .contact-icon-wrap {
+      width: 44px;
+      height: 44px;
+      background: var(--cream-dark);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+      flex-shrink: 0;
+    }
+
+    .contact-detail {
+      padding-top: 4px;
+    }
+
+    .contact-detail strong {
+      display: block;
+      font-weight: 600;
+      color: var(--brown);
+      font-size: 0.875rem;
+      margin-bottom: 2px;
+    }
+
+    .contact-detail span {
+      color: var(--coffee);
+      font-size: 0.9rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-link {
+      width: 44px;
+      height: 44px;
+      background: var(--cream-dark);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+      transition: background 0.2s, transform 0.2s var(--ease-spring);
+    }
+
+    .social-link:hover {
+      background: var(--terracotta);
+      transform: scale(1.12) translateY(-2px);
+    }
+
+    /* Map placeholder */
+    .map-placeholder {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 380px;
+      background: linear-gradient(135deg, var(--cream-dark) 0%, #e8d5b8 100%);
+      position: relative;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, rgba(61, 44, 30, 0.04) 0px, rgba(61, 44, 30, 0.04) 1px, transparent 1px, transparent 40px),
+        repeating-linear-gradient(90deg, rgba(61, 44, 30, 0.04) 0px, rgba(61, 44, 30, 0.04) 1px, transparent 1px, transparent 40px);
+    }
+
+    .map-pin {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .map-pin-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--brown);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 24px rgba(61, 44, 30, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map-pin-icon::after {
+      content: '☕';
+      transform: rotate(45deg);
+      font-size: 1.375rem;
+    }
+
+    .map-label {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      color: var(--brown);
+      font-weight: 600;
+    }
+
+    .map-sub {
+      font-size: 0.875rem;
+      color: var(--coffee);
+      margin-top: 6px;
+    }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    footer {
+      background: var(--charcoal);
+      color: rgba(250, 246, 240, 0.7);
+      padding: 48px 40px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    .footer-logo span {
+      color: var(--terracotta);
+    }
+
+    .footer-copy {
+      font-size: 0.8125rem;
+    }
+
+    .footer-tagline {
+      font-size: 0.8125rem;
+      font-style: italic;
+      color: rgba(250, 246, 240, 0.45);
+    }
+
+    /* ============================================
+       MOBILE MENU TOGGLE
+    ============================================ */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--brown);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 1024px) {
+      .philosophy-grid,
+      .contacts-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .process-timeline {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .process-timeline::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      section {
+        padding: 72px 24px;
+      }
+
+      .nav {
+        padding: 16px 24px;
+      }
+
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 280px;
+        background: var(--cream-light);
+        flex-direction: column;
+        padding: 80px 32px 32px;
+        box-shadow: -8px 0 40px rgba(61, 44, 30, 0.12);
+        gap: 20px;
+        z-index: 99;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 1rem;
+      }
+
+      .nav-toggle {
+        display: flex;
+        z-index: 100;
+      }
+
+      .hero {
+        padding: 0 24px;
+        min-height: 100svh;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      .hero-content {
+        max-width: 100%;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .process-timeline {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+
+      .philosophy {
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      }
+
+      footer {
+        padding: 40px 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-timeline {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-tabs {
+        gap: 6px;
+      }
+
+      .menu-tab {
+        padding: 8px 16px;
+        font-size: 0.8125rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="mainNav">
+    <a href="#" class="nav-logo">Зерно<span>.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#philosophy">О нас</a></li>
+      <li><a href="#menu">Меню</a></li>
+      <li><a href="#process">Процесс</a></li>
+      <li><a href="#contacts" class="nav-cta">Найти нас</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Открыть меню">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="hero">
+    <!-- Floating beans -->
+    <div class="bean bean-1"></div>
+    <div class="bean bean-2"></div>
+    <div class="bean bean-3"></div>
+    <div class="bean bean-4"></div>
+    <div class="bean bean-5"></div>
+    <div class="bean bean-6"></div>
+
+    <!-- Warm blobs -->
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+
+    <div class="hero-content">
+      <span class="hero-eyebrow">Specialty Coffee · Москва</span>
+      <h1>Каждое зерно —<br><em>история</em></h1>
+      <p class="hero-desc">
+        Мы обжариваем малые партии вручную, выбираем лоты напрямую с ферм
+        и готовим кофе так, чтобы вы почувствовали каждую ноту.
+      </p>
+      <div class="hero-actions">
+        <a href="#menu" class="btn-primary">
+          Смотреть меню
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#contacts" class="btn-secondary">
+          Найти нас
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Cup visual -->
+    <div class="hero-visual">
+      <div class="cup-wrapper">
+        <div class="steam-container">
+          <div class="steam-line"></div>
+          <div class="steam-line"></div>
+          <div class="steam-line"></div>
+        </div>
+        <div class="cup">
+          <div class="cup-handle"></div>
+        </div>
+        <div class="cup-saucer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY SECTION -->
+  <section class="philosophy" id="philosophy">
+    <div class="container">
+      <div class="philosophy-grid">
+        <div class="philosophy-left fade-up">
+          <span class="section-label">Наша философия</span>
+          <h2>Мы обжариваем каждую партию вручную</h2>
+          <p>
+            Для нас кофе — это не просто напиток. Это путь от конкретной фермы
+            в Эфиопии или Колумбии до вашей чашки. Мы знаем историю каждого лота,
+            имена фермеров и высоту плантации над уровнем моря.
+          </p>
+        </div>
+        <div class="philosophy-values">
+          <div class="value-card fade-up fade-up-delay-1">
+            <div class="value-icon">✦</div>
+            <div class="value-text">
+              <h3>Свежесть</h3>
+              <p>Обжарка малыми партиями каждые 3 дня. Никаких складских остатков — только свежий кофе.</p>
+            </div>
+          </div>
+          <div class="value-card fade-up fade-up-delay-2">
+            <div class="value-icon">◆</div>
+            <div class="value-text">
+              <h3>Прямые закупки</h3>
+              <p>Direct trade с фермерами в Эфиопии, Колумбии и Кении. Честная цена — лучшее качество.</p>
+            </div>
+          </div>
+          <div class="value-card fade-up fade-up-delay-3">
+            <div class="value-icon">◈</div>
+            <div class="value-text">
+              <h3>Мастерство</h3>
+              <p>Наши бариста — чемпионы региональных соревнований. Каждая чашка — результат многолетней практики.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU SECTION -->
+  <section class="menu" id="menu">
+    <div class="container">
+      <div class="menu-header fade-up">
+        <span class="section-label">Наше меню</span>
+        <h2>Выберите своё</h2>
+        <p>От классического эспрессо до авторских напитков с сезонными ингредиентами</p>
+      </div>
+
+      <div class="menu-tabs fade-up fade-up-delay-1">
+        <button class="menu-tab active" data-category="espresso">Эспрессо-бар</button>
+        <button class="menu-tab" data-category="filter">Фильтр</button>
+        <button class="menu-tab" data-category="signature">Авторские</button>
+        <button class="menu-tab" data-category="desserts">Десерты</button>
+      </div>
+
+      <div class="menu-grid" id="menuGrid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS SECTION -->
+  <section class="process" id="process">
+    <div class="container">
+      <div class="process-header fade-up">
+        <span class="section-label">Путь кофе</span>
+        <h2>От фермы до вашей чашки</h2>
+      </div>
+
+      <div class="process-timeline">
+        <div class="process-step fade-up fade-up-delay-1">
+          <div class="process-icon">
+            🌿
+            <span class="process-num">1</span>
+          </div>
+          <h3>Ферма</h3>
+          <p>Отбираем лоты напрямую у фермеров. Только specialty-сорта с оценкой SCA 84+.</p>
+        </div>
+        <div class="process-step fade-up fade-up-delay-2">
+          <div class="process-icon">
+            🔥
+            <span class="process-num">2</span>
+          </div>
+          <h3>Обжарка</h3>
+          <p>Малыми партиями по 3 кг на ростере Giesen. Светлая и средняя обжарка, раскрывающая терруар.</p>
+        </div>
+        <div class="process-step fade-up fade-up-delay-3">
+          <div class="process-icon">
+            ⚙️
+            <span class="process-num">3</span>
+          </div>
+          <h3>Помол</h3>
+          <p>Коническая фреза EK43. Каждый помол под конкретный метод заваривания — граммы и микроны.</p>
+        </div>
+        <div class="process-step fade-up fade-up-delay-4">
+          <div class="process-icon">
+            ☕
+            <span class="process-num">4</span>
+          </div>
+          <h3>Чашка</h3>
+          <p>Эспрессо на La Marzocco или ваш любимый фильтр — V60, Aeropress, Chemex. Всё с любовью.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ATMOSPHERE / QUOTE SECTION -->
+  <section class="atmosphere">
+    <div class="deco-bean deco-bean-1"></div>
+    <div class="deco-bean deco-bean-2"></div>
+    <div class="container">
+      <div class="atmosphere-content fade-up">
+        <span class="quote-mark">"</span>
+        <blockquote>
+          Лучший кофе — тот, который пьёшь не торопясь
+        </blockquote>
+        <div class="atmosphere-meta">
+          <div class="meta-divider"></div>
+          <span>Зерно · с 2019 года</span>
+          <div class="meta-divider"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTS SECTION -->
+  <section class="contacts" id="contacts">
+    <div class="container">
+      <div class="contacts-grid">
+        <div class="contacts-left fade-up">
+          <span class="section-label">Найдите нас</span>
+          <h2>Мы здесь каждый день</h2>
+          <p>Заходите с утра за первым кофе или вечером — поработать в тишине под джаз и свежую обжарку.</p>
+
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="contact-icon-wrap">📍</div>
+              <div class="contact-detail">
+                <strong>Адрес</strong>
+                <span>Москва, ул. Никольская, 17, стр. 2<br>м. Охотный Ряд, 3 минуты пешком</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon-wrap">🕐</div>
+              <div class="contact-detail">
+                <strong>Часы работы</strong>
+                <span>Ежедневно 8:00 — 22:00<br>Без выходных</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon-wrap">📞</div>
+              <div class="contact-detail">
+                <strong>Телефон</strong>
+                <span>+7 (495) 123-45-67</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon-wrap">✉️</div>
+              <div class="contact-detail">
+                <strong>Email</strong>
+                <span>hello@zerno.coffee</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Instagram">📷</a>
+            <a href="#" class="social-link" aria-label="Telegram">✈️</a>
+            <a href="#" class="social-link" aria-label="VK">💬</a>
+          </div>
+        </div>
+
+        <div class="fade-up fade-up-delay-2">
+          <div class="map-placeholder">
+            <div class="map-pin">
+              <div class="map-pin-icon"></div>
+              <div class="map-label">Зерно</div>
+              <div class="map-sub">ул. Никольская, 17</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Зерно<span>.</span></div>
+      <div class="footer-copy">2019 — 2025 · Зерно Specialty Coffee</div>
+      <div class="footer-tagline">Specialty coffee, обжаренный с любовью</div>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================
+    // MENU DATA
+    // ============================================
+    const menuData = {
+      espresso: [
+        { name: 'Эспрессо', desc: 'Ристретто, одиночный или двойной. Эфиопия Иргачеф, ноты бергамота и цитруса.', price: '180 ₽', badge: 'Классика', icon: '☕' },
+        { name: 'Американо', desc: 'Двойной эспрессо с горячей водой. Насыщенный, без кислинки.', price: '200 ₽', badge: null, icon: '🥤' },
+        { name: 'Флэт Уайт', desc: 'Двойной ристретто, 130 мл молока, кремовая текстура. Наш фаворит.', price: '280 ₽', badge: 'Любимый', icon: '🍶' },
+        { name: 'Капучино', desc: '1:1:1 — идеальный баланс кофе, молока и пены. Температура 65°C.', price: '260 ₽', badge: null, icon: '☕' },
+        { name: 'Латте', desc: 'Двойной эспрессо и 200 мл пропаренного молока. Мягко и нежно.', price: '300 ₽', badge: null, icon: '🥛' },
+        { name: 'Кортадо', desc: 'Эспрессо с равной долей тёплого молока. Для ценителей баланса.', price: '230 ₽', badge: null, icon: '🫖' },
+        { name: 'Макиато', desc: 'Эспрессо с ложкой молочной пены. Маленький, но характерный.', price: '200 ₽', badge: null, icon: '☕' },
+        { name: 'Доппио', desc: 'Двойной эспрессо — для тех, кто знает, чего хочет.', price: '220 ₽', badge: null, icon: '⚡' },
+      ],
+      filter: [
+        { name: 'V60', desc: 'Пуровер с японским изяществом. Колумбия Уила, персик и тёмный шоколад.', price: '320 ₽', badge: 'Хит', icon: '🫖' },
+        { name: 'Chemex', desc: 'Для тех, кто ценит чистоту вкуса. Кения АА, чёрная смородина, цветочность.', price: '360 ₽', badge: null, icon: '🧪' },
+        { name: 'Аэропресс', desc: 'Концентрированный, насыщенный. Бразилия Серрадо, орех и карамель.', price: '280 ₽', badge: null, icon: '⚗️' },
+        { name: 'Французский пресс', desc: 'Полнотелый, маслянистый. Гватемала Антигуа, какао и коричневый сахар.', price: '260 ₽', badge: null, icon: '☕' },
+        { name: 'Холодный брю', desc: '24 часа экстракции. Освежает и бодрит. Эфиопия Сидамо.', price: '400 ₽', badge: 'Сезон', icon: '🧊' },
+      ],
+      signature: [
+        { name: 'Зерно Латте', desc: 'Эспрессо, кокосовое молоко, пряный сироп кардамона. Подпись нашего баристы.', price: '380 ₽', badge: 'Авторский', icon: '✨' },
+        { name: 'Апельсин эспрессо', desc: 'Двойной ристретто, свежевыжатый апельсин, тоник. Ярко и бодро.', price: '340 ₽', badge: null, icon: '🍊' },
+        { name: 'Матча Латте', desc: 'Японский матча премиум, овсяное молоко, мёд. Спокойная энергия.', price: '360 ₽', badge: null, icon: '🍵' },
+        { name: 'Шакарато', desc: 'Двойной эспрессо со льдом и тростниковым сахаром — шейкер и бокал.', price: '320 ₽', badge: 'Лето', icon: '🍸' },
+        { name: 'Дальгона', desc: 'Взбитый растворимый кофе... шутка. Настоящий — со взбитыми сливками.', price: '350 ₽', badge: null, icon: '☁️' },
+        { name: 'Лавандовый фог', desc: 'Ароматный эрл грей, лавандовый сироп, молочная пена. Уютно.', price: '300 ₽', badge: null, icon: '💜' },
+      ],
+      desserts: [
+        { name: 'Тирамису', desc: 'Классический рецепт с нашим эспрессо. Маскарпоне и слои савоярди.', price: '380 ₽', badge: 'Хит', icon: '🎂' },
+        { name: 'Кофейный брауни', desc: 'Тёмный шоколад и двойной эспрессо. Влажный, насыщенный.', price: '280 ₽', badge: null, icon: '🍫' },
+        { name: 'Круассан', desc: 'Выпекаем каждое утро. Масляные, слоёные, с корицей или миндалём.', price: '200 ₽', badge: 'Утро', icon: '🥐' },
+        { name: 'Чизкейк', desc: 'Нью-Йоркский, без выпечки. Сливочный, с карамелью или ягодами.', price: '350 ₽', badge: null, icon: '🍰' },
+        { name: 'Эклер', desc: 'Заварное тесто, ванильный крем, глазурь из горького шоколада.', price: '260 ₽', badge: null, icon: '🍩' },
+        { name: 'Зерновые панкейки', desc: 'Цельнозерновые, с кленовым сиропом и ягодным соусом.', price: '340 ₽', badge: 'Завтрак', icon: '🥞' },
+      ]
+    };
+
+    function renderMenu(category) {
+      const grid = document.getElementById('menuGrid');
+      const items = menuData[category];
+      grid.innerHTML = items.map((item, i) => `
+        <div class="menu-card fade-up" style="transition-delay: ${i * 0.06}s">
+          <div class="menu-card-icon">${item.icon}</div>
+          <h3>${item.name}</h3>
+          <p class="menu-card-desc">${item.desc}</p>
+          <div class="menu-card-footer">
+            <span class="menu-price">${item.price}</span>
+            ${item.badge ? `<span class="menu-badge">${item.badge}</span>` : ''}
+          </div>
+        </div>
+      `).join('');
+
+      // Trigger animations
+      requestAnimationFrame(() => {
+        grid.querySelectorAll('.fade-up').forEach(el => {
+          setTimeout(() => el.classList.add('visible'), 30);
+        });
+      });
+    }
+
+    // Tab switching
+    document.querySelectorAll('.menu-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderMenu(tab.dataset.category);
+      });
+    });
+
+    // Initial render
+    renderMenu('espresso');
+
+    // ============================================
+    // SCROLL ANIMATIONS
+    // ============================================
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up:not(#menuGrid .fade-up)').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ============================================
+    // NAV SCROLL STATE
+    // ============================================
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // ============================================
+    // MOBILE NAV TOGGLE
+    // ============================================
+    const toggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // ============================================
+    // SUBTLE PARALLAX ON HERO BLOBS
+    // ============================================
+    const blob1 = document.querySelector('.hero-blob-1');
+    const blob2 = document.querySelector('.hero-blob-2');
+
+    window.addEventListener('mousemove', (e) => {
+      if (window.innerWidth < 768) return;
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      blob1.style.transform = `translate(${x * 1.5}px, ${y * 1.2}px)`;
+      blob2.style.transform = `translate(${-x}px, ${-y * 0.8}px)`;
+    }, { passive: true });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Щит и Право — юридическая фирма с 15-летним опытом защиты бизнеса. Корпоративное право, арбитражные споры, защита активов, налоговое право.">
+  <meta property="og:title" content="Щит и Право — Юридическая Защита Бизнеса">
+  <meta property="og:description" content="Более 15 лет защищаем интересы предпринимателей. 500+ успешных дел, 95% побед.">
+  <title>Щит и Право — Юридическая Защита Бизнеса</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #0a1628;
+      --charcoal:    #1a1f2e;
+      --charcoal-2:  #232938;
+      --gold:        #c9a84c;
+      --gold-light:  #dfc07a;
+      --gold-dim:    rgba(201, 168, 76, 0.15);
+      --gold-line:   rgba(201, 168, 76, 0.4);
+      --white:       #f0ece4;
+      --white-dim:   rgba(240, 236, 228, 0.65);
+      --white-faint: rgba(240, 236, 228, 0.12);
+
+      --font-serif: 'IBM Plex Serif', Georgia, serif;
+      --font-sans:  'IBM Plex Sans', system-ui, sans-serif;
+
+      --h1: clamp(36px, 4.5vw, 56px);
+      --h2: clamp(26px, 3vw, 40px);
+      --h3: clamp(18px, 2vw, 22px);
+
+      --ease: cubic-bezier(0.21, 0.47, 0.32, 0.98);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--navy);
+      color: var(--white);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── SCROLLBAR ────────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-line); border-radius: 3px; }
+
+    /* ─── SELECTION ────────────────────────────────────────────────────────── */
+    ::selection { background: var(--gold); color: var(--navy); }
+
+    /* ─── REVEAL ANIMATION ─────────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── HEADER / NAV ─────────────────────────────────────────────────────── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 clamp(24px, 5vw, 80px);
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 22, 40, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+      transition: background 0.4s var(--ease);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .logo-shield {
+      width: 32px;
+      height: 36px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .logo-shield svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .logo-name {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--white);
+    }
+
+    .logo-tagline {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 2px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    nav a {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+
+    nav a:hover { color: var(--gold); }
+
+    .nav-cta {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--navy) !important;
+      background: var(--gold);
+      padding: 10px 24px;
+      text-decoration: none;
+      transition: background 0.25s, color 0.25s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold-light) !important;
+      color: var(--navy) !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px clamp(24px, 5vw, 80px) 80px;
+    }
+
+    /* Geometric background */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(201, 168, 76, 0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 80% at 20% 70%, rgba(26, 31, 46, 0.8) 0%, transparent 70%);
+    }
+
+    /* Structural lines */
+    .hero-lines {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-lines::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: clamp(40px, 8vw, 120px);
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 0%, var(--gold-line) 30%, var(--gold-line) 70%, transparent 100%);
+    }
+
+    .hero-lines::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent 0%, rgba(201, 168, 76, 0.08) 20%, rgba(201, 168, 76, 0.08) 80%, transparent 100%);
+      transform: translateY(-50%);
+    }
+
+    /* Corner mark */
+    .hero-corner {
+      position: absolute;
+      top: 100px;
+      right: clamp(48px, 9vw, 136px);
+      width: 80px;
+      height: 80px;
+      border-top: 1px solid var(--gold-line);
+      border-right: 1px solid var(--gold-line);
+    }
+
+    .hero-corner-bottom {
+      position: absolute;
+      bottom: 60px;
+      left: clamp(24px, 5vw, 80px);
+      width: 60px;
+      height: 60px;
+      border-bottom: 1px solid var(--gold-line);
+      border-left: 1px solid var(--gold-line);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: var(--h1);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    /* Gold divider line */
+    .gold-divider {
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin: 28px 0;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(15px, 1.5vw, 17px);
+      font-weight: 300;
+      color: var(--white-dim);
+      line-height: 1.75;
+      max-width: 520px;
+      margin-bottom: 44px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--navy);
+      background: var(--gold);
+      padding: 16px 36px;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      background: transparent;
+      padding: 15px 32px;
+      border: 1px solid rgba(240, 236, 228, 0.2);
+      text-decoration: none;
+      transition: border-color 0.25s, color 0.25s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold-line);
+      color: var(--gold);
+    }
+
+    /* Hero stats strip */
+    .hero-stats {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      border-top: 1px solid rgba(201, 168, 76, 0.12);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .hero-stat {
+      padding: 24px clamp(24px, 5vw, 80px);
+      border-right: 1px solid rgba(201, 168, 76, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-stat:last-child { border-right: none; }
+
+    .hero-stat-num {
+      font-family: var(--font-serif);
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .hero-stat-label {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--white-dim);
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+    }
+
+    /* ─── SECTION COMMON ───────────────────────────────────────────────────── */
+    section {
+      padding: clamp(64px, 8vw, 120px) clamp(24px, 5vw, 80px);
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: var(--h2);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--white-dim);
+      max-width: 540px;
+      line-height: 1.75;
+    }
+
+    .section-header {
+      margin-bottom: 60px;
+    }
+
+    /* ─── SERVICES ─────────────────────────────────────────────────────────── */
+    .services { background: var(--charcoal); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1px;
+      background: rgba(201, 168, 76, 0.1);
+      border: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .service-card {
+      background: var(--charcoal);
+      padding: 44px 36px;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 36px;
+      right: 36px;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease-out);
+    }
+
+    .service-card:hover { background: var(--charcoal-2); }
+    .service-card:hover::after { transform: scaleX(1); }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border: 1px solid var(--gold-line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      color: var(--gold);
+      position: relative;
+    }
+
+    .service-icon::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: -6px;
+      bottom: -6px;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      z-index: -1;
+    }
+
+    .service-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .service-card h3 {
+      font-family: var(--font-serif);
+      font-size: var(--h3);
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+
+    .service-card p {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--white-dim);
+      line-height: 1.75;
+    }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      transition: gap 0.25s;
+    }
+
+    .service-link:hover { gap: 14px; }
+
+    .service-link svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ─── ABOUT ────────────────────────────────────────────────────────────── */
+    .about { background: var(--navy); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 100px);
+      align-items: start;
+    }
+
+    .about-visual {
+      position: relative;
+      aspect-ratio: 4/5;
+      max-height: 520px;
+    }
+
+    /* Decorative law composition */
+    .about-frame {
+      position: absolute;
+      inset: 0;
+      background: var(--charcoal-2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .about-frame-border {
+      position: absolute;
+      inset: 20px;
+      border: 1px solid var(--gold-line);
+      pointer-events: none;
+    }
+
+    .about-frame-corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+    }
+
+    .about-frame-corner.tl { top: 12px; left: 12px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+    .about-frame-corner.tr { top: 12px; right: 12px; border-top: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+    .about-frame-corner.bl { bottom: 12px; left: 12px; border-bottom: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+    .about-frame-corner.br { bottom: 12px; right: 12px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+
+    .about-emblem {
+      width: 120px;
+      height: 140px;
+      margin-bottom: 32px;
+    }
+
+    .about-emblem svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .about-frame-year {
+      font-family: var(--font-serif);
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .about-frame-name {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+
+    .about-frame-line {
+      width: 60px;
+      height: 1px;
+      background: var(--gold-line);
+      margin: 20px 0;
+    }
+
+    .about-frame-motto {
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      text-align: center;
+      padding: 0 40px;
+      line-height: 1.8;
+    }
+
+    .about-content { padding-top: 8px; }
+
+    .about-content p {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--white-dim);
+      line-height: 1.85;
+      margin-bottom: 20px;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 44px;
+      padding-top: 44px;
+      border-top: 1px solid rgba(201, 168, 76, 0.15);
+    }
+
+    .about-stat-num {
+      font-family: var(--font-serif);
+      font-size: clamp(30px, 3.5vw, 44px);
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .about-stat-label {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--white-dim);
+      line-height: 1.5;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── TEAM ─────────────────────────────────────────────────────────────── */
+    .team { background: var(--charcoal); }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .team-card {
+      background: var(--charcoal-2);
+      padding: 40px 32px;
+      border: 1px solid rgba(201, 168, 76, 0.08);
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .team-card:hover {
+      border-color: var(--gold-line);
+      transform: translateY(-4px);
+    }
+
+    .team-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 2px solid var(--gold-line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--gold);
+      position: relative;
+    }
+
+    .team-avatar::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+    }
+
+    .team-role {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .team-name {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .team-spec {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--white-dim);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .team-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold-line);
+      margin-bottom: 16px;
+    }
+
+    .team-edu {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.4);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── CTA SECTION ──────────────────────────────────────────────────────── */
+    .cta-section {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(201, 168, 76, 0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-left h2 {
+      margin-bottom: 16px;
+    }
+
+    .cta-left p {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--white-dim);
+      line-height: 1.75;
+      margin-bottom: 32px;
+    }
+
+    .cta-promise {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cta-promise-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--white-dim);
+    }
+
+    .cta-promise-item::before {
+      content: '';
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+      position: relative;
+    }
+
+    .cta-promise-item::before {
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M4 9l3.5 3.5L14 6' stroke='%23c9a84c' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat, transparent;
+      border-color: var(--gold-line);
+    }
+
+    /* Form */
+    .contact-form {
+      background: var(--charcoal);
+      border: 1px solid rgba(201, 168, 76, 0.12);
+      padding: 40px 36px;
+    }
+
+    .form-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: rgba(240, 236, 228, 0.04);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-bottom-color: rgba(201, 168, 76, 0.3);
+      color: var(--white);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 300;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.25s, background 0.25s;
+      border-radius: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(240, 236, 228, 0.25);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold-line);
+      background: rgba(201, 168, 76, 0.04);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-submit {
+      width: 100%;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s;
+      margin-top: 8px;
+    }
+
+    .form-submit:hover { background: var(--gold-light); }
+
+    .form-note {
+      margin-top: 14px;
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.35);
+      line-height: 1.6;
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────────────────────── */
+    footer {
+      background: var(--charcoal);
+      border-top: 1px solid rgba(201, 168, 76, 0.12);
+      padding: 60px clamp(24px, 5vw, 80px) 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: clamp(28px, 4vw, 60px);
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .logo {
+      margin-bottom: 16px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--white-dim);
+      line-height: 1.75;
+      max-width: 260px;
+    }
+
+    .footer-heading {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--white-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-contact-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--white-dim);
+      line-height: 1.5;
+    }
+
+    .footer-contact-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(201, 168, 76, 0.08);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.35);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-legal a {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.35);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-legal a:hover { color: var(--white-dim); }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-visual { max-height: 360px; aspect-ratio: 3/2; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .hamburger { display: flex; }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+        position: static;
+        margin-top: 60px;
+        border-top: none;
+      }
+      .hero-stat {
+        border-right: none;
+        border-top: 1px solid rgba(201, 168, 76, 0.08);
+        padding: 20px 0;
+      }
+      .hero-corner, .hero-corner-bottom { display: none; }
+
+      .team-grid { grid-template-columns: 1fr; max-width: 420px; }
+      .cta-inner { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .about-stats .about-stat:last-child { grid-column: span 2; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ─── MOBILE MENU ──────────────────────────────────────────────────────── */
+    .mobile-menu {
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background: rgba(10, 22, 40, 0.98);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+      padding: 24px clamp(24px, 5vw, 80px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 99;
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.3s var(--ease), opacity 0.3s;
+    }
+
+    .mobile-menu.is-open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .mobile-menu a {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--white-dim);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.08);
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-menu a.cta { color: var(--gold); font-weight: 500; border-color: transparent; }
+  </style>
+</head>
+<body>
+
+  <!-- ─── HEADER ──────────────────────────────────────────────────────────── -->
+  <header id="site-header">
+    <a href="#" class="logo" aria-label="Щит и Право — главная">
+      <div class="logo-shield">
+        <svg viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M16 2L3 8v10c0 8.284 5.733 15.999 13 18 7.267-2.001 13-9.716 13-18V8L16 2z" fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="1"/>
+          <path d="M11 17.5l3.5 3.5 7-7" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">Щит и Право</span>
+        <span class="logo-tagline">Юридическая защита</span>
+      </div>
+    </a>
+
+    <nav aria-label="Основная навигация">
+      <a href="#services">Услуги</a>
+      <a href="#about">О фирме</a>
+      <a href="#team">Команда</a>
+      <a href="#consultation" class="nav-cta">Консультация</a>
+    </nav>
+
+    <button class="hamburger" id="hamburger-btn" aria-label="Открыть меню" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Мобильная навигация">
+    <a href="#services" class="mobile-link">Услуги</a>
+    <a href="#about" class="mobile-link">О фирме</a>
+    <a href="#team" class="mobile-link">Команда</a>
+    <a href="#consultation" class="mobile-link cta">Получить консультацию</a>
+  </div>
+
+  <main>
+    <!-- ─── HERO ──────────────────────────────────────────────────────────── -->
+    <section class="hero" id="hero" aria-label="Главный баннер">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-lines" aria-hidden="true"></div>
+      <div class="hero-corner" aria-hidden="true"></div>
+      <div class="hero-corner-bottom" aria-hidden="true"></div>
+
+      <div class="hero-content">
+        <div class="hero-eyebrow reveal">Юридическая фирма с 2009 года</div>
+
+        <h1 class="reveal reveal-delay-1">
+          Ваши интересы —<br>
+          под <em>надёжной</em><br>
+          защитой
+        </h1>
+
+        <div class="gold-divider reveal reveal-delay-2" aria-hidden="true"></div>
+
+        <p class="hero-subtitle reveal reveal-delay-2">
+          Мы не оказываем услуги — мы защищаем ваш бизнес. Корпоративные споры, защита активов, налоговые риски. Результат, а не процесс.
+        </p>
+
+        <div class="hero-actions reveal reveal-delay-3">
+          <a href="#consultation" class="btn-primary" aria-label="Получить консультацию">
+            Получить консультацию
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#services" class="btn-secondary">Наши практики</a>
+        </div>
+      </div>
+
+      <div class="hero-stats reveal reveal-delay-4" aria-label="Ключевые показатели">
+        <div class="hero-stat">
+          <div class="hero-stat-num">500+</div>
+          <div class="hero-stat-label">успешных дел<br>завершено</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">95%</div>
+          <div class="hero-stat-label">дел выиграно<br>в арбитраже</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">15+</div>
+          <div class="hero-stat-label">лет защищаем<br>российский бизнес</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SERVICES ──────────────────────────────────────────────────────── -->
+    <section class="services" id="services" aria-labelledby="services-heading">
+      <div class="section-header">
+        <div class="section-label reveal">Практики</div>
+        <h2 id="services-heading" class="reveal reveal-delay-1">Области права</h2>
+        <p class="section-desc reveal reveal-delay-2">
+          Работаем только в тех сферах, где достигаем результата. Никаких обещаний — только конкретные решения.
+        </p>
+      </div>
+
+      <div class="services-grid" role="list">
+
+        <article class="service-card reveal" role="listitem">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="6" width="18" height="14" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M8 12h4M8 15h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Корпоративное право</h3>
+          <p>Структурирование бизнеса, сделки M&A, акционерные соглашения, корпоративные конфликты. Защищаем компании на всех этапах — от создания до продажи.</p>
+          <a href="#consultation" class="service-link" aria-label="Обсудить задачу по корпоративному праву">
+            Обсудить задачу
+            <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+        <article class="service-card reveal reveal-delay-1" role="listitem">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3L3 7v7c0 5 3.5 9.5 9 11 5.5-1.5 9-6 9-11V7l-9-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M9 12l2.5 2.5L15 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Арбитражные споры</h3>
+          <p>Представление в арбитражных судах всех инстанций. Экономические споры, банкротство, взыскание долгов. Готовимся основательно — выигрываем уверенно.</p>
+          <a href="#consultation" class="service-link" aria-label="Обсудить задачу по арбитражным спорам">
+            Обсудить задачу
+            <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+        <article class="service-card reveal reveal-delay-2" role="listitem">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7 3.5L5 5.5M17 3.5l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Защита активов</h3>
+          <p>Юридическое структурирование активов, защита от недружественных поглощений и рейдерства, создание надёжных механизмов контроля над собственностью.</p>
+          <a href="#consultation" class="service-link" aria-label="Обсудить задачу по защите активов">
+            Обсудить задачу
+            <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+        <article class="service-card reveal reveal-delay-3" role="listitem">
+          <div class="service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 7H5a1 1 0 00-1 1v10a1 1 0 001 1h14a1 1 0 001-1V8a1 1 0 00-1-1h-4" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="9" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M9 13h6M9 16h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Налоговое право</h3>
+          <p>Налоговое планирование, защита в ФНС и судах, сопровождение налоговых проверок. Снижаем риски — законными методами, без компромиссов с законом.</p>
+          <a href="#consultation" class="service-link" aria-label="Обсудить задачу по налоговому праву">
+            Обсудить задачу
+            <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─── ABOUT ──────────────────────────────────────────────────────────── -->
+    <section class="about" id="about" aria-labelledby="about-heading">
+      <div class="about-grid">
+
+        <div class="about-visual reveal" aria-hidden="true">
+          <div class="about-frame">
+            <div class="about-frame-border"></div>
+            <div class="about-frame-corner tl"></div>
+            <div class="about-frame-corner tr"></div>
+            <div class="about-frame-corner bl"></div>
+            <div class="about-frame-corner br"></div>
+
+            <div class="about-emblem">
+              <svg viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Shield main -->
+                <path d="M60 8L12 30v38c0 30 22 56 48 64 26-8 48-34 48-64V30L60 8z" fill="rgba(201,168,76,0.06)" stroke="#c9a84c" stroke-width="1.5"/>
+                <!-- Shield inner -->
+                <path d="M60 22L26 39v27c0 21.5 15.5 40 34 46 18.5-6 34-24.5 34-46V39L60 22z" fill="none" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
+                <!-- Scales of justice -->
+                <path d="M60 44v36" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M44 52h32" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Left pan -->
+                <path d="M40 54l-6 14h12l-6-14z" fill="rgba(201,168,76,0.2)" stroke="#c9a84c" stroke-width="1"/>
+                <!-- Right pan -->
+                <path d="M80 56l-6 12h12l-6-12z" fill="rgba(201,168,76,0.1)" stroke="#c9a84c" stroke-width="1"/>
+                <!-- Base -->
+                <path d="M52 80h16M56 80v-3M64 80v-3" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <div class="about-frame-year">Основана в 2009</div>
+            <div class="about-frame-name">Щит и Право</div>
+            <div class="about-frame-line"></div>
+            <div class="about-frame-motto">Lex est quod notamus<br>Право — это то, что мы защищаем</div>
+          </div>
+        </div>
+
+        <div class="about-content">
+          <div class="section-label reveal">О фирме</div>
+          <h2 id="about-heading" class="reveal reveal-delay-1">Более 15 лет защищаем бизнес</h2>
+
+          <p class="reveal reveal-delay-2">
+            Щит и Право основана в 2009 году командой юристов, работавших в ведущих российских и международных компаниях. Мы создавали фирму с одной целью — дать предпринимателям юридическую защиту уровня корпорации.
+          </p>
+          <p class="reveal reveal-delay-2">
+            Наши клиенты — владельцы бизнеса и топ-менеджеры, для которых каждое юридическое решение имеет реальные финансовые последствия. Мы говорим прямо, работаем быстро и добиваемся результата.
+          </p>
+          <p class="reveal reveal-delay-3">
+            Никакой бюрократии, никаких юридических формулировок ради формулировок. Только конкретный ответ на конкретный вопрос: что делать, чтобы защитить то, что вы строили годами.
+          </p>
+
+          <div class="about-stats reveal reveal-delay-3" aria-label="Статистика фирмы">
+            <div>
+              <div class="about-stat-num">500+</div>
+              <div class="about-stat-label">дел успешно завершено</div>
+            </div>
+            <div>
+              <div class="about-stat-num">95%</div>
+              <div class="about-stat-label">побед в арбитраже</div>
+            </div>
+            <div>
+              <div class="about-stat-num">200+</div>
+              <div class="about-stat-label">постоянных клиентов</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── TEAM ───────────────────────────────────────────────────────────── -->
+    <section class="team" id="team" aria-labelledby="team-heading">
+      <div class="section-header">
+        <div class="section-label reveal">Команда</div>
+        <h2 id="team-heading" class="reveal reveal-delay-1">Люди, которые<br>ведут ваше дело</h2>
+        <p class="section-desc reveal reveal-delay-2">
+          Каждый клиент работает с конкретным юристом, а не с анонимной командой.
+        </p>
+      </div>
+
+      <div class="team-grid">
+
+        <article class="team-card reveal" aria-label="Алексей Волков, партнёр">
+          <div class="team-avatar" aria-hidden="true">АВ</div>
+          <div class="team-role">Партнёр-основатель</div>
+          <div class="team-name">Алексей Волков</div>
+          <p class="team-spec">Корпоративное право и M&A. Сопровождал сделки на сумму свыше 12 млрд рублей. Специализируется на структурировании бизнеса и акционерных соглашениях.</p>
+          <div class="team-divider" aria-hidden="true"></div>
+          <div class="team-edu">МГЮА, специальность "Гражданское право" · 20+ лет практики</div>
+        </article>
+
+        <article class="team-card reveal reveal-delay-1" aria-label="Наталья Краснова, старший юрист">
+          <div class="team-avatar" aria-hidden="true">НК</div>
+          <div class="team-role">Старший юрист</div>
+          <div class="team-name">Наталья Краснова</div>
+          <p class="team-spec">Арбитражные споры и банкротство. Более 300 дел в арбитражных судах. Специализируется на сложных корпоративных конфликтах и субсидиарной ответственности.</p>
+          <div class="team-divider" aria-hidden="true"></div>
+          <div class="team-edu">МГУ им. Ломоносова, юрфак · 12 лет практики</div>
+        </article>
+
+        <article class="team-card reveal reveal-delay-2" aria-label="Дмитрий Орлов, юрист">
+          <div class="team-avatar" aria-hidden="true">ДО</div>
+          <div class="team-role">Юрист</div>
+          <div class="team-name">Дмитрий Орлов</div>
+          <p class="team-spec">Налоговое право и налоговые проверки. Защищал интересы компаний в спорах с ФНС на сотни миллионов рублей. Ведёт сложные трансфертные дела.</p>
+          <div class="team-divider" aria-hidden="true"></div>
+          <div class="team-edu">ВШЭ, "Налоговое и финансовое право" · 8 лет практики</div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─── CONSULTATION ───────────────────────────────────────────────────── -->
+    <section class="cta-section" id="consultation" aria-labelledby="consultation-heading">
+      <div class="cta-inner">
+
+        <div class="cta-left">
+          <div class="section-label reveal">Консультация</div>
+          <h2 id="consultation-heading" class="reveal reveal-delay-1">Начните с<br>разговора</h2>
+          <p class="reveal reveal-delay-2">
+            Первая консультация — это не продажа. Это честная оценка вашей ситуации и конкретные рекомендации. Без обязательств.
+          </p>
+
+          <div class="cta-promise reveal reveal-delay-3" role="list" aria-label="Наши обязательства">
+            <div class="cta-promise-item" role="listitem">Ответим в течение 2 часов в рабочее время</div>
+            <div class="cta-promise-item" role="listitem">Оценим ситуацию без воды и без лишних слов</div>
+            <div class="cta-promise-item" role="listitem">Скажем прямо, если не сможем помочь</div>
+            <div class="cta-promise-item" role="listitem">Конфиденциальность на уровне адвокатской тайны</div>
+          </div>
+        </div>
+
+        <div class="contact-form reveal reveal-delay-2">
+          <div class="form-title">Запрос на консультацию</div>
+          <form action="#" method="post" novalidate aria-label="Форма запроса консультации">
+
+            <div class="form-group">
+              <label for="name">Имя</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Ваше имя"
+                required
+                autocomplete="name"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Телефон</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="+7 (___) ___-__-__"
+                required
+                autocomplete="tel"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="message">Опишите ситуацию</label>
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Кратко опишите вашу задачу или вопрос"
+                rows="4"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="form-submit">Отправить запрос</button>
+          </form>
+          <p class="form-note">
+            Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности. Данные защищены и не передаются третьим лицам.
+          </p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ─── FOOTER ──────────────────────────────────────────────────────────── -->
+  <footer role="contentinfo">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <a href="#" class="logo" aria-label="Щит и Право — на главную">
+          <div class="logo-shield" aria-hidden="true">
+            <svg viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 2L3 8v10c0 8.284 5.733 15.999 13 18 7.267-2.001 13-9.716 13-18V8L16 2z" fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="1"/>
+              <path d="M11 17.5l3.5 3.5L15.5 14" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-name">Щит и Право</span>
+            <span class="logo-tagline">Юридическая защита</span>
+          </div>
+        </a>
+        <p>Защищаем интересы российского бизнеса с 2009 года. Корпоративное право, арбитраж, защита активов.</p>
+      </div>
+
+      <div>
+        <div class="footer-heading">Практики</div>
+        <ul class="footer-links" role="list">
+          <li><a href="#services">Корпоративное право</a></li>
+          <li><a href="#services">Арбитражные споры</a></li>
+          <li><a href="#services">Защита активов</a></li>
+          <li><a href="#services">Налоговое право</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-heading">Фирма</div>
+        <ul class="footer-links" role="list">
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#team">Команда</a></li>
+          <li><a href="#consultation">Консультация</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-heading">Контакты</div>
+
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M8 1.5C5.515 1.5 3.5 3.515 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.485-2.015-4.5-4.5-4.5zm0 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/>
+          </svg>
+          <span>ул. Тверская, 12, офис 450<br>Москва, 125009</span>
+        </div>
+
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2 4a1 1 0 011-1h10a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V4zm2 0l4 4 4-4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+          </svg>
+          <a href="mailto:info@shield-law.ru" style="color:inherit;text-decoration:none;">info@shield-law.ru</a>
+        </div>
+
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2.5 3.5a1 1 0 011.032-.992l1.97.131a1 1 0 01.896.773l.5 2.5a1 1 0 01-.37.994L5.5 7.8a9.037 9.037 0 004.7 4.7l.894-1.028a1 1 0 01.994-.37l2.5.5a1 1 0 01.773.896l.131 1.97A1 1 0 0114.5 15.5 12 12 0 012.5 3.5z" stroke="currentColor" stroke-width="1"/>
+          </svg>
+          <a href="tel:+74951234567" style="color:inherit;text-decoration:none;">+7 (495) 123-45-67</a>
+        </div>
+
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="8" cy="8" r="6.5" stroke="currentColor"/>
+            <path d="M8 4.5V8l2.5 2.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Пн–Пт: 9:00–19:00<br>Сб: 10:00–15:00</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        &copy; 2009–2026 ООО «Щит и Право». Все права защищены.
+      </div>
+      <nav class="footer-legal" aria-label="Правовые документы">
+        <a href="#">Политика конфиденциальности</a>
+        <a href="#">Условия работы</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // ─── SCROLL REVEAL ──────────────────────────────────────────────────────
+    (function() {
+      const revealEls = document.querySelectorAll('.reveal');
+      if (!revealEls.length) return;
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
+
+      revealEls.forEach(function(el) {
+        observer.observe(el);
+      });
+    })();
+
+    // ─── HEADER SCROLL ──────────────────────────────────────────────────────
+    (function() {
+      var header = document.getElementById('site-header');
+      var lastY = 0;
+
+      window.addEventListener('scroll', function() {
+        var y = window.scrollY;
+        if (y > 80) {
+          header.style.background = 'rgba(10, 22, 40, 0.98)';
+        } else {
+          header.style.background = 'rgba(10, 22, 40, 0.92)';
+        }
+        lastY = y;
+      }, { passive: true });
+    })();
+
+    // ─── MOBILE MENU ────────────────────────────────────────────────────────
+    (function() {
+      var btn = document.getElementById('hamburger-btn');
+      var menu = document.getElementById('mobile-menu');
+      var links = menu.querySelectorAll('.mobile-link');
+      var open = false;
+
+      function toggle() {
+        open = !open;
+        menu.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', String(open));
+      }
+
+      btn.addEventListener('click', toggle);
+
+      links.forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (open) toggle();
+        });
+      });
+    })();
+
+    // ─── FORM SUBMIT ─────────────────────────────────────────────────────────
+    (function() {
+      var form = document.querySelector('.contact-form form');
+      if (!form) return;
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = form.querySelector('.form-submit');
+        var name = form.querySelector('#name').value.trim();
+        if (!name) {
+          form.querySelector('#name').focus();
+          return;
+        }
+        btn.textContent = 'Заявка отправлена';
+        btn.style.background = '#2d6a4f';
+        btn.style.color = '#d8f3dc';
+        btn.disabled = true;
+      });
+    })();
+
+    // ─── SMOOTH SCROLL LINKS ─────────────────────────────────────────────────
+    (function() {
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          var id = this.getAttribute('href');
+          if (id === '#') return;
+          var target = document.querySelector(id);
+          if (!target) return;
+          e.preventDefault();
+          var offset = 72;
+          var top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
