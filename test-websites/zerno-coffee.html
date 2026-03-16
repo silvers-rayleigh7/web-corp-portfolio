@@ -3,14 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Зерно — Specialty Coffee</title>
-  <meta name="description" content="Зерно — авторская кофейня в сердце города. Свежая обжарка, прямые закупки, мастерство в каждой чашке.">
-  <meta property="og:title" content="Зерно — Specialty Coffee">
-  <meta property="og:description" content="Каждое зерно — история. Specialty coffee, авторские напитки, место для работы и отдыха.">
+  <title>Зерно — Specialty Coffee в Москве | Авторская кофейня</title>
+  <meta name="description" content="Зерно — авторская specialty кофейня в Москве. Свежая обжарка, прямые закупки с ферм, мастерство в каждой чашке. Ул. Никольская, 17.">
+  <meta property="og:title" content="Зерно — Specialty Coffee в Москве">
+  <meta property="og:description" content="Каждое зерно — история. Specialty coffee, авторские напитки, место для работы и отдыха. Свежая обжарка каждые 3 дня.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zerno.coffee/">
+  <meta property="og:image" content="https://zerno.coffee/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://zerno.coffee/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CafeOrCoffeeShop",
+    "name": "Зерно Specialty Coffee",
+    "url": "https://zerno.coffee/",
+    "description": "Авторская specialty кофейня в Москве. Свежая обжарка, прямые закупки с ферм.",
+    "telephone": "+74951234567",
+    "email": "hello@zerno.coffee",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ул. Никольская, 17, стр. 2",
+      "addressLocality": "Москва",
+      "addressCountry": "RU"
+    },
+    "openingHours": "Mo-Su 08:00-22:00",
+    "servesCuisine": "Coffee",
+    "priceRange": "₽₽",
+    "foundingDate": "2019",
+    "sameAs": []
+  }
+  </script>
   <style>
     /* ============================================
        CSS CUSTOM PROPERTIES — DESIGN TOKENS
@@ -24,6 +50,10 @@
       --terracotta:  #c17f59;
       --sage:        #8a9a7b;
       --charcoal:    #2a2520;
+      --white:       #ffffff;
+      --cup-light:   #fff8f0;
+      --cup-mid:     #f2e4d0;
+      --cup-dark:    #e8d5bc;
 
       --font-display: 'Playfair Display', Georgia, serif;
       --font-body: 'Nunito', system-ui, sans-serif;
@@ -39,6 +69,29 @@
       --shadow-soft: 0 4px 24px rgba(61, 44, 30, 0.08);
       --shadow-card: 0 8px 40px rgba(61, 44, 30, 0.12);
       --shadow-hover: 0 16px 56px rgba(61, 44, 30, 0.18);
+    }
+
+    /* ============================================
+       SKIP LINK — keyboard accessibility
+    ============================================ */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 8px;
+      z-index: 9999;
+      padding: 8px 16px;
+      background: var(--brown);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      text-decoration: none;
+      transition: top 0.2s;
+    }
+
+    .skip-link:focus {
+      top: 0;
     }
 
     /* ============================================
@@ -65,6 +118,13 @@
 
     img { display: block; max-width: 100%; }
     a { color: inherit; text-decoration: none; }
+
+    /* Focus styles — WCAG 2.4.7 */
+    :focus-visible {
+      outline: 2px solid var(--terracotta);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
 
     /* ============================================
        TYPOGRAPHY
@@ -405,7 +465,7 @@
     .cup {
       width: 160px;
       height: 120px;
-      background: linear-gradient(145deg, #fff8f0, #f2e4d0);
+      background: linear-gradient(145deg, var(--cup-light), var(--cup-mid));
       border-radius: 12px 12px 40px 40px;
       margin: 0 auto;
       position: relative;
@@ -430,7 +490,7 @@
       top: 20px;
       width: 36px;
       height: 48px;
-      border: 10px solid #f2e4d0;
+      border: 10px solid var(--cup-mid);
       border-left: none;
       border-radius: 0 20px 20px 0;
       box-shadow: 4px 2px 8px rgba(61, 44, 30, 0.1);
@@ -439,7 +499,7 @@
     .cup-saucer {
       width: 200px;
       height: 20px;
-      background: linear-gradient(145deg, #f2e4d0, #e8d5bc);
+      background: linear-gradient(145deg, var(--cup-mid), var(--cup-dark));
       border-radius: 50%;
       margin: 0 auto -10px;
       box-shadow: 0 8px 24px rgba(61, 44, 30, 0.12);
@@ -566,7 +626,7 @@
     }
 
     .philosophy-left p {
-      color: rgba(250, 246, 240, 0.72);
+      color: rgba(250, 246, 240, 0.85);
       font-size: 1.0625rem;
     }
 
@@ -611,7 +671,7 @@
     }
 
     .value-text p {
-      color: rgba(250, 246, 240, 0.6);
+      color: rgba(250, 246, 240, 0.78);
       font-size: 0.9rem;
       line-height: 1.65;
     }
@@ -675,7 +735,7 @@
     }
 
     .menu-card {
-      background: white;
+      background: var(--white);
       border-radius: var(--radius-md);
       padding: 28px;
       box-shadow: var(--shadow-soft);
@@ -725,7 +785,7 @@
 
     .menu-card-desc {
       font-size: 0.8375rem;
-      color: rgba(61, 44, 30, 0.55);
+      color: rgba(61, 44, 30, 0.72);
       margin-bottom: 16px;
       line-height: 1.6;
     }
@@ -828,7 +888,7 @@
       justify-content: center;
       font-size: 0.7rem;
       font-weight: 700;
-      color: white;
+      color: var(--white);
       border: 2px solid var(--cream-light);
     }
 
@@ -840,8 +900,8 @@
 
     .process-step p {
       font-size: 0.875rem;
-      color: var(--coffee);
-      opacity: 0.75;
+      color: var(--brown);
+      opacity: 0.7;
       line-height: 1.65;
     }
 
@@ -1026,7 +1086,7 @@
       border-radius: var(--radius-lg);
       overflow: hidden;
       height: 380px;
-      background: linear-gradient(135deg, var(--cream-dark) 0%, #e8d5b8 100%);
+      background: linear-gradient(135deg, var(--cream-dark) 0%, var(--cup-dark) 100%);
       position: relative;
       box-shadow: var(--shadow-card);
       display: flex;
@@ -1118,7 +1178,7 @@
     .footer-tagline {
       font-size: 0.8125rem;
       font-style: italic;
-      color: rgba(250, 246, 240, 0.45);
+      color: rgba(250, 246, 240, 0.65);
     }
 
     /* ============================================
@@ -1184,10 +1244,22 @@
         box-shadow: -8px 0 40px rgba(61, 44, 30, 0.12);
         gap: 20px;
         z-index: 99;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
 
       .nav-links.open {
         display: flex;
+      }
+
+      /* Mobile nav overlay backdrop */
+      .nav-links.open::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        right: 280px;
+        background: rgba(42, 37, 32, 0.4);
+        z-index: -1;
       }
 
       .nav-links a {
@@ -1201,6 +1273,7 @@
 
       .hero {
         padding: 0 24px;
+        min-height: 100vh;
         min-height: 100svh;
       }
 
@@ -1228,6 +1301,36 @@
 
       footer {
         padding: 40px 24px;
+      }
+    }
+
+    /* ============================================
+       REDUCED MOTION — accessibility
+    ============================================ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .hero-eyebrow,
+      .hero h1,
+      .hero-desc,
+      .hero-actions,
+      .hero-visual {
+        opacity: 1;
+        animation: none;
+      }
+
+      .fade-up {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      html {
+        scroll-behavior: auto;
       }
     }
 
@@ -1263,35 +1366,40 @@
 </head>
 <body>
 
+  <!-- SKIP TO CONTENT -->
+  <a href="#main-content" class="skip-link">Перейти к основному содержимому</a>
+
   <!-- NAVIGATION -->
-  <nav class="nav" id="mainNav">
-    <a href="#" class="nav-logo">Зерно<span>.</span></a>
-    <ul class="nav-links" id="navLinks">
+  <nav class="nav" id="mainNav" aria-label="Основная навигация">
+    <a href="#hero" class="nav-logo">Зерно<span>.</span></a>
+    <ul class="nav-links" id="navLinks" role="list">
       <li><a href="#philosophy">О нас</a></li>
       <li><a href="#menu">Меню</a></li>
       <li><a href="#process">Процесс</a></li>
       <li><a href="#contacts" class="nav-cta">Найти нас</a></li>
     </ul>
-    <button class="nav-toggle" id="navToggle" aria-label="Открыть меню">
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="navLinks">
       <span></span>
       <span></span>
       <span></span>
     </button>
   </nav>
 
-  <!-- HERO SECTION -->
-  <section class="hero" id="hero">
-    <!-- Floating beans -->
-    <div class="bean bean-1"></div>
-    <div class="bean bean-2"></div>
-    <div class="bean bean-3"></div>
-    <div class="bean bean-4"></div>
-    <div class="bean bean-5"></div>
-    <div class="bean bean-6"></div>
+  <main id="main-content">
 
-    <!-- Warm blobs -->
-    <div class="hero-blob hero-blob-1"></div>
-    <div class="hero-blob hero-blob-2"></div>
+  <!-- HERO SECTION -->
+  <section class="hero" id="hero" aria-label="Главная секция">
+    <!-- Floating beans (decorative) -->
+    <div class="bean bean-1" aria-hidden="true"></div>
+    <div class="bean bean-2" aria-hidden="true"></div>
+    <div class="bean bean-3" aria-hidden="true"></div>
+    <div class="bean bean-4" aria-hidden="true"></div>
+    <div class="bean bean-5" aria-hidden="true"></div>
+    <div class="bean bean-6" aria-hidden="true"></div>
+
+    <!-- Warm blobs (decorative) -->
+    <div class="hero-blob hero-blob-1" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob-2" aria-hidden="true"></div>
 
     <div class="hero-content">
       <span class="hero-eyebrow">Specialty Coffee · Москва</span>
@@ -1316,8 +1424,8 @@
       </div>
     </div>
 
-    <!-- Cup visual -->
-    <div class="hero-visual">
+    <!-- Cup visual (decorative) -->
+    <div class="hero-visual" aria-hidden="true">
       <div class="cup-wrapper">
         <div class="steam-container">
           <div class="steam-line"></div>
@@ -1333,7 +1441,7 @@
   </section>
 
   <!-- PHILOSOPHY SECTION -->
-  <section class="philosophy" id="philosophy">
+  <section class="philosophy" id="philosophy" aria-label="О нас и наша философия">
     <div class="container">
       <div class="philosophy-grid">
         <div class="philosophy-left fade-up">
@@ -1373,7 +1481,7 @@
   </section>
 
   <!-- MENU SECTION -->
-  <section class="menu" id="menu">
+  <section class="menu" id="menu" aria-label="Наше меню">
     <div class="container">
       <div class="menu-header fade-up">
         <span class="section-label">Наше меню</span>
@@ -1382,10 +1490,10 @@
       </div>
 
       <div class="menu-tabs fade-up fade-up-delay-1">
-        <button class="menu-tab active" data-category="espresso">Эспрессо-бар</button>
-        <button class="menu-tab" data-category="filter">Фильтр</button>
-        <button class="menu-tab" data-category="signature">Авторские</button>
-        <button class="menu-tab" data-category="desserts">Десерты</button>
+        <button class="menu-tab active" type="button" data-category="espresso" aria-pressed="true">Эспрессо-бар</button>
+        <button class="menu-tab" type="button" data-category="filter" aria-pressed="false">Фильтр</button>
+        <button class="menu-tab" type="button" data-category="signature" aria-pressed="false">Авторские</button>
+        <button class="menu-tab" type="button" data-category="desserts" aria-pressed="false">Десерты</button>
       </div>
 
       <div class="menu-grid" id="menuGrid">
@@ -1395,7 +1503,7 @@
   </section>
 
   <!-- PROCESS SECTION -->
-  <section class="process" id="process">
+  <section class="process" id="process" aria-label="Путь кофе от фермы до чашки">
     <div class="container">
       <div class="process-header fade-up">
         <span class="section-label">Путь кофе</span>
@@ -1441,25 +1549,25 @@
 
   <!-- ATMOSPHERE / QUOTE SECTION -->
   <section class="atmosphere">
-    <div class="deco-bean deco-bean-1"></div>
-    <div class="deco-bean deco-bean-2"></div>
+    <div class="deco-bean deco-bean-1" aria-hidden="true"></div>
+    <div class="deco-bean deco-bean-2" aria-hidden="true"></div>
     <div class="container">
       <div class="atmosphere-content fade-up">
-        <span class="quote-mark">"</span>
-        <blockquote>
+        <span class="quote-mark" aria-hidden="true">"</span>
+        <blockquote cite="https://zerno.coffee">
           Лучший кофе — тот, который пьёшь не торопясь
         </blockquote>
         <div class="atmosphere-meta">
-          <div class="meta-divider"></div>
+          <div class="meta-divider" aria-hidden="true"></div>
           <span>Зерно · с 2019 года</span>
-          <div class="meta-divider"></div>
+          <div class="meta-divider" aria-hidden="true"></div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- CONTACTS SECTION -->
-  <section class="contacts" id="contacts">
+  <section class="contacts" id="contacts" aria-label="Контакты и адрес">
     <div class="container">
       <div class="contacts-grid">
         <div class="contacts-left fade-up">
@@ -1517,6 +1625,8 @@
       </div>
     </div>
   </section>
+
+  </main><!-- /#main-content -->
 
   <!-- FOOTER -->
   <footer>
@@ -1593,8 +1703,12 @@
     // Tab switching
     document.querySelectorAll('.menu-tab').forEach(tab => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.menu-tab').forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-pressed', 'false');
+        });
         tab.classList.add('active');
+        tab.setAttribute('aria-pressed', 'true');
         renderMenu(tab.dataset.category);
       });
     });
@@ -1632,11 +1746,27 @@
     const navLinks = document.getElementById('navLinks');
 
     toggle.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
+      const isOpen = navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
     });
 
     navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => navLinks.classList.remove('open'));
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Открыть меню');
+      });
+    });
+
+    // Close mobile nav on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+        navLinks.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Открыть меню');
+        toggle.focus();
+      }
     });
 
     // ============================================

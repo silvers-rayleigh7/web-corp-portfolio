@@ -6,7 +6,35 @@
   <meta name="description" content="Щит и Право — юридическая фирма с 15-летним опытом защиты бизнеса. Корпоративное право, арбитражные споры, защита активов, налоговое право.">
   <meta property="og:title" content="Щит и Право — Юридическая Защита Бизнеса">
   <meta property="og:description" content="Более 15 лет защищаем интересы предпринимателей. 500+ успешных дел, 95% побед.">
+  <meta property="og:image" content="/og-image.jpg">
+  <meta property="og:url" content="https://shield-law.ru/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Щит и Право — Юридическая Защита Бизнеса">
+  <meta name="twitter:description" content="Более 15 лет защищаем интересы предпринимателей. 500+ успешных дел, 95% побед.">
+  <link rel="canonical" href="https://shield-law.ru/">
   <title>Щит и Право — Юридическая Защита Бизнеса</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LegalService",
+    "name": "Щит и Право",
+    "description": "Юридическая фирма с 15-летним опытом защиты бизнеса. Корпоративное право, арбитражные споры, защита активов, налоговое право.",
+    "url": "https://shield-law.ru/",
+    "telephone": "+74951234567",
+    "email": "info@shield-law.ru",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ул. Тверская, 12, офис 450",
+      "addressLocality": "Москва",
+      "postalCode": "125009",
+      "addressCountry": "RU"
+    },
+    "openingHours": ["Mo-Fr 09:00-19:00", "Sa 10:00-15:00"],
+    "foundingDate": "2009",
+    "sameAs": []
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -147,6 +175,7 @@
       color: var(--white-dim);
       text-decoration: none;
       transition: color 0.25s;
+      cursor: pointer;
     }
 
     nav a:hover { color: var(--gold); }
@@ -173,7 +202,13 @@
       flex-direction: column;
       gap: 5px;
       cursor: pointer;
-      padding: 4px;
+      padding: 10px;
+      min-width: 44px;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
     }
 
     .hamburger span {
@@ -997,6 +1032,16 @@
       margin-top: 1px;
     }
 
+    .footer-contact-item a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-contact-item a:hover {
+      color: var(--gold);
+    }
+
     .footer-bottom {
       border-top: 1px solid rgba(201, 168, 76, 0.08);
       padding-top: 28px;
@@ -1039,9 +1084,17 @@
       nav { display: none; }
       .hamburger { display: flex; }
 
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding-bottom: 40px;
+      }
+
       .hero-stats {
         grid-template-columns: 1fr;
         position: static;
+        width: 100%;
         margin-top: 60px;
         border-top: none;
       }
@@ -1052,7 +1105,7 @@
       }
       .hero-corner, .hero-corner-bottom { display: none; }
 
-      .team-grid { grid-template-columns: 1fr; max-width: 420px; }
+      .team-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
       .cta-inner { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
     }
@@ -1061,6 +1114,32 @@
       .about-stats { grid-template-columns: 1fr 1fr; }
       .about-stats .about-stat:last-child { grid-column: span 2; }
       .hero-actions { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ─── FOCUS VISIBLE ────────────────────────────────────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    /* Remove default outline only when focus-visible is supported */
+    :focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    /* ─── REDUCED MOTION ────────────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
     }
 
     /* ─── MOBILE MENU ──────────────────────────────────────────────────────── */
@@ -1128,7 +1207,7 @@
       <a href="#consultation" class="nav-cta">Консультация</a>
     </nav>
 
-    <button class="hamburger" id="hamburger-btn" aria-label="Открыть меню" aria-expanded="false">
+    <button type="button" class="hamburger" id="hamburger-btn" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
       <span></span>
       <span></span>
       <span></span>
@@ -1512,14 +1591,14 @@
           <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M2 4a1 1 0 011-1h10a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V4zm2 0l4 4 4-4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
           </svg>
-          <a href="mailto:info@shield-law.ru" style="color:inherit;text-decoration:none;">info@shield-law.ru</a>
+          <a href="mailto:info@shield-law.ru">info@shield-law.ru</a>
         </div>
 
         <div class="footer-contact-item">
           <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M2.5 3.5a1 1 0 011.032-.992l1.97.131a1 1 0 01.896.773l.5 2.5a1 1 0 01-.37.994L5.5 7.8a9.037 9.037 0 004.7 4.7l.894-1.028a1 1 0 01.994-.37l2.5.5a1 1 0 01.773.896l.131 1.97A1 1 0 0114.5 15.5 12 12 0 012.5 3.5z" stroke="currentColor" stroke-width="1"/>
           </svg>
-          <a href="tel:+74951234567" style="color:inherit;text-decoration:none;">+7 (495) 123-45-67</a>
+          <a href="tel:+74951234567">+7 (495) 123-45-67</a>
         </div>
 
         <div class="footer-contact-item">
@@ -1616,14 +1695,18 @@
           return;
         }
         btn.textContent = 'Заявка отправлена';
-        btn.style.background = '#2d6a4f';
-        btn.style.color = '#d8f3dc';
+        btn.style.background = 'var(--gold-dim)';
+        btn.style.color = 'var(--white)';
+        btn.style.border = '1px solid var(--gold-line)';
+        btn.style.cursor = 'default';
         btn.disabled = true;
       });
     })();
 
     // ─── SMOOTH SCROLL LINKS ─────────────────────────────────────────────────
     (function() {
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
         anchor.addEventListener('click', function(e) {
           var id = this.getAttribute('href');
@@ -1633,7 +1716,7 @@
           e.preventDefault();
           var offset = 72;
           var top = target.getBoundingClientRect().top + window.scrollY - offset;
-          window.scrollTo({ top: top, behavior: 'smooth' });
+          window.scrollTo({ top: top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
         });
       });
     })();

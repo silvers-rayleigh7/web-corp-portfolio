@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Forte — Музыкальные инструменты</title>
+<title>Forte — Музыкальные инструменты | Магазин в Москве</title>
+<meta name="description" content="Forte — музыкальный магазин в Москве. Более 3000 инструментов: гитары, пианино, ударные, духовые. Бесплатная консультация, доставка по всей России.">
+<meta property="og:title" content="Forte — Музыкальные инструменты">
+<meta property="og:description" content="Более 3000 инструментов от мировых брендов. Бесплатная консультация. Доставка по всей России.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -260,6 +264,72 @@ footer{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);paddi
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 .reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
+
+/* MOBILE NAV */
+.nav-burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;min-width:44px;min-height:44px;align-items:center;justify-content:center}
+.nav-burger span{display:block;width:22px;height:2px;background:var(--ivory);border-radius:1px;transition:transform .3s,opacity .3s}
+.nav-mobile{display:none;position:fixed;inset:0;background:rgba(10,9,8,.97);z-index:199;flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.nav-mobile.open{display:flex}
+.nav-mobile a{font-family:var(--font-display);font-size:28px;color:var(--ivory);text-decoration:none;transition:color .25s}
+.nav-mobile a:hover{color:var(--amber)}
+.nav-mobile-close{position:absolute;top:24px;right:24px;background:none;border:none;color:var(--ivory);font-size:28px;cursor:pointer;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+
+/* RESPONSIVE */
+@media (max-width:1024px){
+  nav{padding:16px 32px}
+  nav.scrolled{padding:12px 32px}
+  section{padding:80px 32px}
+  .stats-bar{padding:24px 32px}
+  .footer-grid{gap:32px}
+  footer{padding:48px 32px}
+}
+@media (max-width:768px){
+  nav{padding:14px 20px}
+  nav.scrolled{padding:10px 20px}
+  .nav-links{display:none}
+  .nav-actions .btn-call{display:none}
+  .nav-burger{display:flex}
+  section{padding:64px 20px}
+  .stats-bar{padding:24px 20px;grid-template-columns:repeat(2,1fr)}
+  .stat-item:nth-child(2){border-right:none}
+  .stat-item:nth-child(3){border-right:1px solid rgba(245,240,232,.06)}
+  .categories-header{flex-direction:column;align-items:flex-start;gap:16px}
+  .categories-grid{grid-template-columns:1fr;grid-template-rows:auto}
+  .cat-card:nth-child(1){grid-row:auto;min-height:200px}
+  .products-header{flex-direction:column;align-items:flex-start;gap:16px}
+  .tabs{flex-wrap:wrap}
+  .heard-in-grid{grid-template-columns:1fr}
+  .about-inner{grid-template-columns:1fr;gap:40px}
+  .about-visual{height:280px}
+  .consultation-inner{grid-template-columns:1fr;gap:40px}
+  .blog-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  footer{padding:40px 20px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .cart-drawer{width:100vw}
+  .hero-content{padding:0 20px}
+  .carousel-slide{flex-wrap:wrap}
+  .product-card{flex:0 0 calc(50% - 8px)!important;min-width:calc(50% - 8px)!important}
+}
+@media (max-width:480px){
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .hero-actions{flex-direction:column;align-items:center}
+  .btn-primary,.btn-ghost{width:100%;max-width:280px;text-align:center}
+  .footer-grid{grid-template-columns:1fr}
+  .product-card{flex:0 0 100%!important;min-width:100%!important}
+  .about-card-accent{width:140px;height:140px}
+  .about-card-accent .big-num{font-size:36px}
+  .consult-form{padding:24px 16px}
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+  .hero-label,.hero-title,.hero-subtitle,.hero-desc,.hero-actions,.hero-scroll{opacity:1;transform:none;animation:none}
+  .scroll-line{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+}
 </style>
 </head>
 <body>
@@ -269,7 +339,7 @@ footer{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);paddi
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-head">
     <h3>Корзина</h3>
-    <button class="cart-close" onclick="closeCart()">×</button>
+    <button type="button" class="cart-close" onclick="closeCart()" aria-label="Закрыть корзину">×</button>
   </div>
   <div class="cart-items-wrap" id="cartItemsWrap">
     <div class="cart-empty"><span class="empty-icon">🎸</span><p>Корзина пуста</p><p style="font-size:13px;margin-top:6px">Добавьте инструмент, который поёт именно для вас</p></div>
@@ -279,9 +349,20 @@ footer{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);paddi
       <span>Итого:</span>
       <strong id="cartTotal">0 ₽</strong>
     </div>
-    <button class="btn-checkout" onclick="checkout()">Оформить заказ →</button>
-    <button class="btn-clear-cart" onclick="clearCart()">Очистить корзину</button>
+    <button type="button" class="btn-checkout" onclick="checkout()">Оформить заказ →</button>
+    <button type="button" class="btn-clear-cart" onclick="clearCart()">Очистить корзину</button>
   </div>
+</div>
+
+<!-- MOBILE NAV -->
+<div class="nav-mobile" id="navMobile" role="dialog" aria-label="Навигация">
+  <button type="button" class="nav-mobile-close" onclick="closeMobileNav()" aria-label="Закрыть меню">✕</button>
+  <a href="#categories" onclick="closeMobileNav()">Каталог</a>
+  <a href="#heard" onclick="closeMobileNav()">Звук в музыке</a>
+  <a href="#about" onclick="closeMobileNav()">О нас</a>
+  <a href="#blog" onclick="closeMobileNav()">Советы</a>
+  <a href="#consult" onclick="closeMobileNav()">Консультация</a>
+  <a href="tel:+74951234567" style="color:var(--amber)">+7 (495) 123-45-67</a>
 </div>
 
 <!-- NAV -->
@@ -299,9 +380,12 @@ footer{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);paddi
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
       Позвонить
     </a>
-    <button class="btn-cart" onclick="toggleCart()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-      <div class="cart-badge" id="cartBadge">0</div>
+    <button type="button" class="btn-cart" onclick="toggleCart()" aria-label="Открыть корзину">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <div class="cart-badge" id="cartBadge" aria-live="polite">0</div>
+    </button>
+    <button type="button" class="nav-burger" onclick="openMobileNav()" aria-label="Открыть меню">
+      <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
@@ -336,7 +420,7 @@ footer{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);paddi
 <section class="categories" id="categories">
   <div class="categories-header reveal">
     <div><div class="section-label">Каталог</div><h2 class="section-title">Найди свой<br><em>инструмент</em></h2></div>
-    <a href="#" class="btn-ghost" style="white-space:nowrap">Весь каталог →</a>
+    <a href="#categories" class="btn-ghost" style="white-space:nowrap">Весь каталог →</a>
   </div>
   <div class="categories-grid reveal">
     <a href="forte-guitars.html" class="cat-card">
@@ -367,17 +451,17 @@ footer{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);paddi
   <div class="products-header reveal">
     <div><div class="section-label">Товары</div><h2 class="section-title">Хиты и <em>новинки</em></h2></div>
     <div class="tabs">
-      <button class="tab active" data-tab="hits">Хиты продаж</button>
-      <button class="tab" data-tab="new">Новинки</button>
-      <button class="tab" data-tab="sale">Скидки</button>
+      <button type="button" class="tab active" data-tab="hits">Хиты продаж</button>
+      <button type="button" class="tab" data-tab="new">Новинки</button>
+      <button type="button" class="tab" data-tab="sale">Скидки</button>
     </div>
   </div>
   <div class="carousel-wrapper reveal">
     <div class="carousel-track" id="carouselTrack"></div>
     <div class="carousel-dots" id="carouselDots"></div>
     <div class="carousel-nav">
-      <button class="carousel-btn" id="carouselPrev">‹</button>
-      <button class="carousel-btn" id="carouselNext">›</button>
+      <button type="button" class="carousel-btn" id="carouselPrev" aria-label="Предыдущая страница">‹</button>
+      <button type="button" class="carousel-btn" id="carouselNext" aria-label="Следующая страница">›</button>
     </div>
   </div>
 </section>
@@ -451,17 +535,17 @@ footer{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);paddi
       <h2 class="section-title">Не знаешь<br>с чего <em>начать?</em></h2>
       <p class="section-desc">Расскажи нам о себе — жанр, уровень, бюджет. Мы подберём идеальный инструмент лично для тебя. Бесплатно и без давления.</p>
     </div>
-    <div class="consult-form reveal reveal-delay-2">
+    <form class="consult-form reveal reveal-delay-2" onsubmit="submitForm(this.querySelector('.btn-submit'));return false;" novalidate>
       <div class="form-title">Записаться на консультацию</div>
       <div class="form-subtitle">Бесплатно · Без давления · Онлайн или в магазине</div>
-      <div class="form-group"><label>Ваше имя</label><input type="text" placeholder="Как вас зовут?"></div>
-      <div class="form-group"><label>Телефон</label><input type="tel" placeholder="+7 (___) ___-__-__"></div>
-      <div class="form-group"><label>Что вас интересует?</label>
-        <select><option value="">Выберите категорию</option><option>Первый инструмент (новичок)</option><option>Апгрейд текущего инструмента</option><option>Профессиональный подбор</option><option>Подарок музыканту</option><option>Инструмент для ребёнка</option></select>
+      <div class="form-group"><label for="consult-name">Ваше имя</label><input id="consult-name" type="text" placeholder="Как вас зовут?" autocomplete="given-name"></div>
+      <div class="form-group"><label for="consult-phone">Телефон</label><input id="consult-phone" type="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel"></div>
+      <div class="form-group"><label for="consult-category">Что вас интересует?</label>
+        <select id="consult-category"><option value="">Выберите категорию</option><option>Первый инструмент (новичок)</option><option>Апгрейд текущего инструмента</option><option>Профессиональный подбор</option><option>Подарок музыканту</option><option>Инструмент для ребёнка</option></select>
       </div>
-      <div class="form-group"><label>Расскажите подробнее</label><textarea rows="3" placeholder="Жанр, бюджет, опыт — любые детали помогут подобрать лучшее"></textarea></div>
-      <button class="btn-submit" onclick="submitForm(this)">Записаться бесплатно</button>
-    </div>
+      <div class="form-group"><label for="consult-details">Расскажите подробнее</label><textarea id="consult-details" rows="3" placeholder="Жанр, бюджет, опыт — любые детали помогут подобрать лучшее"></textarea></div>
+      <button type="submit" class="btn-submit">Записаться бесплатно</button>
+    </form>
   </div>
 </section>
 
@@ -478,7 +562,7 @@ footer{background:var(--surface);border-top:1px solid rgba(196,135,58,.12);paddi
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">
-    <div><a href="forte-music.html" class="nav-logo">Fort<span>e</span></a><p class="footer-desc">Музыкальные инструменты от людей, которые понимают музыку. Москва, работаем с 2017 года.</p><div class="social-links"><a href="#" class="social-link">VK</a><a href="#" class="social-link">TG</a><a href="#" class="social-link">YT</a></div></div>
+    <div><a href="forte-music.html" class="nav-logo">Fort<span>e</span></a><p class="footer-desc">Музыкальные инструменты от людей, которые понимают музыку. Москва, работаем с 2017 года.</p><div class="social-links"><a href="#" class="social-link" aria-label="ВКонтакте">VK</a><a href="#" class="social-link" aria-label="Telegram">TG</a><a href="#" class="social-link" aria-label="YouTube">YT</a></div></div>
     <div class="footer-col"><h4>Каталог</h4><ul class="footer-links"><li><a href="forte-guitars.html">Гитары</a></li><li><a href="forte-keys.html">Клавишные</a></li><li><a href="forte-drums.html">Ударные</a></li><li><a href="forte-winds.html">Духовые</a></li><li><a href="forte-accessories.html">Аксессуары</a></li></ul></div>
     <div class="footer-col"><h4>Магазин</h4><ul class="footer-links"><li><a href="#about">О нас</a></li><li><a href="#">Доставка и оплата</a></li><li><a href="#">Возврат и гарантия</a></li><li><a href="#blog">Статьи</a></li></ul></div>
     <div class="footer-col"><h4>Контакты</h4><ul class="footer-links"><li><a href="tel:+74951234567">+7 (495) 123-45-67</a></li><li><a href="mailto:hello@forte-music.ru">hello@forte-music.ru</a></li><li><a href="#">Москва, ул. Тверская, 12</a></li><li><a href="#">Пн–Сб: 10:00 – 20:00</a></li></ul></div>
@@ -581,13 +665,13 @@ function updateCartUI(){
         <div class="cart-item-brand">${item.brand}</div>
         <div class="cart-item-name">${item.name}</div>
         <div class="cart-item-controls">
-          <button class="qty-btn" onclick="updateQty(${item.id},-1)">−</button>
+          <button type="button" class="qty-btn" onclick="updateQty(${item.id},-1)" aria-label="Уменьшить количество">−</button>
           <span class="qty-val">${item.qty}</span>
-          <button class="qty-btn" onclick="updateQty(${item.id},1)">+</button>
+          <button type="button" class="qty-btn" onclick="updateQty(${item.id},1)" aria-label="Увеличить количество">+</button>
           <span class="cart-item-price">${(item.price*item.qty).toLocaleString('ru')} ₽</span>
         </div>
       </div>
-      <button class="cart-item-remove" onclick="removeFromCart(${item.id})">×</button>
+      <button type="button" class="cart-item-remove" onclick="removeFromCart(${item.id})" aria-label="Удалить товар">×</button>
     </div>`).join('');
 }
 
@@ -627,7 +711,7 @@ function renderCarousel(){
         <div class="product-img">
           <div class="product-emoji">${p.emoji}</div>
           <div class="product-badge badge-${p.badge}">${p.badge==='hit'?'Хит':p.badge==='new'?'Новинка':'−'+(Math.round((1-p.price/p.oldPrice)*100))+'%'}</div>
-          <button class="product-wishlist" onclick="toggleWish(this)">♡</button>
+          <button type="button" class="product-wishlist" onclick="toggleWish(this)" aria-label="Добавить в избранное">♡</button>
         </div>
         <div class="product-info">
           <div class="product-brand">${p.brand}</div>
@@ -636,7 +720,7 @@ function renderCarousel(){
           <div class="product-desc-short">${p.desc}</div>
           <div class="product-footer">
             <div><span class="product-price">${p.price.toLocaleString('ru')} ₽</span>${p.oldPrice?`<span class="product-price-old">${p.oldPrice.toLocaleString('ru')} ₽</span>`:''}</div>
-            <button class="btn-add" onclick="handleAdd(this,${p.id})">+</button>
+            <button type="button" class="btn-add" onclick="handleAdd(this,${p.id})" aria-label="Добавить ${p.name} в корзину">+</button>
           </div>
         </div>
       </div>`).join('')}</div>`;
@@ -793,6 +877,10 @@ function playTrackSound(card){
   setTimeout(()=>{ if(activeTrack===card){ card.classList.remove('playing'); activeTrack=null; } },dur);
 }
 
+// ── MOBILE NAV ──
+function openMobileNav(){ document.getElementById('navMobile').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeMobileNav(){ document.getElementById('navMobile').classList.remove('open'); document.body.style.overflow=''; }
+
 // ── NAV ──
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60));
 
@@ -820,7 +908,7 @@ document.querySelectorAll('.cat-card').forEach(card=>{
 });
 
 // ── FORM ──
-function submitForm(btn){btn.textContent='Отправляем...';btn.disabled=true;setTimeout(()=>{btn.textContent='✓ Заявка принята! Позвоним в течение часа';btn.style.background='#3A8B4A';},1200);}
+function submitForm(btn){btn.textContent='Отправляем...';btn.disabled=true;setTimeout(()=>{btn.textContent='Заявка принята! Позвоним в течение часа';btn.style.background='#3A8B4A';},1200);}
 </script>
 </body>
 </html>

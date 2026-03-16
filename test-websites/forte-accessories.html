@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Аксессуары — Forte Music Store</title>
+<title>Аксессуары — Forte Music Store | Педали, струны, кабели</title>
+<meta name="description" content="Аксессуары для музыкантов в Forte: педали эффектов, усилители, струны, кабели, медиаторы. BOSS, Fender, D'Addario, Ernie Ball. Более 500 позиций.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -114,21 +115,63 @@
   .footer-col a:hover { color: var(--amber); }
   .footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; }
   .footer-bottom p { color: var(--ivory-mute); font-size: 0.8rem; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .nav-burger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+  .nav-burger span { display: block; width: 22px; height: 2px; background: var(--ivory); border-radius: 1px; }
+  .nav-mobile { display: none; position: fixed; inset: 0; background: rgba(10,9,8,.97); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
+  .nav-mobile.open { display: flex; }
+  .nav-mobile a { font-size: 1.4rem; color: var(--ivory); text-decoration: none; }
+  .nav-mobile a:hover { color: var(--amber); }
+  .nav-mobile-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--ivory); font-size: 1.6rem; cursor: pointer; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .nav-actions .btn-call { display: none; }
+    .nav-burger { display: flex; }
+    .category-hero { padding: 40px 20px 28px; }
+    .category-hero h1 { font-size: 2rem; }
+    .hero-stats { flex-wrap: wrap; gap: 20px; }
+    .filters { padding: 16px 20px; gap: 12px; }
+    .filter-divider { display: none; }
+    .products-section { padding: 24px 20px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .section-meta { flex-direction: column; align-items: flex-start; gap: 10px; }
+    footer { padding: 32px 20px 16px; margin-top: 40px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .filter-group { flex-wrap: wrap; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
 </style>
 </head>
 <body>
 
+<div class="nav-mobile" id="navMobile">
+  <button type="button" class="nav-mobile-close" onclick="document.getElementById('navMobile').classList.remove('open');document.body.style.overflow=''" aria-label="Закрыть меню">✕</button>
+  <a href="forte-music.html">Главная</a>
+  <a href="forte-music.html#categories">Каталог</a>
+  <a href="forte-music.html#about">О нас</a>
+  <a href="forte-music.html#consult">Консультация</a>
+</div>
+
 <nav>
   <a href="forte-music.html" class="nav-logo">Forte <span>Music Store</span></a>
   <div class="nav-links">
-    <a href="forte-music.html#catalog" class="active">Каталог</a>
+    <a href="forte-music.html#categories" class="active">Каталог</a>
     <a href="forte-music.html#about">О нас</a>
-    <a href="forte-music.html#tips">Советы</a>
-    <a href="forte-music.html#consultation">Консультация</a>
+    <a href="forte-music.html#blog">Советы</a>
+    <a href="forte-music.html#consult">Консультация</a>
   </div>
   <div class="nav-actions">
-    <button class="btn-call">📞 Позвонить</button>
-    <button class="btn-cart" onclick="toggleCart()">🛒 Корзина <span class="cart-badge" id="cartBadge">0</span></button>
+    <a href="tel:+74951234567" class="btn-call">Позвонить</a>
+    <button type="button" class="btn-cart" onclick="toggleCart()" aria-label="Открыть корзину">Корзина <span class="cart-badge" id="cartBadge">0</span></button>
+    <button type="button" class="nav-burger" onclick="document.getElementById('navMobile').classList.add('open');document.body.style.overflow='hidden'" aria-label="Открыть меню"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -148,34 +191,34 @@
 <div class="filters">
   <div class="filter-group">
     <span class="filter-label">Бренд</span>
-    <button class="filter-btn active" onclick="toggleFilter(this)">Все</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">BOSS</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">Fender</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">D'Addario</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">Ernie Ball</button>
+    <button type="button" class="filter-btn active" onclick="toggleFilter(this)">Все</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">BOSS</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">Fender</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">D'Addario</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">Ernie Ball</button>
   </div>
   <div class="filter-divider"></div>
   <div class="filter-group">
     <span class="filter-label">Цена</span>
-    <button class="filter-btn" onclick="toggleFilter(this)">до 2 000₽</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">2–10 тыс.</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">10–25 тыс.</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">25 000₽+</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">до 2 000₽</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">2–10 тыс.</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">10–25 тыс.</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">25 000₽+</button>
   </div>
   <div class="filter-divider"></div>
   <div class="filter-group">
     <span class="filter-label">Тип</span>
-    <button class="filter-btn" onclick="toggleFilter(this)">Педали</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">Усилители</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">Струны</button>
-    <button class="filter-btn" onclick="toggleFilter(this)">Кабели</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">Педали</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">Усилители</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">Струны</button>
+    <button type="button" class="filter-btn" onclick="toggleFilter(this)">Кабели</button>
   </div>
 </div>
 
 <section class="products-section">
   <div class="section-meta">
     <p>Показано 10 из 500+ товаров</p>
-    <select class="sort-select"><option>По популярности</option><option>Сначала дешевле</option><option>Сначала дороже</option><option>Новинки</option></select>
+    <label for="sort-select" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Сортировка</label><select id="sort-select" class="sort-select"><option>По популярности</option><option>Сначала дешевле</option><option>Сначала дороже</option><option>Новинки</option></select>
   </div>
   <div class="promo-strip">
     <span>🔥</span>
@@ -216,12 +259,12 @@
 <div class="cart-drawer" id="cartDrawer">
   <div class="drawer-header">
     <h3>Корзина</h3>
-    <button class="drawer-close" onclick="toggleCart()">✕</button>
+    <button type="button" class="drawer-close" onclick="toggleCart()" aria-label="Закрыть корзину">✕</button>
   </div>
   <div class="drawer-body" id="cartBody"></div>
   <div class="drawer-footer" id="cartFooter" style="display:none;">
     <div class="cart-total"><span>Итого:</span><strong id="cartTotal">0₽</strong></div>
-    <button class="btn-checkout">Оформить заказ</button>
+    <button type="button" class="btn-checkout" onclick="alert('Переход к оформлению заказа!')">Оформить заказ</button>
   </div>
 </div>
 
@@ -252,7 +295,7 @@ function renderProducts() {
       <div class="product-img">
         ${p.emoji}
         <span class="product-badge badge-${p.badge}">${badgeTxt}</span>
-        <button class="wishlist-btn" onclick="toggleWishlist(this)">♡</button>
+        <button type="button" class="wishlist-btn" onclick="toggleWishlist(this)" aria-label="В избранное">♡</button>
       </div>
       <div class="product-info">
         <div class="product-brand">${p.brand}</div>
@@ -263,7 +306,7 @@ function renderProducts() {
           <span class="price-current">${fmt(p.price)}</span>
           ${p.oldPrice ? `<span class="price-old">${fmt(p.oldPrice)}</span><span class="price-discount">−${discount(p.price, p.oldPrice)}</span>` : ''}
         </div>
-        <button class="btn-add" onclick="addToCart('${p.id}', '${p.emoji}', '${p.brand} ${p.name}', ${p.price})">В корзину</button>
+        <button type="button" class="btn-add" onclick="addToCart('${p.id}', '${p.emoji}', '${p.brand} ${p.name}', ${p.price})">В корзину</button>
       </div>
     </div>`;
   }).join('');

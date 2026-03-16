@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Web Development Corp — Архитектура AI-корпорации</title>
+<meta name="description" content="36 автономных AI-агентов для создания сайтов любой сложности. Корпоративная иерархия: CEO, 6 директоров, 24 специалиста. Lighthouse ≥ 90, WCAG 2.1, Theme-First дизайн.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://web-corp.amai.studio/">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://web-corp.amai.studio/">
+<meta property="og:title" content="Web Development Corp — Архитектура AI-корпорации">
+<meta property="og:description" content="36 автономных AI-агентов. 7 директоров. 8 навыков. Полный цикл от брифа до деплоя — сайт любой сложности силами искусственного интеллекта.">
+<meta property="og:image" content="https://web-corp.amai.studio/og-image.jpg">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Web Development Corp — AI-корпорация для создания сайтов">
+<meta name="twitter:description" content="36 AI-агентов, Lighthouse ≥ 90, WCAG 2.1. От брифа до деплоя.">
+<meta name="twitter:image" content="https://web-corp.amai.studio/og-image.jpg">
+<!-- Preconnect for fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ═══════ RESET & BASE ═══════ */
@@ -74,6 +91,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
   backdrop-filter: blur(20px) saturate(1.5);
   background: rgba(6,8,15,0.7);
   border-bottom: 1px solid var(--border);
@@ -1140,16 +1158,69 @@ section {
   .pipeline-step { gap: 1rem; }
   .pipeline-node { width: 44px; height: 44px; font-size: 0.9rem; }
 }
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+  .hero-description { font-size: 1rem; }
+  .hero-stat-value { font-size: 2rem; }
+  nav { padding: 0.75rem 1rem; }
+  .nav-brand { font-size: 0.85rem; }
+  .nav-badge { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
+  .design-two-col { grid-template-columns: 1fr; }
+}
+
+/* ═══════ FOCUS STATES (WCAG 2.1 AA) ═══════ */
+:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.nav-links a:focus-visible,
+.project-link-btn:focus-visible,
+.project-subpage-link:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 3px;
+}
+
+/* ═══════ PREFERS-REDUCED-MOTION ═══════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 </style>
 </head>
 <body>
 
-<div class="grid-bg"></div>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Web Development Corp",
+  "description": "Корпорация из 36 AI-агентов для создания сайтов любой сложности. Полный цикл от брифа до деплоя.",
+  "url": "https://web-corp.amai.studio/",
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "AMAI Game Studio"
+  }
+}
+</script>
+
+<div class="grid-bg" aria-hidden="true"></div>
 
 <!-- ═══════ NAVIGATION ═══════ -->
-<nav>
+<nav aria-label="Шапка сайта">
   <div class="nav-brand">CORP-001</div>
-  <div class="nav-links">
+  <div class="nav-links" aria-label="Основная навигация">
     <a href="#overview">Обзор</a>
     <a href="#hierarchy">Иерархия</a>
     <a href="#pipeline">Pipeline</a>
@@ -1157,18 +1228,20 @@ section {
     <a href="#design">Дизайн</a>
     <a href="#qa">QA</a>
     <a href="#projects">Проекты</a>
+    <a href="#skills">Навыки</a>
   </div>
-  <div class="nav-badge">
-    <span class="dot"></span>
+  <div class="nav-badge" role="status" aria-label="36 агентов в сети">
+    <span class="dot" aria-hidden="true"></span>
     36 агентов online
   </div>
 </nav>
 
+<main>
 <!-- ═══════ HERO ═══════ -->
-<section class="hero">
-  <div class="hero-orb hero-orb-1"></div>
-  <div class="hero-orb hero-orb-2"></div>
-  <div class="hero-orb hero-orb-3"></div>
+<section class="hero" aria-label="Главный экран">
+  <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+  <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+  <div class="hero-orb hero-orb-3" aria-hidden="true"></div>
 
   <div class="hero-corp-tag reveal">
     <span>CORP-001</span>
@@ -1203,7 +1276,7 @@ section {
     </div>
   </div>
 
-  <div class="scroll-hint">
+  <div class="scroll-hint" aria-hidden="true">
     <span>scroll</span>
     <div class="arrow"></div>
   </div>
@@ -1219,7 +1292,7 @@ section {
 
   <div class="overview-grid">
     <div class="overview-card reveal reveal-delay-1">
-      <div class="card-icon purple">&#9672;</div>
+      <div class="card-icon purple" aria-hidden="true">&#9672;</div>
       <h3>Корпоративная иерархия</h3>
       <p>CEO оркестрирует задачу, 6 C-Suite директоров управляют доменами, 24 специалиста выполняют работу в alpha/beta парах.</p>
     </div>
@@ -1889,7 +1962,7 @@ section {
 </section>
 
 <!-- ═══════ SKILLS ═══════ -->
-<section>
+<section id="skills">
   <div class="section-label reveal">08 — Навыки</div>
   <h2 class="section-title reveal reveal-delay-1">8 автоматических Skills</h2>
   <p class="section-subtitle reveal reveal-delay-2">
@@ -1907,6 +1980,8 @@ section {
     <div class="skill-chip"><span class="skill-dot"></span>kimi-universal</div>
   </div>
 </section>
+
+</main>
 
 <!-- ═══════ FOOTER ═══════ -->
 <footer class="footer">
@@ -1956,52 +2031,66 @@ document.querySelectorAll('.agent-chip').forEach(chip => {
   });
 });
 
-// ═══════ QR CODE GENERATOR (zero dependencies) ═══════
-// Minimal QR Code generator - supports alphanumeric mode, version 2-4
+// ═══════ QR CODE GENERATOR ═══════
 (function() {
-  // Use a CDN for proper QR generation - lightweight qrcode-generator
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
-  script.onload = function() {
-    document.querySelectorAll('.project-qr-canvas').forEach(canvas => {
-      const url = canvas.dataset.url;
-      // Build full URL from current page location
-      const fullUrl = new URL(url, window.location.href).href;
+  script.crossOrigin = 'anonymous';
 
-      const qr = qrcode(0, 'M');
-      qr.addData(fullUrl);
-      qr.make();
+  function drawQR(canvas, qr) {
+    const ctx = canvas.getContext('2d');
+    const size = canvas.width;
+    const moduleCount = qr.getModuleCount();
+    const cellSize = size / (moduleCount + 2); // +2 for quiet zone
+    const offset = cellSize; // quiet zone
 
-      const ctx = canvas.getContext('2d');
-      const size = canvas.width;
-      const moduleCount = qr.getModuleCount();
-      const cellSize = size / (moduleCount + 2); // +2 for quiet zone
-      const offset = cellSize; // quiet zone
-
-      // White background with rounded corners
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
+    // White background — with roundRect fallback for older Safari
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    if (typeof ctx.roundRect === 'function') {
       ctx.roundRect(0, 0, size, size, 6);
-      ctx.fill();
+    } else {
+      ctx.rect(0, 0, size, size);
+    }
+    ctx.fill();
 
-      // Draw QR modules
-      for (let row = 0; row < moduleCount; row++) {
-        for (let col = 0; col < moduleCount; col++) {
-          if (qr.isDark(row, col)) {
-            const x = offset + col * cellSize;
-            const y = offset + row * cellSize;
-            // Gradient effect: purple to blue
-            const progress = (row + col) / (moduleCount * 2);
-            const r = Math.round(124 - progress * 65);
-            const g = Math.round(58 + progress * 72);
-            const b = Math.round(237 - progress * 91);
-            ctx.fillStyle = `rgb(${r},${g},${b})`;
-            ctx.fillRect(x, y, cellSize + 0.5, cellSize + 0.5);
-          }
+    // Draw QR modules with gradient effect
+    for (let row = 0; row < moduleCount; row++) {
+      for (let col = 0; col < moduleCount; col++) {
+        if (qr.isDark(row, col)) {
+          const x = offset + col * cellSize;
+          const y = offset + row * cellSize;
+          const progress = (row + col) / (moduleCount * 2);
+          const r = Math.round(124 - progress * 65);
+          const g = Math.round(58 + progress * 72);
+          const b = Math.round(237 - progress * 91);
+          ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
+          ctx.fillRect(x, y, cellSize + 0.5, cellSize + 0.5);
         }
+      }
+    }
+  }
+
+  script.onload = function() {
+    document.querySelectorAll('.project-qr-canvas').forEach(function(canvas) {
+      try {
+        const url = canvas.dataset.url;
+        const fullUrl = new URL(url, window.location.href).href;
+        const qr = qrcode(0, 'M');
+        qr.addData(fullUrl);
+        qr.make();
+        drawQR(canvas, qr);
+      } catch (err) {
+        // On error: show plain white canvas (already white background from CSS)
+        console.warn('QR generation failed for', canvas.dataset.url, err);
       }
     });
   };
+
+  script.onerror = function() {
+    console.warn('QR code library failed to load from CDN. QR codes will not be displayed.');
+  };
+
   document.head.appendChild(script);
 })();
 </script>
