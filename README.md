@@ -4,17 +4,17 @@
 
 ## Живая презентация
 
-**[Открыть презентацию архитектуры](https://silvers-rayleigh7.github.io/-------/)**
+**[Открыть презентацию архитектуры](https://silvers-rayleigh7.github.io/web-corp-portfolio/)**
 
 ## 5 демо-проектов
 
 | Проект | Жанр | Ссылка |
 |--------|------|--------|
-| The Lost File | Horror | [Открыть](https://silvers-rayleigh7.github.io/-------/test-websites/the-lost-file.html) |
-| Forte Music Store | E-commerce | [Открыть](https://silvers-rayleigh7.github.io/-------/test-websites/forte-music.html) |
-| Щит и Право | Legal/Corporate | [Открыть](https://silvers-rayleigh7.github.io/-------/test-websites/shield-law.html) |
-| FORGE Fitness | Fitness/Industrial | [Открыть](https://silvers-rayleigh7.github.io/-------/test-websites/forge-fitness.html) |
-| Зерно | Cafe/Artisan | [Открыть](https://silvers-rayleigh7.github.io/-------/test-websites/zerno-coffee.html) |
+| The Lost File | Horror | [Открыть](https://silvers-rayleigh7.github.io/web-corp-portfolio/test-websites/the-lost-file.html) |
+| Forte Music Store | E-commerce | [Открыть](https://silvers-rayleigh7.github.io/web-corp-portfolio/test-websites/forte-music.html) |
+| Щит и Право | Legal/Corporate | [Открыть](https://silvers-rayleigh7.github.io/web-corp-portfolio/test-websites/shield-law.html) |
+| FORGE Fitness | Fitness/Industrial | [Открыть](https://silvers-rayleigh7.github.io/web-corp-portfolio/test-websites/forge-fitness.html) |
+| Зерно | Cafe/Artisan | [Открыть](https://silvers-rayleigh7.github.io/web-corp-portfolio/test-websites/zerno-coffee.html) |
 
 ## Структура репозитория
 
